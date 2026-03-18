@@ -1,0 +1,35 @@
+name: renty_app
+description: Renty Car Rentals & Hires
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.10
+  google_fonts: ^6.2.1
+  table_calendar: ^3.1.2
+  image_picker: ^1.1.2
+  cached_network_image: ^3.3.1
+  smooth_page_indicator: ^1.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: fonts/Inter-Regular.ttf
+        - asset: fonts/Inter-Medium.ttf
+        - asset: fonts/Inter-SemiBold.ttf
+        - asset: fonts/Inter-Bold.ttf
