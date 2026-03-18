@@ -16,8 +16,8 @@ void main() {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const RentyApp());
 
-    // Verify app launches without crashing, find splash elements.
+    // Verify app launches without crashing, find main app elements.
     expect(find.text('Renty'), findsOneWidget);
-    expect(find.byType(SvgPicture), findsOneWidget);
+    expect(find.text('Drive Your Way'), findsOneWidget);
   });
 }

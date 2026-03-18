@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/theme.dart';
-import 'screens/splash/splash_screen.dart';
+import 'screens/main_screen.dart';
 
 void main() {
   runApp(const RentyApp());
@@ -14,7 +14,7 @@ class RentyApp extends StatelessWidget {
       title: 'Renty',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const SplashScreen(),
+      home: const MainScreen(),
     );
   }
 }
