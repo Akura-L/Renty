@@ -19,8 +19,11 @@ class SignUpScreen extends StatelessWidget {
                 obscureText: true),
             const SizedBox(height: 24),
             ElevatedButton(
-              onPressed: () => Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const OtpScreen())),
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) =>
+                          const OtpScreen(phoneNumber: '+1 (555) 123-4567'))),
               child: const Text('Sign Up'),
             ),
           ],
