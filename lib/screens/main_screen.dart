@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'home/home_screen.dart';
-// import other tab screens as implemented
-// For now, use placeholders for other tabs
+import 'profile/favourites_screen.dart';
+import 'profile/my_bookings_screen.dart';
+import 'profile/messages_screen.dart';
+import 'profile/profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
-
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -13,23 +14,18 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _tabs = [
+  final List<Widget> _screens = [
     const HomeScreen(),
-    const Center(
-        child:
-            Text('Favourites Screen - TODO', style: TextStyle(fontSize: 24))),
-    const Center(
-        child: Text('Bookings Screen - TODO', style: TextStyle(fontSize: 24))),
-    const Center(
-        child: Text('Messages Screen - TODO', style: TextStyle(fontSize: 24))),
-    const Center(
-        child: Text('Profile Screen - TODO', style: TextStyle(fontSize: 24))),
+    const FavouritesScreen(),
+    const MyBookingsScreen(),
+    const MessagesScreen(),
+    const ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _tabs[_currentIndex],
+      body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,

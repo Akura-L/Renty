@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../core/theme.dart';
 import '../screens/home/home_screen.dart';
 
 class LicenseScreen extends StatefulWidget {

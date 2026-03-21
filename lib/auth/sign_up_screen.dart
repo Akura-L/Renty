@@ -11,11 +11,11 @@ class SignUpScreen extends StatelessWidget {
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            TextField(
-                decoration: const InputDecoration(labelText: 'Email or Phone')),
+            const TextField(
+                decoration: InputDecoration(labelText: 'Email or Phone')),
             const SizedBox(height: 16),
-            TextField(
-                decoration: const InputDecoration(labelText: 'Password'),
+            const TextField(
+                decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true),
             const SizedBox(height: 24),
             ElevatedButton(

@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/favourites_provider.dart';
+import 'providers/bookings_provider.dart';
 import 'core/theme.dart';
 import 'screens/main_screen.dart';
 
 void main() {
-  runApp(const RentyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => FavouritesProvider()),
+        ChangeNotifierProvider(create: (_) => BookingsProvider()),
+      ],
+      child: const RentyApp(),
+    ),
+  );
 }
 
 class RentyApp extends StatelessWidget {

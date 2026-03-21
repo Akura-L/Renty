@@ -62,9 +62,9 @@ class WelcomeScreen extends StatelessWidget {
                 Expanded(
                     child: OutlinedButton(
                   onPressed: () => debugPrint('Continue with Google'),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.g_mobiledata),
                       SizedBox(width: 8),
                       Text('Google'),
@@ -75,9 +75,9 @@ class WelcomeScreen extends StatelessWidget {
                 Expanded(
                     child: OutlinedButton(
                   onPressed: () => debugPrint('Continue with Apple'),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.phone_iphone),
                       SizedBox(width: 8),
                       Text('Apple'),

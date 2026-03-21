@@ -81,9 +81,9 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
                 onTap: () => _selectDob(context),
                 child: AbsorbPointer(
                   child: TextFormField(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: "Date of birth",
-                      suffixIcon: const Icon(Icons.calendar_today),
+                      suffixIcon: Icon(Icons.calendar_today),
                     ),
                     controller: TextEditingController(
                       text: _dob == null

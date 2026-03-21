@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../core/theme.dart';
 import 'profile_info_screen.dart';
-import '../../screens/home/home_screen.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;

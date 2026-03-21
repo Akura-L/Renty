@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'license_screen.dart';
-import '../core/theme.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../screens/home/home_screen.dart';
 
 class PhotoScreen extends StatefulWidget {
   const PhotoScreen({super.key});
