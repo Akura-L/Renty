@@ -44,11 +44,12 @@ class MyBookingsScreen extends StatelessWidget {
               );
             }
             return RefreshIndicator(
-              onRefresh: () => provider._loadBookings(),
+              onRefresh: () => Future.value(),
               child: ListView.builder(
-                padding: const EdgeInsets.all(20),
+                padding: EdgeInsets.all(AppTheme.kPaddingLarge),
                 itemCount: provider.bookings.length,
-                itemBuilder: (context, i) => _buildBookingCard(context, provider.bookings[i], provider),
+                itemBuilder: (context, i) =>
+                    _buildBookingCard(context, provider.bookings[i], provider),
               ),
             );
           },
@@ -57,15 +58,16 @@ class MyBookingsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBookingCard(BuildContext context, Booking booking, BookingsProvider provider) {
+  Widget _buildBookingCard(
+      BuildContext context, Booking booking, BookingsProvider provider) {
     final totalDays = booking.endDate.difference(booking.startDate).inDays + 1;
     final totalPrice = booking.car.price * totalDays;
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: AppTheme.kPaddingMedium),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(AppTheme.kPaddingMedium),
         child: Column(
           children: [
             Row(
@@ -74,12 +76,12 @@ class MyBookingsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     booking.car.imageUrl,
-                    height: 60,
+                    height: AppTheme.kThumbnailHeight,
                     width: 80,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
-                      height: 60,
-                      width: 80,
+                      height: AppTheme.kThumbnailHeight,
+                      width: AppTheme.kThumbnailWidth,
                       color: Colors.grey[300],
                       child: const Icon(Icons.image_not_supported),
                     ),
@@ -139,16 +141,20 @@ class MyBookingsScreen extends StatelessWidget {
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.payment, size: 16),
                     label: const Text('Pay Now'),
-                    onPressed: booking.status == 'Pending' 
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => PaymentScreen(booking: booking),
-                            ),
-                          );
-                        }
-                      : null,
+                    onPressed: booking.status == 'Pending'
+                        ? () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => PaymentScreen(
+                                    car: booking.car,
+                                    startDate: booking.startDate,
+                                    endDate: booking.endDate,
+                                    totalAmount: totalPrice),
+                              ),
+                            );
+                          }
+                        : null,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.primary,
                       foregroundColor: Colors.white,

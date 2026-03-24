@@ -17,8 +17,10 @@ class FavouritesScreen extends StatelessWidget {
       builder: (context, provider, child) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Favourites (${provider.count})',
-                style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+            title: Text(
+              'Favourites (${provider.count})',
+              style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+            ),
             actions: const [
               CircleAvatar(
                 radius: 20,
@@ -31,7 +33,7 @@ class FavouritesScreen extends StatelessWidget {
           body: RefreshIndicator(
             onRefresh: () => Future.delayed(const Duration(seconds: 1)),
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(AppTheme.kPaddingLarge),
               child: provider.favouriteCars.isEmpty
                   ? const Center(
                       child: Column(
@@ -56,8 +58,8 @@ class FavouritesScreen extends StatelessWidget {
                         mainAxisSpacing: 16,
                       ),
                       itemCount: provider.favouriteCars.length,
-                      itemBuilder: (context, i) =>
-                          _buildCarCard(context, provider.favouriteCars[i]),
+                      itemBuilder: (context, i) => _buildCarCard(
+                          context, provider.favouriteCars[i], provider),
                     ),
             ),
           ),
@@ -66,12 +68,14 @@ class FavouritesScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCarCard(BuildContext context, Car car) {
-    final provider = Provider.of<FavouritesProvider>(context);
+  Widget _buildCarCard(
+      BuildContext context, Car car, FavouritesProvider provider) {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => CarDetailScreen(car: car)),
+        MaterialPageRoute(
+          builder: (_) => CarDetailScreen(car: car),
+        ),
       ),
       child: Container(
         decoration: BoxDecoration(
@@ -94,16 +98,16 @@ class FavouritesScreen extends StatelessWidget {
                       const BorderRadius.vertical(top: Radius.circular(16)),
                   child: CachedNetworkImage(
                     imageUrl: car.imageUrl,
-                    height: 140,
+                    height: AppTheme.kCardImageHeight,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => Shimmer.fromColors(
                       baseColor: Colors.grey[300]!,
                       highlightColor: Colors.grey[100]!,
-                      child: Container(height: 140),
+                      child: Container(height: AppTheme.kCardImageHeight),
                     ),
                     errorWidget: (context, url, error) => Container(
-                      height: 140,
+                      height: AppTheme.kCardImageHeight,
                       color: Colors.grey[300],
                       child: const Icon(Icons.image_not_supported,
                           size: 50, color: Colors.grey),

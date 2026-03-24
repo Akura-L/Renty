@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:renty/main.dart';
+import 'package:renty_app/main.dart';
 
 void main() {
   testWidgets('RentyApp launches smoke test', (WidgetTester tester) async {
@@ -17,7 +17,7 @@ void main() {
     await tester.pumpWidget(const RentyApp());
 
     // Verify app launches without crashing, find main app elements.
-    expect(find.text('Renty'), findsOneWidget);
-    expect(find.text('Drive Your Way'), findsOneWidget);
+    expect(find.byType(SvgPicture), findsOneWidget);
+    expect(find.text('DRIVE THE MOMENT'), findsOneWidget);
   });
 }

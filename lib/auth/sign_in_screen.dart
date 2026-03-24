@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
+import '../screens/main_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -22,10 +23,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
   void _signIn() {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement real auth
-      debugPrint('Sign in with email: ${_emailController.text}');
-      // Navigate to home
-      // Navigator.pushReplacementNamed(context, '/home');
+      // Mock auth success
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const MainScreen()),
+      );
     }
   }
 
@@ -34,18 +36,28 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(AppTheme.kPaddingXL),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Welcome back',
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 8),
-              const Text('Sign in to continue',
-                  style: TextStyle(fontSize: 16, color: AppTheme.grey)),
-              const SizedBox(height: 32),
+              Text(
+                'Welcome back',
+                style: TextStyle(
+                  fontSize: AppTheme.kFontSizeLargeTitle + 6,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: AppTheme.kPaddingXS),
+              Text(
+                'Sign in to continue',
+                style: TextStyle(
+                  fontSize: AppTheme.kFontSizeSmall + 4,
+                  color: AppTheme.grey,
+                ),
+              ),
+              SizedBox(height: AppTheme.kPaddingLarge),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
@@ -53,7 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 validator: (value) =>
                     value?.isEmpty ?? true ? 'Enter email' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: AppTheme.kPaddingMedium),
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(labelText: 'Password'),
@@ -61,15 +73,19 @@ class _SignInScreenState extends State<SignInScreen> {
                 validator: (value) =>
                     value?.isEmpty ?? true ? 'Enter password' : null,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: AppTheme.kPaddingXS),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => debugPrint('Forgot password'),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Forgot Password - Stub')),
+                    );
+                  },
                   child: const Text('Forgot Password?'),
                 ),
               ),
-              const SizedBox(height: 24),
+              SizedBox(height: AppTheme.kPaddingLarge),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -77,17 +93,31 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: const Text('Sign In'),
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: AppTheme.kPaddingMedium),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  OutlinedButton(
-                      onPressed: () => debugPrint('Google login'),
-                      child: const Text('Google')),
-                  const SizedBox(width: 16),
-                  OutlinedButton(
-                      onPressed: () => debugPrint('Apple login'),
-                      child: const Text('Apple')),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MainScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.g_mobiledata),
+                    label: const Text('Google'),
+                  ),
+                  SizedBox(width: AppTheme.kPaddingMedium),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MainScreen()),
+                      );
+                    },
+                    icon: const Icon(Icons.apple),
+                    label: const Text('Apple'),
+                  ),
                 ],
               ),
             ],

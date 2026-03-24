@@ -8,9 +8,9 @@ class Message {
   final String senderImage;
   final String lastMessage;
   final DateTime time;
-  final bool isUnread;
+  bool isUnread;  // Make mutable
 
-  const Message({
+  Message({
     required this.id,
     required this.senderName,
     required this.senderImage,
@@ -28,73 +28,85 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
-  final List<Message> messages = [
-    const Message(
-      id: '1',
-      senderName: 'Toyota Rentals',
-      senderImage: 'https://i.pravatar.cc/150?img=1',
-      lastMessage: 'Your booking TX123 has been confirmed!',
-      time: DateTime.now().subtract(Duration(hours: 2)),
-      isUnread: true,
-    ),
-    const Message(
-      id: '2',
-      senderName: 'Range Rover Team',
-      senderImage: 'https://i.pravatar.cc/150?img=2',
-      lastMessage: 'Payment received. Enjoy your drive!',
-      time: DateTime.now().subtract(Duration(hours: 5)),
-    ),
-    const Message(
-      id: '3',
-      senderName: 'Customer Support',
-      senderImage: 'https://i.pravatar.cc/150?img=3',
-      lastMessage: "How can we help you today?",
-      time: DateTime.now().subtract(Duration(days: 1)),
-      isUnread: true,
-    ),
-    const Message(
-      id: '4',
-      senderName: 'Mercedes-Benz',
-      senderImage: 'https://i.pravatar.cc/150?img=4',
-      lastMessage: 'Car ready for pickup tomorrow at 9AM',
-      time: DateTime.now().subtract(Duration(days: 2)),
-    ),
-    const Message(
-      id: '5',
-      senderName: 'Audi Service',
-      senderImage: 'https://i.pravatar.cc/150?img=5',
-      lastMessage: 'Thank you for your feedback!',
-      time: DateTime.now().subtract(Duration(days: 3)),
-    ),
-  ];
+  late List<Message> messages;
+
+  @override
+  void initState() {
+    super.initState();
+    messages = [
+      Message(
+        id: '1',
+        senderName: 'Toyota Rentals',
+        senderImage: 'https://i.pravatar.cc/150?img=1',
+        lastMessage: 'Your booking TX123 has been confirmed!',
+        time: DateTime(2024, 10, 10, 12, 0),  // Fixed time
+        isUnread: true,
+      ),
+      Message(
+        id: '2',
+        senderName: 'Range Rover Team',
+        senderImage: 'https://i.pravatar.cc/150?img=2',
+        lastMessage: 'Payment received. Enjoy your drive!',
+        time: DateTime(2024, 10, 10, 9, 0),
+      ),
+      Message(
+        id: '3',
+        senderName: 'Customer Support',
+        senderImage: 'https://i.pravatar.cc/150?img=3',
+        lastMessage: "How can we help you today?",
+        time: DateTime(2024, 10, 9, 14, 0),
+        isUnread: true,
+      ),
+      Message(
+        id: '4',
+        senderName: 'Mercedes-Benz',
+        senderImage: 'https://i.pravatar.cc/150?img=4',
+        lastMessage: 'Car ready for pickup tomorrow at 9AM',
+        time: DateTime(2024, 10, 8, 16, 0),
+      ),
+      Message(
+        id: '5',
+        senderName: 'Audi Service',
+        senderImage: 'https://i.pravatar.cc/150?img=5',
+        lastMessage: 'Thank you for your feedback!',
+        time: DateTime(2024, 10, 7, 11, 0),
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
+    final unreadCount = messages.where((m) => m.isUnread).length;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Messages',
-            style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+        title: Text(
+          'Messages',
+          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
+        ),
         actions: [
           Stack(
             children: [
               const CircleAvatar(
                 radius: 20,
-                backgroundImage:
-                    NetworkImage('https://i.pravatar.cc/150?img=68'),
+                backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=68'),
               ),
-              if (messages.where((m) => m.isUnread).isNotEmpty)
+              if (unreadCount > 0)
                 Positioned(
                   right: 0,
                   top: 0,
                   child: Container(
                     padding: const EdgeInsets.all(2),
                     decoration: const BoxDecoration(
-                        color: Colors.red, shape: BoxShape.circle),
-                    constraints:
-                        const BoxConstraints(minWidth: 12, minHeight: 12),
+                      color: Colors.red,
+                      shape: BoxShape.circle,
+                    ),
+                    constraints: const BoxConstraints(minWidth: 12, minHeight: 12),
                     child: Text(
-                      '${messages.where((m) => m.isUnread).length}',
-                      style: const TextStyle(color: Colors.white, fontSize: 10),
+                      '$unreadCount',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                      ),
                     ),
                   ),
                 ),
@@ -121,7 +133,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
               )
             : ListView.builder(
                 itemCount: messages.length,
-                itemBuilder: (context, i) => _buildMessageTile(messages[i]),
+                itemBuilder: (context, index) => _buildMessageTile(index),
               ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -132,7 +144,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
     );
   }
 
-  Widget _buildMessageTile(Message message) {
+  Widget _buildMessageTile(int index) {
+    final message = messages[index];
     return ListTile(
       leading: Stack(
         children: [
@@ -148,13 +161,17 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 width: 12,
                 height: 12,
                 decoration: const BoxDecoration(
-                    color: Colors.green, shape: BoxShape.circle),
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
               ),
             ),
         ],
       ),
-      title: Text(message.senderName,
-          style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+      title: Text(
+        message.senderName,
+        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+      ),
       subtitle: Text(message.lastMessage),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -170,21 +187,18 @@ class _MessagesScreenState extends State<MessagesScreen> {
               width: 8,
               height: 8,
               decoration: const BoxDecoration(
-                  color: Colors.blue, shape: BoxShape.circle),
+                color: Colors.blue,
+                shape: BoxShape.circle,
+              ),
             ),
         ],
       ),
       onTap: () {
-        // Open chat
+        // Open chat and mark as read
         if (message.isUnread) {
-          setState(() => messages[i] = Message(
-                id: message.id,
-                senderName: message.senderName,
-                senderImage: message.senderImage,
-                lastMessage: message.lastMessage,
-                time: message.time,
-                isUnread: false,
-              ));
+          setState(() {
+            messages[index].isUnread = false;
+          });
         }
       },
     );

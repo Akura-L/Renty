@@ -16,12 +16,42 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Car> cars = [
     const Car(
-        id: '1',
-        name: 'Toyota Land Cruiser GX V8',
-        location: 'Nairobi',
-        year: 2023,
-        price: 5500,
-        imageUrl: 'https://picsum.photos/id/1015/400/250'),
+      id: '1',
+      name: 'Toyota Land Cruiser GX V8',
+      location: 'Nairobi',
+      year: 2023,
+      price: 8500,
+      imageUrl: 'https://picsum.photos/id/1015/400/250',
+      rating: 4.9,
+      reviewCount: 128,
+      topRated: true,
+      availableToday: true,
+      specs: const [
+        '7 Seats',
+        'Automatic',
+        'Full A/C',
+        '300km/day',
+        '4WD',
+      ],
+      about:
+          'This well-maintained Land Cruiser GX V8 handles both city streets and off-road adventures with ease. Fully insured, recently serviced, equipped with 4WD, roof rack, and full climate control.',
+      reviews: const [
+        const CarReview(
+          initials: 'SK',
+          text:
+              'Absolutely loved this car! Clean, drives smoothly. David was super helpful at pickup. Will rent again!',
+          name: 'Sarah K.',
+          monthYear: 'May 2025',
+        ),
+        const CarReview(
+          initials: 'MO',
+          text:
+              'Great for our Maasai Mara trip. Handles city and rough roads perfectly. Highly recommend!',
+          name: 'Michael O.',
+          monthYear: 'Apr 2025',
+        ),
+      ],
+    ),
     const Car(
         id: '2',
         name: 'Mercedes-Benz GLE 450',
@@ -110,43 +140,58 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Drive Your Way",
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        actions: const [
-          CircleAvatar(
-            radius: 20,
-            backgroundImage: NetworkImage("https://i.pravatar.cc/150?img=68"),
-          ),
-          SizedBox(width: 16),
-        ],
-      ),
-      body: RefreshIndicator(
+    return SafeArea(
+      child: RefreshIndicator(
         onRefresh: _refreshCars,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(20),
+          padding: EdgeInsets.all(AppTheme.kPaddingLarge),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Featured Cars",
+                'Good morning',
                 style: GoogleFonts.inter(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.grey,
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 6),
+              Text(
+                'Drive Your Way',
+                style: GoogleFonts.inter(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w900,
+                  color: AppTheme.dark,
+                ),
+              ),
+              const SizedBox(height: 14),
               TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
-                  hintText: "Search cars or locations...",
+                  hintText: 'Search cars, locations...',
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12)),
                   filled: true,
                   fillColor: Colors.grey[100],
+                ),
+              ),
+              const SizedBox(height: 14),
+              Row(
+                children: const [
+                  _HomeMiniChip(label: 'All', active: true),
+                  SizedBox(width: 10),
+                  _HomeMiniChip(label: 'SUV'),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Text(
+                "Featured Cars",
+                style: GoogleFonts.inter(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 16),
@@ -175,7 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => const CarDetailScreen(),
+          builder: (_) => CarDetailScreen(car: car),
         ),
       ),
       child: Container(
@@ -197,15 +242,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   const BorderRadius.vertical(top: Radius.circular(16)),
               child: CachedNetworkImage(
                 imageUrl: car.imageUrl,
-                height: 140,
+                height: AppTheme.kCardImageHeight,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Shimmer.fromColors(
                   baseColor: Colors.grey[300]!,
                   highlightColor: Colors.grey[100]!,
-                  child: Container(height: 140, color: Colors.white),
+                  child: Container(
+                      height: AppTheme.kCardImageHeight, color: Colors.white),
                 ),
                 errorWidget: (context, url, error) => Container(
-                  height: 140,
+                  height: AppTheme.kCardImageHeight,
                   color: Colors.grey[300],
                   child: const Icon(Icons.image_not_supported,
                       size: 50, color: Colors.grey),
@@ -253,6 +299,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeMiniChip extends StatelessWidget {
+  final String label;
+  final bool active;
+  const _HomeMiniChip({required this.label, this.active = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: active ? AppTheme.primary10 : Colors.grey[100],
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(
+          color: active ? AppTheme.primary : AppTheme.grey10,
+        ),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontWeight: FontWeight.w800,
+          color: active ? AppTheme.primary : AppTheme.grey700,
+          fontSize: 12,
         ),
       ),
     );

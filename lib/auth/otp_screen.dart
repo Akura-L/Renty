@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../core/theme.dart';
 import 'profile_info_screen.dart';
+import 'widgets/auth_flow_stepper.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -24,6 +26,13 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
   bool _isLoading = false;
   bool _hasError = false;
   Timer? _timer;
+
+  String _formatClock(int seconds) {
+    final d = Duration(seconds: seconds);
+    final mm = d.inMinutes.toString().padLeft(2, '0');
+    final ss = (d.inSeconds % 60).toString().padLeft(2, '0');
+    return '$mm:$ss';
+  }
 
   @override
   void initState() {
@@ -90,12 +99,9 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
       _hasError = false;
     });
 
-    // Simulate API call
     await Future.delayed(const Duration(seconds: 1));
 
     if (mounted) {
-      // Always succeed for demo, TODO: Real verification
-      debugPrint('Verified OTP: $_otp for ${widget.phoneNumber}');
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const ProfileInfoScreen()),
@@ -130,11 +136,11 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
           decoration: InputDecoration(
             counterText: '',
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppTheme.kPaddingMedium),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppTheme.kPaddingMedium),
               borderSide:
                   BorderSide(color: Theme.of(context).primaryColor, width: 2),
             ),
@@ -162,41 +168,45 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Verify Phone'),
-        elevation: 0,
-      ),
       body: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: EdgeInsets.all(AppTheme.kPaddingXL),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Spacer(flex: 1),
+            const AuthFlowStepper(currentStep: 2),
+            const SizedBox(height: 18),
             Icon(
               Icons.message_outlined,
-              size: 80,
+              size: AppTheme.kIconSizeLarge,
               color: theme.primaryColor,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 14),
             Text(
-              'Enter verification code',
+              'Verify your number',
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Text(
-              'sent to ${widget.phoneNumber}',
+              'We sent a 6-digit code to ${widget.phoneNumber}.',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.primaryColor,
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 18),
+            Text(
+              'Please enter it below.',
+              style: TextStyle(
+                  color: AppTheme.grey600, fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 14),
             AnimatedBuilder(
               animation: _shakeController,
               builder: (context, child) {
                 return Transform.translate(
                   offset: Offset(_shakeController.value * 10, 0),
-                  child: child,
+                  child: child!,
                 );
               },
               child: Row(
@@ -204,7 +214,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
                 children: List.generate(6, _buildDigitField),
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 18),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -220,22 +230,77 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
                               AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       )
-                    : const Text('Verify'),
+                    : const Text('Verify Code'),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Didn't receive the code?",
+                    style: TextStyle(
+                      color: AppTheme.grey700,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  _formatClock(_seconds),
+                  style: TextStyle(
+                    color: theme.primaryColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      // Mock alternative delivery
+                    },
+                    child: const Text('Send via Email'),
+                  ),
+                ),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      // Mock alternative delivery
+                    },
+                    child: const Text('Call me instead'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Text(
+              'Check your SMS inbox',
+              style: TextStyle(
+                color: AppTheme.dark,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'The code may take up to 2 minutes to arrive. Check that your phone has signal and the number is correct.',
+              style: TextStyle(
+                color: AppTheme.grey700,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
             const Spacer(),
             if (_resendVisible)
-              TextButton(
-                onPressed: _resendOtp,
-                child: const Text('Resend Code'),
-              )
-            else
-              Text(
-                'Resend in ${_seconds.toString().padLeft(2, '0')}s',
-                style: TextStyle(color: Colors.grey.shade600),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: _resendOtp,
+                  child: const Text('Resend Code'),
+                ),
               ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 8),
           ],
         ),
       ),

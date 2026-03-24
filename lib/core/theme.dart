@@ -2,9 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const Color primary = Color(0xFF00BFA5); // exact teal from PDF
+  // Colors
+  static const Color primary = Color(0xFF00BFA5);
   static const Color dark = Color(0xFF1A1A1A);
   static const Color grey = Color(0xFF666666);
+
+  // Spacing Constants
+  static const double kPaddingXS = 8.0;
+  static const double kPaddingSmall = 12.0;
+  static const double kPaddingMedium = 16.0;
+  static const double kPaddingLarge = 20.0;
+  static const double kPaddingXL = 24.0;
+
+  // Sizes
+  static const double kCardImageHeight = 140.0;
+  static const double kThumbnailHeight = 60.0;
+  static const double kThumbnailWidth = 80.0;
+  static const double kSmallImageHeight = 60.0;
+  static const double kAvatarRadius = 20.0;
+  static const double kLargeAvatarRadius = 60.0;
+  static const double kIconSizeLarge = 80.0;
+  static const double kFontSizeLargeTitle = 22.0;
+  static const double kFontSizeTitle = 18.0;
+  static const double kFontSizeBody = 15.0;
+  static const double kFontSizeSmall = 12.0;
+
+  // Color Shades & Variants (fix getter errors)
+  static Color get grey10 => grey.withOpacity(0.1);
+  static Color get grey300 => grey.withOpacity(0.3);
+  static Color get grey600 => grey.withOpacity(0.6);
+  static Color get grey700 => grey.withOpacity(0.7);
+  static Color get grey18 => grey.withOpacity(0.18);
+  static Color get grey22 => grey.withOpacity(0.22);
+  static Color get grey25 => grey.withOpacity(0.25);
+  static Color get grey55 => grey.withOpacity(0.55);
+
+  static Color get primary05 => primary.withOpacity(0.05);
+  static Color get primary07 => primary.withOpacity(0.07);
+  static Color get primary10 => primary.withOpacity(0.1);
+  static Color get primary12 => primary.withOpacity(0.12);
+  static Color get primary14 => primary.withOpacity(0.14);
+  static Color get primary20 => primary.withOpacity(0.2);
+
+  // Shadows
+  static const List<BoxShadow> kCardShadow = [
+    BoxShadow(
+      color: Colors.black26,
+      blurRadius: 12,
+      offset: Offset(0, 4),
+    ),
+  ];
 
   static ThemeData get lightTheme => ThemeData(
         primaryColor: primary,
@@ -19,15 +66,18 @@ class AppTheme {
           style: ElevatedButton.styleFrom(
             backgroundColor: primary,
             foregroundColor: Colors.white,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(kPaddingMedium),
+            ),
             padding: const EdgeInsets.symmetric(vertical: 16),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(kPaddingMedium),
+          ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(kPaddingMedium),
             borderSide: const BorderSide(color: primary, width: 2),
           ),
         ),

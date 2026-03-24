@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/favourites_provider.dart';
 import 'providers/bookings_provider.dart';
+import 'screens/splash/splash_screen.dart';
+import 'auth/welcome_screen.dart';
 import 'core/theme.dart';
 import 'screens/main_screen.dart';
 
@@ -25,7 +27,12 @@ class RentyApp extends StatelessWidget {
       title: 'Renty',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      home: const MainScreen(),
+      initialRoute: '/splash',
+      routes: {
+        '/splash': (context) => const SplashScreen(),
+        '/welcome': (context) => const WelcomeScreen(),
+        '/main': (context) => const MainScreen(),
+      },
     );
   }
 }

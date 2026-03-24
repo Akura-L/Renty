@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import '../auth/welcome_screen.dart';
+import '../../auth/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,13 +25,21 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset('assets/icons/logo.svg', width: 180),
+            Image.asset(
+              'assets/images/renty.png',
+              width: 180,
+              height: 180,
+              fit: BoxFit.contain,
+            ),
             const SizedBox(height: 12),
-            const Text('DRIVE THE MOMENT',
-                style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 2)),
+            const Text(
+              'DRIVE THE MOMENT',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 2,
+              ),
+            ),
           ],
         ),
       ),
