@@ -16,6 +16,7 @@ class AppTheme {
 
   // Sizes
   static const double kCardImageHeight = 140.0;
+  static const double kDetailImageHeight = 200.0;
   static const double kThumbnailHeight = 60.0;
   static const double kThumbnailWidth = 80.0;
   static const double kSmallImageHeight = 60.0;
@@ -27,7 +28,7 @@ class AppTheme {
   static const double kFontSizeBody = 15.0;
   static const double kFontSizeSmall = 12.0;
 
-  // Color Shades & Variants (fix getter errors)
+  // Color Shades & Variants
   static Color get grey10 => grey.withOpacity(0.1);
   static Color get grey300 => grey.withOpacity(0.3);
   static Color get grey600 => grey.withOpacity(0.6);
@@ -81,5 +82,80 @@ class AppTheme {
             borderSide: const BorderSide(color: primary, width: 2),
           ),
         ),
+        extensions: [
+          ResponsiveExtension(AppTheme()),
+        ],
       );
+  }
 }
+
+class Responsive {
+  /// Responsive utilities to prevent overflow on different devices
+  double screenPadding(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (width * 0.05).clamp(12.0, 28.0);
+  }
+
+  double horizontalGap(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (width * 0.025).clamp(6.0, 16.0);
+  }
+
+  int dynamicGridCount(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (width / 200).floor().clamp(1, 2);
+  }
+
+  double adaptiveHeight(BuildContext context, double baseHeight) {
+    final height = MediaQuery.sizeOf(context).height;
+    return (baseHeight * (height / 800)).clamp(height * 0.18, height * 0.28);
+  }
+
+  double adaptiveRadius(BuildContext context, double baseRadius) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (baseRadius * (width / 400)).clamp(40.0, 90.0);
+  }
+}
+
+class ResponsiveExtension extends ThemeExtension<Responsive> {
+  const ResponsiveExtension(this.appTheme) : super();
+  
+  final AppTheme appTheme;
+
+  @override
+  ThemeExtension<Responsive> copyWith({Responsive? responsive}) => this;
+
+  @override
+  ResponsiveExtension lerp(ThemeExtension<Responsive>? other, double t) => this;
+}
+
+
+class Responsive {
+  /// Responsive utilities to prevent overflow on different devices
+  static double screenPadding(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (width * 0.05).clamp(12.0, 28.0);
+  }
+
+  static double horizontalGap(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (width * 0.025).clamp(6.0, 16.0);
+  }
+
+  static int dynamicGridCount(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (width / 200).floor().clamp(1, 2);
+  }
+
+  static double adaptiveHeight(BuildContext context, double baseHeight) {
+    final height = MediaQuery.sizeOf(context).height;
+    return (baseHeight * (height / 800)).clamp(height * 0.18, height * 0.28);
+  }
+
+  static double adaptiveRadius(BuildContext context, double baseRadius) {
+    final width = MediaQuery.sizeOf(context).width;
+    return (baseRadius * (width / 400)).clamp(40.0, 90.0);
+  }
+}
+
+

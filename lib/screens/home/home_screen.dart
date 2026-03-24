@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../booking/car_detail_screen.dart';
@@ -20,8 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Toyota Land Cruiser GX V8',
       location: 'Nairobi',
       year: 2023,
-      price: 8500,
-      imageUrl: 'https://picsum.photos/id/1015/400/250',
+      price: 8500.0,
+      imageUrl: 'assets/images/toyota_landcruiser.png',
       rating: 4.9,
       reviewCount: 128,
       topRated: true,
@@ -36,14 +35,14 @@ class _HomeScreenState extends State<HomeScreen> {
       about:
           'This well-maintained Land Cruiser GX V8 handles both city streets and off-road adventures with ease. Fully insured, recently serviced, equipped with 4WD, roof rack, and full climate control.',
       reviews: const [
-        const CarReview(
+        CarReview(
           initials: 'SK',
           text:
               'Absolutely loved this car! Clean, drives smoothly. David was super helpful at pickup. Will rent again!',
           name: 'Sarah K.',
           monthYear: 'May 2025',
         ),
-        const CarReview(
+        CarReview(
           initials: 'MO',
           text:
               'Great for our Maasai Mara trip. Handles city and rough roads perfectly. Highly recommend!',
@@ -53,54 +52,92 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     ),
     const Car(
-        id: '2',
-        name: 'Mercedes-Benz GLE 450',
-        location: 'Mombasa',
-        year: 2022,
-        price: 7800,
-        imageUrl: 'https://picsum.photos/id/1016/400/250'),
+      id: '2',
+      name: 'Mercedes-Benz GLE 450',
+      location: 'Mombasa',
+      year: 2022,
+      price: 7800.0,
+      imageUrl: 'assets/images/mercedes GLE 450.jpeg',
+      rating: 4.8,
+      reviewCount: 89,
+      topRated: true,
+      availableToday: true,
+      specs: const ['5 Seats', 'Automatic', 'Full A/C', '250km/day', 'AWD'],
+      about:
+          'Luxury SUV with premium features, ambient lighting, and smooth handling.',
+    ),
     const Car(
-        id: '3',
-        name: 'Range Rover Evoque',
-        location: 'Nairobi',
-        year: 2024,
-        price: 9200,
-        imageUrl: 'https://picsum.photos/id/1018/400/250'),
+      id: '3',
+      name: 'Range Rover Evoque',
+      location: 'Nairobi',
+      year: 2024,
+      price: 9200.0,
+      imageUrl: 'assets/images/range evoque.jpeg',
+      rating: 4.9,
+      reviewCount: 156,
+      topRated: true,
+      availableToday: true,
+    ),
     const Car(
-        id: '4',
-        name: 'BMW X5 xDrive40i',
-        location: 'Kisumu',
-        year: 2021,
-        price: 6800,
-        imageUrl: 'https://picsum.photos/id/102/400/250'),
+      id: '4',
+      name: 'BMW X5 xDrive40i',
+      location: 'Kisumu',
+      year: 2021,
+      price: 6800.0,
+      imageUrl: 'assets/images/BMW X5.jpeg',
+      rating: 4.7,
+      reviewCount: 112,
+      topRated: true,
+      availableToday: true,
+    ),
     const Car(
-        id: '5',
-        name: 'Audi Q7 Premium',
-        location: 'Nairobi',
-        year: 2023,
-        price: 8500,
-        imageUrl: 'https://picsum.photos/id/103/400/250'),
+      id: '5',
+      name: 'Audi Q7 Premium',
+      location: 'Nairobi',
+      year: 2023,
+      price: 8500.0,
+      imageUrl: 'assets/images/AudiQ7.jpeg',
+      rating: 4.8,
+      reviewCount: 95,
+      topRated: true,
+      availableToday: true,
+    ),
     const Car(
-        id: '6',
-        name: 'Toyota Prado TX',
-        location: 'Nakuru',
-        year: 2020,
-        price: 4500,
-        imageUrl: 'https://picsum.photos/id/104/400/250'),
+      id: '6',
+      name: 'Toyota Prado TX',
+      location: 'Nakuru',
+      year: 2020,
+      price: 4500.0,
+      imageUrl: 'assets/images/Toyota prado TX.jpeg',
+      rating: 4.6,
+      reviewCount: 234,
+      topRated: true,
+      availableToday: true,
+    ),
     const Car(
-        id: '7',
-        name: 'Ford Explorer Platinum',
-        location: 'Eldoret',
-        year: 2022,
-        price: 6200,
-        imageUrl: 'https://picsum.photos/id/105/400/250'),
+      id: '7',
+      name: 'Ford Explorer Platinum',
+      location: 'Eldoret',
+      year: 2022,
+      price: 6200.0,
+      imageUrl: 'assets/images/Ford Explorer.jpeg',
+      rating: 4.7,
+      reviewCount: 78,
+      topRated: true,
+      availableToday: true,
+    ),
     const Car(
-        id: '8',
-        name: 'Hyundai Palisade',
-        location: 'Mombasa',
-        year: 2023,
-        price: 5900,
-        imageUrl: 'https://picsum.photos/id/106/400/250'),
+      id: '8',
+      name: 'Hyundai Palisade',
+      location: 'Mombasa',
+      year: 2023,
+      price: 5900.0,
+      imageUrl: 'assets/images/Hyundai.jpeg',
+      rating: 4.8,
+      reviewCount: 145,
+      topRated: true,
+      availableToday: true,
+    ),
   ];
   List<Car> filteredCars = [];
   final TextEditingController _searchController = TextEditingController();
@@ -138,6 +175,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -145,12 +189,15 @@ class _HomeScreenState extends State<HomeScreen> {
         onRefresh: _refreshCars,
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.all(AppTheme.kPaddingLarge),
+          padding: EdgeInsets.symmetric(
+            horizontal: Responsive.screenPadding(context),
+            vertical: AppTheme.kPaddingLarge * 0.7,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Good morning',
+                _getGreeting(),
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -178,35 +225,45 @@ class _HomeScreenState extends State<HomeScreen> {
                   fillColor: Colors.grey[100],
                 ),
               ),
-              const SizedBox(height: 14),
-              Row(
+              SizedBox(height: AppTheme.kPaddingMedium * 0.75),
+              Wrap(
+                spacing: Responsive.horizontalGap(context),
                 children: const [
                   _HomeMiniChip(label: 'All', active: true),
-                  SizedBox(width: 10),
                   _HomeMiniChip(label: 'SUV'),
                 ],
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: AppTheme.kPaddingMedium),
               Text(
-                "Featured Cars",
+                "Available Cars",
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 16),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.85,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: filteredCars.length,
-                itemBuilder: (context, i) =>
-                    _buildCarCard(context, filteredCars[i]),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final crossCount = Responsive.dynamicGridCount(context);
+                  final aspectRatio = crossCount == 1
+                      ? 0.75
+                      : (constraints.maxWidth / crossCount - 20) /
+                          AppTheme.kCardImageHeight *
+                          1.1;
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossCount,
+                      childAspectRatio: aspectRatio,
+                      crossAxisSpacing: Responsive.horizontalGap(context) * 2,
+                      mainAxisSpacing: AppTheme.kPaddingSmall * 1.3,
+                    ),
+                    itemCount: filteredCars.length,
+                    itemBuilder: (context, i) =>
+                        _buildCarCard(context, filteredCars[i]),
+                  );
+                },
               ),
             ],
           ),
@@ -240,21 +297,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ClipRRect(
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(16)),
-              child: CachedNetworkImage(
-                imageUrl: car.imageUrl,
-                height: AppTheme.kCardImageHeight,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Container(
-                      height: AppTheme.kCardImageHeight, color: Colors.white),
-                ),
-                errorWidget: (context, url, error) => Container(
+              child: Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Image.asset(
+                  car.imageUrl,
                   height: AppTheme.kCardImageHeight,
-                  color: Colors.grey[300],
-                  child: const Icon(Icons.image_not_supported,
-                      size: 50, color: Colors.grey),
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: AppTheme.kCardImageHeight,
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image_not_supported,
+                        size: 50, color: Colors.grey),
+                  ),
                 ),
               ),
             ),

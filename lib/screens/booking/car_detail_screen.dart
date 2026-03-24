@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../core/theme.dart';
 import '../../models/car.dart';
-import 'date_picker_screen.dart';
 
-class CarDetailScreen extends StatelessWidget {
+// import 'date_picker_screen.dart';
+
+class CarDetailScreen extends StatefulWidget {
   final Car car;
 
   const CarDetailScreen({
@@ -15,33 +17,70 @@ class CarDetailScreen extends StatelessWidget {
   });
 
   @override
+  State<CarDetailScreen> createState() => _CarDetailScreenState();
+}
+
+class _CarDetailScreenState extends State<CarDetailScreen> {
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+
+  bool _isSameDay(DateTime? a, DateTime? b) {
+    if (a == null || b == null) return false;
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(car.name)),
+      appBar: AppBar(title: Text(widget.car.name)),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: EdgeInsets.symmetric(
+          horizontal: Responsive.screenPadding(context),
+          vertical: Responsive.screenPadding(context),
+        ),
         child: Column(
           children: [
-            Image.network(car.imageUrl, fit: BoxFit.cover),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: SizedBox(
+                height: Responsive.adaptiveHeight(
+                    context, AppTheme.kDetailImageHeight),
+                width: double.infinity,
+                child: Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Image.asset(
+                    widget.car.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.image_not_supported,
+                          size: 50, color: Colors.grey),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(height: 20),
             Row(
               children: [
-                if (car.topRated)
+                if (widget.car.topRated)
                   _Badge(text: 'TOP RATED', color: AppTheme.primary),
-                if (car.availableToday) const SizedBox(width: 10),
-                if (car.availableToday)
+                if (widget.car.availableToday)
+                  SizedBox(width: Responsive.horizontalGap(context)),
+                if (widget.car.availableToday)
                   _Badge(text: 'AVAILABLE', color: const Color(0xFF2E7D32)),
               ],
             ),
             const SizedBox(height: 10),
-            Text("KSh ${car.price.toStringAsFixed(0)} / day",
+            Text("KSh ${widget.car.price.toStringAsFixed(0)} / day",
                 style: GoogleFonts.inter(
                     fontSize: 28,
                     color: AppTheme.primary,
                     fontWeight: FontWeight.bold)),
             const SizedBox(height: 10),
             Text(
-              '${car.location} • ${car.rating.toStringAsFixed(1)} (${car.reviewCount})',
+              '${widget.car.location} • ${widget.car.rating.toStringAsFixed(1)} (${widget.car.reviewCount})',
               style: const TextStyle(
                   color: AppTheme.grey, fontWeight: FontWeight.w600),
               textAlign: TextAlign.center,
@@ -49,7 +88,7 @@ class CarDetailScreen extends StatelessWidget {
             const SizedBox(height: 20),
             _SectionTitle('Specifications'),
             const SizedBox(height: 10),
-            if (car.specs.isEmpty)
+            if (widget.car.specs.isEmpty)
               Text(
                 'Specifications will appear here.',
                 style: TextStyle(
@@ -59,7 +98,7 @@ class CarDetailScreen extends StatelessWidget {
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
-                children: car.specs
+                children: widget.car.specs
                     .map(
                       (s) => _SpecChip(text: s),
                     )
@@ -68,13 +107,13 @@ class CarDetailScreen extends StatelessWidget {
             const SizedBox(height: 18),
             _SectionTitle('About This Car'),
             const SizedBox(height: 8),
-            if (car.about.isNotEmpty)
+            if (widget.car.about.isNotEmpty)
               Text(
-                car.about,
+                widget.car.about,
                 style: TextStyle(
                     color: AppTheme.grey700, fontWeight: FontWeight.w600),
               ),
-            if (car.about.isNotEmpty)
+            if (widget.car.about.isNotEmpty)
               Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton(
@@ -83,12 +122,19 @@ class CarDetailScreen extends StatelessWidget {
                 ),
               ),
             const SizedBox(height: 10),
-            _SectionTitle('Availability – June 2025'),
+            _SectionTitle('Select Rental Dates'),
             const SizedBox(height: 10),
             TableCalendar(
-              focusedDay: DateTime(2025, 6, 1),
-              firstDay: DateTime(2025, 6, 1),
-              lastDay: DateTime(2025, 6, 30),
+              firstDay: DateTime.now(),
+              lastDay: DateTime.now().add(const Duration(days: 365)),
+              focusedDay: _focusedDay,
+              selectedDayPredicate: (day) => _isSameDay(_selectedDay, day),
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              },
               headerStyle: const HeaderStyle(
                 formatButtonVisible: false,
                 titleCentered: true,
@@ -102,23 +148,27 @@ class CarDetailScreen extends StatelessWidget {
                   color: AppTheme.primary,
                   shape: BoxShape.circle,
                 ),
+                selectedDecoration: const BoxDecoration(
+                  color: AppTheme.primary,
+                  shape: BoxShape.circle,
+                ),
               ),
-              onDaySelected: (_, __) {},
-              selectedDayPredicate: (_) => false,
             ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
+            Wrap(
+              spacing: Responsive.horizontalGap(context),
+              alignment: WrapAlignment.spaceBetween,
+              children: [
                 _LegendItem(label: 'Selected', color: AppTheme.primary),
-                _LegendItem(label: 'Booked', color: Color(0xFFB71C1C)),
-                _LegendItem(label: 'Unavailable', color: Color(0xFF9E9E9E)),
+                _LegendItem(label: 'Booked', color: const Color(0xFFB71C1C)),
+                _LegendItem(
+                    label: 'Unavailable', color: const Color(0xFF9E9E9E)),
               ],
             ),
             const SizedBox(height: 18),
             _SectionTitle('Reviews'),
             const SizedBox(height: 10),
-            if (car.reviews.isEmpty)
+            if (widget.car.reviews.isEmpty)
               Text(
                 'No reviews yet.',
                 style: TextStyle(
@@ -126,14 +176,14 @@ class CarDetailScreen extends StatelessWidget {
               )
             else
               Column(
-                children: car.reviews.take(2).map((r) {
+                children: widget.car.reviews.take(2).map((r) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          radius: 18,
+                          radius: Responsive.adaptiveRadius(context, 18),
                           backgroundColor: AppTheme.primary.withOpacity(0.14),
                           child: Text(
                             r.initials,
@@ -143,7 +193,7 @@ class CarDetailScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: Responsive.horizontalGap(context)),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,22 +219,25 @@ class CarDetailScreen extends StatelessWidget {
                   );
                 }).toList(),
               ),
-            if (car.reviewCount > 2)
+            if (widget.car.reviewCount > 2)
               Align(
                 alignment: Alignment.centerLeft,
                 child: TextButton(
                   onPressed: () {},
-                  child: Text('See all ${car.reviewCount} reviews'),
+                  child: Text('See all ${widget.car.reviewCount} reviews'),
                 ),
               ),
             const SizedBox(height: 14),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => DatePickerScreen(car: car)),
-                ),
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content: Text(
+                            'Date selected: ${_selectedDay?.toString().split(' ')[0]} - Navigate to payment')),
+                  );
+                },
                 child: Text('Book Now'),
               ),
             ),
