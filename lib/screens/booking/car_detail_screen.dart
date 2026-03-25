@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -46,17 +45,13 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                 height: Responsive.adaptiveHeight(
                     context, AppTheme.kDetailImageHeight),
                 width: double.infinity,
-                child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
-                  highlightColor: Colors.grey[100]!,
-                  child: Image.asset(
-                    widget.car.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.image_not_supported,
-                          size: 50, color: Colors.grey),
-                    ),
+                child: Image.asset(
+                  widget.car.imageUrl,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: Colors.grey[300],
+                    child: const Icon(Icons.image_not_supported,
+                        size: 50, color: Colors.grey),
                   ),
                 ),
               ),
@@ -73,7 +68,7 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            Text("KSh ${widget.car.price.toStringAsFixed(0)} / day",
+            Text("KSh ${widget.car.price.toStringAsFixed(0)} /day",
                 style: GoogleFonts.inter(
                     fontSize: 28,
                     color: AppTheme.primary,

@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Mombasa',
       year: 2022,
       price: 7800.0,
-      imageUrl: 'assets/images/mercedes GLE 450.jpeg',
+      imageUrl: 'assets/images/mercedes_gle_450.jpeg',
       rating: 4.8,
       reviewCount: 89,
       topRated: true,
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Nairobi',
       year: 2024,
       price: 9200.0,
-      imageUrl: 'assets/images/range evoque.jpeg',
+      imageUrl: 'assets/images/range_evoque.jpeg',
       rating: 4.9,
       reviewCount: 156,
       topRated: true,
@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Kisumu',
       year: 2021,
       price: 6800.0,
-      imageUrl: 'assets/images/BMW X5.jpeg',
+      imageUrl: 'assets/images/bmw_x5.jpeg',
       rating: 4.7,
       reviewCount: 112,
       topRated: true,
@@ -96,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Nairobi',
       year: 2023,
       price: 8500.0,
-      imageUrl: 'assets/images/AudiQ7.jpeg',
+      imageUrl: 'assets/images/audi_q7.jpeg',
       rating: 4.8,
       reviewCount: 95,
       topRated: true,
@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Nakuru',
       year: 2020,
       price: 4500.0,
-      imageUrl: 'assets/images/Toyota prado TX.jpeg',
+      imageUrl: 'assets/images/toyota_prado_tx.jpeg',
       rating: 4.6,
       reviewCount: 234,
       topRated: true,
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Eldoret',
       year: 2022,
       price: 6200.0,
-      imageUrl: 'assets/images/Ford Explorer.jpeg',
+      imageUrl: 'assets/images/ford_explorer.jpeg',
       rating: 4.7,
       reviewCount: 78,
       topRated: true,
@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Mombasa',
       year: 2023,
       price: 5900.0,
-      imageUrl: 'assets/images/Hyundai.jpeg',
+      imageUrl: 'assets/images/hyundai_palisade.jpeg',
       rating: 4.8,
       reviewCount: 145,
       topRated: true,
@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(height: AppTheme.kPaddingMedium),
               Text(
-                "Available Cars",
+                "Featured Cars",
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -245,11 +245,10 @@ class _HomeScreenState extends State<HomeScreen> {
               LayoutBuilder(
                 builder: (context, constraints) {
                   final crossCount = Responsive.dynamicGridCount(context);
-                  final aspectRatio = crossCount == 1
-                      ? 0.75
-                      : (constraints.maxWidth / crossCount - 20) /
-                          AppTheme.kCardImageHeight *
-                          1.1;
+                  // Flutter's `childAspectRatio` is `width / height`.
+                  // The previous value made the grid cells too short, causing
+                  // `BOTTOM OVERFLOWED BY ... PIXELS` warnings inside the cards.
+                  final aspectRatio = crossCount == 1 ? 0.85 : 0.92;
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
@@ -307,34 +306,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   errorBuilder: (context, error, stackTrace) => Container(
                     height: AppTheme.kCardImageHeight,
                     color: Colors.grey[300],
-                    child: const Icon(Icons.image_not_supported,
-                        size: 50, color: Colors.grey),
+                    alignment: Alignment.center,
+                    child: const Icon(
+                      Icons.image_not_supported,
+                      size: 50,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ),
             ),
+            // Keep card content compact to avoid grid cell overflow.
             Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    car.name,
+                    '${car.name} ${car.year}',
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    "${car.location} • ${car.year}",
+                    car.location,
                     style: const TextStyle(
                       color: AppTheme.grey,
                       fontSize: 12,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 6),
                   Text(
                     "KSh ${car.price.toStringAsFixed(0)}",
                     style: const TextStyle(
@@ -344,7 +348,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   const Text(
-                    "/ day",
+                    "/day",
                     style: TextStyle(
                       fontSize: 12,
                       color: AppTheme.grey,

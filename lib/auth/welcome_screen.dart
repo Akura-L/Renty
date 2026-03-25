@@ -160,12 +160,30 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                       ),
                       SizedBox(height: AppTheme.kPaddingSmall),
-                      Text(
-                        '4.9 / 5 • Trusted by 10,000+ drivers across Kenya',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppTheme.grey,
-                              fontWeight: FontWeight.w600,
-                            ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '4.9 / 5',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color: AppTheme.grey,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                          Text(
+                            'Trusted by 10,000+ drivers across Kenya',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color: AppTheme.grey,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

@@ -82,53 +82,14 @@ class AppTheme {
             borderSide: const BorderSide(color: primary, width: 2),
           ),
         ),
-        extensions: [
-          ResponsiveExtension(AppTheme()),
-        ],
       );
-  }
+
+  static ThemeData get darkTheme => ThemeData(
+        primaryColor: primary,
+        scaffoldBackgroundColor: dark,
+        fontFamily: GoogleFonts.inter().fontFamily,
+      );
 }
-
-class Responsive {
-  /// Responsive utilities to prevent overflow on different devices
-  double screenPadding(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    return (width * 0.05).clamp(12.0, 28.0);
-  }
-
-  double horizontalGap(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    return (width * 0.025).clamp(6.0, 16.0);
-  }
-
-  int dynamicGridCount(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    return (width / 200).floor().clamp(1, 2);
-  }
-
-  double adaptiveHeight(BuildContext context, double baseHeight) {
-    final height = MediaQuery.sizeOf(context).height;
-    return (baseHeight * (height / 800)).clamp(height * 0.18, height * 0.28);
-  }
-
-  double adaptiveRadius(BuildContext context, double baseRadius) {
-    final width = MediaQuery.sizeOf(context).width;
-    return (baseRadius * (width / 400)).clamp(40.0, 90.0);
-  }
-}
-
-class ResponsiveExtension extends ThemeExtension<Responsive> {
-  const ResponsiveExtension(this.appTheme) : super();
-  
-  final AppTheme appTheme;
-
-  @override
-  ThemeExtension<Responsive> copyWith({Responsive? responsive}) => this;
-
-  @override
-  ResponsiveExtension lerp(ThemeExtension<Responsive>? other, double t) => this;
-}
-
 
 class Responsive {
   /// Responsive utilities to prevent overflow on different devices
@@ -157,5 +118,3 @@ class Responsive {
     return (baseRadius * (width / 400)).clamp(40.0, 90.0);
   }
 }
-
-

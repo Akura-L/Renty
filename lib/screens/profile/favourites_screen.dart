@@ -136,14 +136,14 @@ class FavouritesScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    car.name,
+                    '${car.name} ${car.year}',
                     style: GoogleFonts.inter(
                         fontWeight: FontWeight.bold, fontSize: 15),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '${car.location} • ${car.year}',
+                    car.location,
                     style: const TextStyle(color: AppTheme.grey, fontSize: 12),
                   ),
                   const SizedBox(height: 8),
@@ -157,7 +157,7 @@ class FavouritesScreen extends StatelessWidget {
                             style: TextStyle(color: AppTheme.primary)),
                         TextSpan(text: '${car.price.toStringAsFixed(0)}'),
                         const TextSpan(
-                            text: ' / day',
+                            text: '/day',
                             style:
                                 TextStyle(fontSize: 12, color: AppTheme.grey)),
                       ],

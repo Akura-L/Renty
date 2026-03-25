@@ -24,7 +24,6 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
   bool _resendVisible = false;
   int _seconds = 60;
   bool _isLoading = false;
-  bool _hasError = false;
   Timer? _timer;
 
   String _formatClock(int seconds) {
@@ -96,7 +95,6 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
 
     setState(() {
       _isLoading = true;
-      _hasError = false;
     });
 
     await Future.delayed(const Duration(seconds: 1));
@@ -116,7 +114,6 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
       controller.clear();
     }
     setState(() {
-      _hasError = false;
     });
     FocusScope.of(context).requestFocus(FocusNode());
   }
@@ -189,7 +186,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
             ),
             const SizedBox(height: 6),
             Text(
-              'We sent a 6-digit code to ${widget.phoneNumber}.',
+              'We sent a 6-digit code to${widget.phoneNumber} .',
               style: theme.textTheme.bodyLarge?.copyWith(
                 color: theme.primaryColor,
               ),
@@ -254,6 +251,14 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: _resendVisible ? _resendOtp : null,
+                child: const Text('Verify Code'),
+              ),
+            ),
             const SizedBox(height: 10),
             Row(
               children: [
@@ -292,15 +297,6 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
               ),
             ),
             const Spacer(),
-            if (_resendVisible)
-              Align(
-                alignment: Alignment.center,
-                child: TextButton(
-                  onPressed: _resendOtp,
-                  child: const Text('Resend Code'),
-                ),
-              ),
-            const SizedBox(height: 8),
           ],
         ),
       ),
