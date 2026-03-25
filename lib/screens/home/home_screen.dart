@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../booking/car_detail_screen.dart';
-import '../../core/theme.dart';
+import '../booking/car_detail_screen.dart';\nimport '../../core/theme.dart';\nimport '../../core/responsive.dart';
 import '../../models/car.dart';
 
 class HomeScreen extends StatefulWidget {

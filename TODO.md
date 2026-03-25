@@ -1,12 +1,35 @@
-# Renty Bookings Screen Implementation TODO
+# Renty Error Correction & Theme Migration TODO
 
-## Plan Steps
-- [x] 1. Update Booking model: add reference, ownerName, pickupLocation, totalPaid, ownerPhone fields + JSON serialization.
-- [x] 2. Update BookingsProvider: add upcoming/past/cancelled getters; extend generateSampleBooking.
-- [x] 3. Update MyBookingsScreen: implement TabBar (Upcoming/Past/Cancelled with counts), per-tab empty states, revamped booking cards (badge ref dates duration owner total Call/Message buttons).
-- [x] 4. No new dependencies needed (mock Call with SnackBar).
-**All steps complete.**
+## Status Legend
+- [ ] **Pending**
+- [x] **Completed**
 
-Navigate to Profile > My Bookings to see empty state. To populate for testing: in debug console or temp button call provider.addBooking(provider.generateSampleBooking('1')) etc.
+## Step 1: Create/Update this TODO.md ✅
 
+## Step 2: Fix fonts in lib/core/theme.dart ✅\n- Standardize fontFamily to 'DMSans' (local Inter fonts)\n- Remove GoogleFonts.dmSans() references\n- Ensure consistent font across ThemeData
 
+## Step 3: Update lib/screens/home/home_screen.dart
+- Replace GoogleFonts.inter() with RentyTextStyles.*
+- Migrate AppTheme colors to RentyColors via Theme.of(context)
+- Verify no overflow issues
+
+## Step 4: Migrate auth screens (priority: sign_in_screen.dart, sign_up_screen.dart, otp_screen_fixed.dart, photo_screen.dart)
+- Remove GoogleFonts.inter(), AppTheme.*
+- Use theme-aware styles
+
+## Step 5: Update main_screen.dart & other core screens
+- Minor color/style updates
+
+## Step 6: Run commands & verify
+- `flutter pub get`
+- `flutter analyze`
+- `flutter run`
+
+## Step 7: Full project scan & remaining migrations
+- Use search_files for remaining AppTheme/GoogleFonts
+- Lint fixes
+
+## Step 8: Final audit
+- No lint errors
+- Theme consistency
+- Visual match to design

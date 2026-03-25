@@ -6,18 +6,27 @@ class Message {
   final String id;
   final String senderName;
   final String senderImage;
-  final String lastMessage;
+  final String carName;
+  final String? bookingRef;
+  final String preview;
   final DateTime time;
-  bool isUnread;  // Make mutable
+  final String category; // 'all', 'unread', 'owners', 'support'
+  bool isUnread;
 
   Message({
     required this.id,
     required this.senderName,
     required this.senderImage,
-    required this.lastMessage,
+    required this.carName,
+    this.bookingRef,
+    required this.preview,
     required this.time,
+    required this.category,
     this.isUnread = false,
   });
+
+  bool get isOwners => category == 'owners';
+  bool get isSupport => category == 'support';
 }
 
 class MessagesScreen extends StatefulWidget {
@@ -36,40 +45,69 @@ class _MessagesScreenState extends State<MessagesScreen> {
     messages = [
       Message(
         id: '1',
-        senderName: 'Toyota Rentals',
+        senderName: 'David M.',
         senderImage: 'https://i.pravatar.cc/150?img=1',
-        lastMessage: 'Your booking TX123 has been confirmed!',
-        time: DateTime(2024, 10, 10, 12, 0),  // Fixed time
+        carName: 'Land Cruiser',
+        bookingRef: 'TX001',
+        preview: 'Hi, when can I pick up the car?',
+        time: DateTime.now().subtract(const Duration(minutes: 2)),
+        category: 'owners',
         isUnread: true,
       ),
       Message(
         id: '2',
-        senderName: 'Range Rover Team',
+        senderName: 'Nancy W.',
         senderImage: 'https://i.pravatar.cc/150?img=2',
-        lastMessage: 'Payment received. Enjoy your drive!',
-        time: DateTime(2024, 10, 10, 9, 0),
-      ),
-      Message(
-        id: '3',
-        senderName: 'Customer Support',
-        senderImage: 'https://i.pravatar.cc/150?img=3',
-        lastMessage: "How can we help you today?",
-        time: DateTime(2024, 10, 9, 14, 0),
+        carName: 'BMW',
+        bookingRef: 'TX002',
+        preview: 'Thanks for the smooth handover!',
+        time: DateTime.now().subtract(const Duration(hours: 1)),
+        category: 'owners',
         isUnread: true,
       ),
       Message(
+        id: '3',
+        senderName: 'Renty Support',
+        senderImage: 'https://i.pravatar.cc/150?img=3',
+        carName: '',
+        bookingRef: null,
+        preview: 'How can we help you today?',
+        time: DateTime.now().subtract(const Duration(hours: 3)),
+        category: 'support',
+        isUnread: false,
+      ),
+      Message(
         id: '4',
-        senderName: 'Mercedes-Benz',
+        senderName: 'Peter K.',
         senderImage: 'https://i.pravatar.cc/150?img=4',
-        lastMessage: 'Car ready for pickup tomorrow at 9AM',
-        time: DateTime(2024, 10, 8, 16, 0),
+        carName: 'Corolla',
+        bookingRef: 'TX004',
+        preview: 'Car ready for pickup tomorrow at 9AM',
+        time: DateTime.now().subtract(const Duration(hours: 24)),
+        category: 'owners',
+        isUnread: false,
       ),
       Message(
         id: '5',
-        senderName: 'Audi Service',
+        senderName: 'Michael O.',
         senderImage: 'https://i.pravatar.cc/150?img=5',
-        lastMessage: 'Thank you for your feedback!',
-        time: DateTime(2024, 10, 7, 11, 0),
+        carName: 'Porsche',
+        bookingRef: 'TX005',
+        preview: 'Thank you for your feedback!',
+        time: DateTime.now().subtract(const Duration(days: 3)),
+        category: 'owners',
+        isUnread: false,
+      ),
+      Message(
+        id: '6',
+        senderName: 'David M.',
+        senderImage: 'https://i.pravatar.cc/150?img=6',
+        carName: 'Land Cruiser',
+        bookingRef: 'TX001',
+        preview: 'Everything good with the return?',
+        time: DateTime.now().subtract(const Duration(days: 4)),
+        category: 'owners',
+        isUnread: false,
       ),
     ];
   }
@@ -88,7 +126,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
             children: [
               const CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=68'),
+                backgroundImage:
+                    NetworkImage('https://i.pravatar.cc/150?img=68'),
               ),
               if (unreadCount > 0)
                 Positioned(
@@ -100,7 +139,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       color: Colors.red,
                       shape: BoxShape.circle,
                     ),
-                    constraints: const BoxConstraints(minWidth: 12, minHeight: 12),
+                    constraints:
+                        const BoxConstraints(minWidth: 12, minHeight: 12),
                     child: Text(
                       '$unreadCount',
                       style: const TextStyle(
@@ -115,26 +155,81 @@ class _MessagesScreenState extends State<MessagesScreen> {
           const SizedBox(width: 16),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: messages.isEmpty
-            ? const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.chat_bubble_outline,
-                        size: 80, color: AppTheme.grey),
-                    SizedBox(height: 16),
-                    Text('No messages yet', style: TextStyle(fontSize: 18)),
-                    Text('Messages appear here',
-                        style: TextStyle(color: AppTheme.grey)),
+      body: Column(
+        children: [
+          // Active Booking Banner
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(16),
+            margin: const EdgeInsets.only(bottom: 16),
+            decoration: BoxDecoration(
+              color: AppTheme.primary,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.local_activity, color: Colors.white, size: 24),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'ACTIVE BOOKING',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Text(
+                        'Land Cruiser TX001 • Nairobi\nOct 15-17 • KSh 12,500',
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+              ],
+            ),
+          ),
+          // Filter Tabs
+          DefaultTabController(
+            length: 4,
+            child: Column(
+              children: [
+                TabBar(
+                  labelColor: AppTheme.primary,
+                  unselectedLabelColor: AppTheme.grey,
+                  indicatorColor: AppTheme.primary,
+                  tabs: const [
+                    Tab(text: 'All'),
+                    Tab(text: 'Unread'),
+                    Tab(text: 'Owners'),
+                    Tab(text: 'Support'),
                   ],
                 ),
-              )
-            : ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) => _buildMessageTile(index),
-              ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      _buildTabView([]), // All
+                      _buildTabView(
+                          messages.where((m) => m.isUnread).toList()), // Unread
+                      _buildTabView(
+                          messages.where((m) => m.isOwners).toList()), // Owners
+                      _buildTabView(messages
+                          .where((m) => m.isSupport)
+                          .toList()), // Support
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -144,63 +239,136 @@ class _MessagesScreenState extends State<MessagesScreen> {
     );
   }
 
+  String _formatRelativeTime(DateTime time) {
+    final now = DateTime.now();
+    final diff = now.difference(time);
+
+    if (diff.inMinutes < 1) {
+      return 'now';
+    } else if (diff.inHours < 1) {
+      return '${diff.inMinutes}m ago';
+    } else if (diff.inHours < 24) {
+      return '${diff.inHours}h ago';
+    } else if (diff.inDays < 2) {
+      return 'Yesterday';
+    } else if (diff.inDays < 7) {
+      final weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      return weekdays[time.weekday % 7];
+    }
+    return '${diff.inDays}d ago';
+  }
+
+  Widget _buildTabView(List<Message> filteredMessages) {
+    if (filteredMessages.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.inbox_outlined, size: 80, color: AppTheme.grey),
+            SizedBox(height: 16),
+            Text('No messages', style: TextStyle(fontSize: 18)),
+            Text('Check back later', style: TextStyle(color: AppTheme.grey)),
+          ],
+        ),
+      );
+    }
+    return ListView.builder(
+      itemCount: filteredMessages.length,
+      itemBuilder: (context, index) =>
+          _buildMessageTileForTab(filteredMessages[index], index),
+    );
+  }
+
+  Widget _buildMessageTileForTab(Message message, int index) {
+    return _buildMessageTile(messages.indexOf(message));
+  }
+
   Widget _buildMessageTile(int index) {
     final message = messages[index];
-    return ListTile(
-      leading: Stack(
-        children: [
-          CircleAvatar(
-            radius: 25,
-            backgroundImage: NetworkImage(message.senderImage),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: ListTile(
+        contentPadding: EdgeInsets.zero,
+        leading: Stack(
+          children: [
+            CircleAvatar(
+              radius: 28,
+              backgroundImage: NetworkImage(message.senderImage),
+            ),
+            if (message.isUnread)
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 12,
+                  height: 12,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        title: Text(
+          message.senderName,
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
           ),
-          if (message.isUnread)
-            Positioned(
-              bottom: 0,
-              right: 0,
-              child: Container(
-                width: 12,
-                height: 12,
-                decoration: const BoxDecoration(
-                  color: Colors.green,
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '${message.carName}${message.bookingRef != null ? ' (${message.bookingRef})' : ''}',
+              style: TextStyle(
+                color: AppTheme.grey,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              message.preview,
+              style: TextStyle(
+                color: AppTheme.grey,
+                fontSize: 14,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+        trailing: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              _formatRelativeTime(message.time),
+              style: const TextStyle(fontSize: 12, color: AppTheme.grey),
+            ),
+            if (message.isUnread) ...[
+              const SizedBox(height: 4),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(
+                  color: AppTheme.primary,
                   shape: BoxShape.circle,
                 ),
               ),
-            ),
-        ],
+            ],
+          ],
+        ),
+        onTap: () {
+          if (message.isUnread) {
+            setState(() {
+              messages[index].isUnread = false;
+            });
+          }
+          // TODO: Navigate to chat screen
+        },
       ),
-      title: Text(
-        message.senderName,
-        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-      ),
-      subtitle: Text(message.lastMessage),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(
-            '${message.time.hour.toString().padLeft(2, '0')}:${message.time.minute.toString().padLeft(2, '0')}',
-            style: const TextStyle(fontSize: 12, color: AppTheme.grey),
-          ),
-          if (message.isUnread) const SizedBox(height: 4),
-          if (message.isUnread)
-            Container(
-              width: 8,
-              height: 8,
-              decoration: const BoxDecoration(
-                color: Colors.blue,
-                shape: BoxShape.circle,
-              ),
-            ),
-        ],
-      ),
-      onTap: () {
-        // Open chat and mark as read
-        if (message.isUnread) {
-          setState(() {
-            messages[index].isUnread = false;
-          });
-        }
-      },
     );
   }
 }

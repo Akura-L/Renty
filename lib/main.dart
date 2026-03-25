@@ -26,7 +26,7 @@ class RentyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Renty',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
+      theme: RentyTheme.light,
       initialRoute: '/splash',
       routes: {
         '/splash': (context) => const SplashScreen(),
