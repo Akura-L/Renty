@@ -83,26 +83,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const SizedBox(height: 14),
               Form(
                 key: _formKey,
-                child: TextFormField(
-                  controller: _contactController,
-                  keyboardType: _usePhone
-                      ? TextInputType.phone
-                      : TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    labelText: _usePhone ? 'Phone' : 'Email',
-                    hintText:
-                        _usePhone ? '+254 712 345 678' : 'james@example.com',
-                  ),
-                  validator: (v) {
-                    if (v == null || v.trim().isEmpty) {
-                      return _usePhone
-                          ? 'Enter your phone number'
-                          : 'Enter your email';
-                    }
-                    return null;
-                  },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: _contactController,
+                      keyboardType: _usePhone
+                          ? TextInputType.phone
+                          : TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        labelText: _usePhone ? 'Phone' : 'Email',
+                        hintText: _usePhone ? '+254 712 345 678' : 'james@example.com',
+                        prefixIcon: _usePhone 
+                          ? Icon(Icons.flag_outlined, color: Colors.green[800], size: 24)
+                          : null,
+                      ),
+                      validator: (v) {
+                        if (v == null || v.trim().isEmpty) {
+                          return _usePhone
+                              ? 'Enter your phone number'
+                              : 'Enter your email';
+                        }
+                        return null;
+                      },
+                    ),
+                    if (_usePhone) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        'We'll send a verification code to this number',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppTheme.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
+              _buildWhyJoinSection(),
               const Spacer(),
               SizedBox(
                 width: double.infinity,
@@ -121,6 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: const Text('Already have an account? Sign In'),
                 ),
               ),
+              _buildFooter(),
             ],
           ),
         ),
@@ -153,6 +172,76 @@ class _SignUpScreenState extends State<SignUpScreen> {
               fontWeight: FontWeight.w700,
               color: active ? AppTheme.primary : AppTheme.dark,
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWhyJoinSection() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 28),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Why join Renty?',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: AppTheme.dark,
+            ),
+          ),
+          const SizedBox(height: 12),
+          _buildBullet('Browse 500+ verified cars across Kenya'),
+          _buildBullet('Free cancellation on most rentals'),
+          _buildBullet('24/7 roadside support included'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBullet(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(Icons.check_circle, color: AppTheme.primary, size: 20),
+          const SizedBox(width: 12),
+          Expanded(child: Text(text, style: Theme.of(context).textTheme.bodyMedium)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFooter() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 24),
+      child: Center(
+        child: RichText(
+          textAlign: TextAlign.center,
+          text: TextSpan(
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey),
+            children: [
+              const TextSpan(text: 'By continuing, you agree to our '),
+              TextSpan(
+                text: 'Terms of Service',
+                style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    // Navigate to terms
+                  },
+              ),
+              const TextSpan(text: ' and '),
+              TextSpan(
+                text: 'Privacy Policy',
+                style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    // Navigate to privacy policy
+                  },
+              ),
+            ],
           ),
         ),
       ),

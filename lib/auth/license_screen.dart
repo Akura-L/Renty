@@ -81,7 +81,7 @@ class _LicenseScreenState extends State<LicenseScreen> {
               _LicenseUploadTile(
                 imageFile: _frontLicense,
                 onTap: () => _pickLicense(forBack: false),
-                placeholderIcon: Icons.badge_outlined,
+                placeholderIcon: Icons.card_membership,
               ),
               const SizedBox(height: 18),
               Text(
@@ -92,14 +92,10 @@ class _LicenseScreenState extends State<LicenseScreen> {
               _LicenseUploadTile(
                 imageFile: _backLicense,
                 onTap: () => _pickLicense(forBack: true),
-                placeholderIcon: Icons.badge,
+                placeholderIcon: Icons.card_membership,
               ),
               const SizedBox(height: 12),
-              TextButton(
-                onPressed: () => _pickLicense(forBack: true),
-                child: const Text(
-                    'Upload the back side of your licence to continue'),
-              ),
+              Text(\n                'Upload the back side of your licence to continue',\n                style: TextStyle(\n                  color: AppTheme.primary,\n                  fontWeight: FontWeight.w600,\n                ),\n              ),
               const SizedBox(height: 14),
               Text(
                 'Photo tips',
@@ -109,10 +105,10 @@ class _LicenseScreenState extends State<LicenseScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              const _TipLine('Full licence visible — no corners cut off'),
-              const _TipLine('Photo must not be expired'),
-              const _TipLine('All text must be clearly readable'),
-              const _TipLine('Both front and back required'),
+  const _TipLine('• Full licence visible — no corners cut off'),
+  const _TipLine('• Photo must not be expired'),
+  const _TipLine('• All text must be clearly readable'),
+  const _TipLine('• Both front and back required'),
               const SizedBox(height: 14),
               Text(
                 '256-bit Encrypted  |  GDPR Compliant',
@@ -130,13 +126,7 @@ class _LicenseScreenState extends State<LicenseScreen> {
                 ),
               ),
               const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _submit,
-                  child: const Text('Submit & Finish'),
-                ),
-              ),
+              SizedBox(\n                width: double.infinity,\n                child: ElevatedButton(\n                  onPressed: _canSubmit ? _submit : null,\n                  style: ElevatedButton.styleFrom(\n                    backgroundColor: _canSubmit ? null : AppTheme.grey300,\n                    foregroundColor: _canSubmit ? null : AppTheme.grey,\n                  ),\n                  child: const Text('Submit & Finish'),\n                ),\n              ),
             ],
           ),
         ),
@@ -164,10 +154,7 @@ class _LicenseUploadTile extends StatelessWidget {
       child: Container(
         height: 160,
         width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(12),
-        ),
+        decoration: BoxDecoration(\n          borderRadius: BorderRadius.circular(12),\n        ),\n        child: Stack(\n          children: [\n            // Dashed border simulation using gradient\n            Positioned.fill(\n              child: Container(\n                decoration: BoxDecoration(\n                  borderRadius: BorderRadius.circular(12),\n                  border: Border.all(\n                    color: Colors.grey.shade300,\n                    width: 2,\n                    strokeAlign: BorderSide.strokeAlignInside,\n                  ),\n                ),\n              ),\n            ),\n            // Content container\n            Container(\n              height: double.infinity,\n              width: double.infinity,\n              decoration: BoxDecoration(\n                color: Colors.white,\n                borderRadius: BorderRadius.circular(12),\n              ),\n            ),\n          ],\n        ),
         child: imageFile == null
             ? Center(
                 child: Column(

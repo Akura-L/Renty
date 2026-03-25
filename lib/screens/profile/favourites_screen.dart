@@ -32,9 +32,7 @@ class FavouritesScreen extends StatelessWidget {
           ),
           body: RefreshIndicator(
             onRefresh: () => Future.delayed(const Duration(seconds: 1)),
-            child: Padding(
-              padding: EdgeInsets.all(AppTheme.kPaddingLarge),
-              child: provider.favouriteCars.isEmpty
+            child: Column(\n              children: [\n                Expanded(\n                  child: Padding(\n                    padding: EdgeInsets.all(AppTheme.kPaddingLarge),\n                    child: provider.favouriteCars.isEmpty
                   ? const Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -42,25 +40,13 @@ class FavouritesScreen extends StatelessWidget {
                           Icon(Icons.favorite_border,
                               size: 80, color: AppTheme.grey),
                           SizedBox(height: 16),
-                          Text('No favourites yet',
-                              style: TextStyle(fontSize: 18)),
+                          Text('No favourites yet',\n                              style: GoogleFonts.inter(\n                                  fontWeight: FontWeight.bold, \n                                  fontSize: 20)),
                           Text('Tap hearts on cars to save them',
                               style: TextStyle(color: AppTheme.grey)),
                         ],
                       ),
                     )
-                  : GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        childAspectRatio: 0.85,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                      ),
-                      itemCount: provider.favouriteCars.length,
-                      itemBuilder: (context, i) => _buildCarCard(
-                          context, provider.favouriteCars[i], provider),
-                    ),
+                    : ListView.builder(\n                      itemCount: provider.favouriteCars.length,\n                      itemBuilder: (context, i) => Padding(\n                        padding: const EdgeInsets.only(bottom: 16),\n                        child: _buildCarCard(\n                          context, provider.favouriteCars[i], provider),\n                      ),\n                    ),
             ),
           ),
         );
@@ -91,81 +77,9 @@ class FavouritesScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(16)),
-                  child: CachedNetworkImage(
-                    imageUrl: car.imageUrl,
-                    height: AppTheme.kCardImageHeight,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Shimmer.fromColors(
-                      baseColor: Colors.grey[300]!,
-                      highlightColor: Colors.grey[100]!,
-                      child: Container(height: AppTheme.kCardImageHeight),
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      height: AppTheme.kCardImageHeight,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.image_not_supported,
-                          size: 50, color: Colors.grey),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: GestureDetector(
-                    onTap: () => provider.toggleFavourite(car.id),
-                    child: Icon(
-                      Icons.favorite,
-                      color: provider.isFavourite(car.id)
-                          ? Colors.red[400]
-                          : Colors.white.withOpacity(0.6),
-                      size: 24,
-                    ),
-                  ),
-                ),
-              ],
+                Stack(\n                  children: [\n                    ClipRRect(\n                      borderRadius:\n                          const BorderRadius.vertical(top: Radius.circular(16)),\n                      child: CachedNetworkImage(\n                        imageUrl: car.imageUrl,\n                        height: AppTheme.kCardImageHeight,\n                        width: double.infinity,\n                        fit: BoxFit.cover,\n                        placeholder: (context, url) => Shimmer.fromColors(\n                          baseColor: Colors.grey[300]!,\n                          highlightColor: Colors.grey[100]!,\n                          child: Container(height: AppTheme.kCardImageHeight),\n                        ),\n                        errorWidget: (context, url, error) => Container(\n                          height: AppTheme.kCardImageHeight,\n                          color: Colors.grey[300],\n                          child: const Icon(Icons.image_not_supported,\n                              size: 50, color: Colors.grey),\n                        ),\n                      ),\n                    ),\n                    if (car.topRated)\n                      const Positioned(\n                        top: 8,\n                        left: 8,\n                        child: Container(\n                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),\n                          decoration: BoxDecoration(\n                            color: AppTheme.primary,\n                            borderRadius: BorderRadius.circular(20),\n                          ),\n                          child: Text(\n                            'Top Rated',\n                            style: TextStyle(\n                              color: Colors.white,\n                              fontSize: 11,\n                              fontWeight: FontWeight.bold,\n                            ),\n                          ),\n                        ),\n                      ),\n                    Positioned(\n                      top: 8,\n                      right: 8,\n                      child: GestureDetector(\n                        onTap: () => provider.toggleFavourite(car.id),\n                        child: Icon(\n                          Icons.favorite,\n                          color: provider.isFavourite(car.id)\n                              ? Colors.red[400]\n                              : Colors.white.withOpacity(0.6),\n                          size: 24,\n                        ),\n                      ),\n                    ),\n                  ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${car.name} ${car.year}',
-                    style: GoogleFonts.inter(
-                        fontWeight: FontWeight.bold, fontSize: 15),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    car.location,
-                    style: const TextStyle(color: AppTheme.grey, fontSize: 12),
-                  ),
-                  const SizedBox(height: 8),
-                  RichText(
-                    text: TextSpan(
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                      children: [
-                        const TextSpan(
-                            text: 'KSh ',
-                            style: TextStyle(color: AppTheme.primary)),
-                        TextSpan(text: '${car.price.toStringAsFixed(0)}'),
-                        const TextSpan(
-                            text: '/day',
-                            style:
-                                TextStyle(fontSize: 12, color: AppTheme.grey)),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            Padding(\n              padding: const EdgeInsets.all(16),\n              child: Column(\n                crossAxisAlignment: CrossAxisAlignment.start,\n                children: [\n                  Text(\n                    car.name,\n                    style: GoogleFonts.inter(\n                      fontWeight: FontWeight.bold,\n                      fontSize: 18,\n                    ),\n                    maxLines: 2,\n                    overflow: TextOverflow.ellipsis,\n                  ),\n                  Text(\n                    car.location,\n                    style: TextStyle(\n                      color: AppTheme.grey,\n                      fontSize: 14,\n                    ),\n                  ),\n                  const SizedBox(height: 12),\n                  // Specs row\n                  if (car.specs.isNotEmpty)\n                    SizedBox(\n                      height: 40,\n                      child: ListView.builder(\n                        scrollDirection: Axis.horizontal,\n                        itemCount: (car.specs.length).clamp(0, 3),\n                        itemBuilder: (context, index) {\n                          final spec = car.specs[index];\n                          IconData icon;\n                          if (spec.toLowerCase().contains('seat')) {\n                            icon = Icons.people_outline;\n                          } else if (spec.toLowerCase().contains('auto') || spec.toLowerCase().contains('trans')) {\n                            icon = Icons.speed;\n                          } else {\n                            icon = Icons.local_gas_station_outlined;\n                          }\n                          return Padding(\n                            padding: const EdgeInsets.only(right: 20),\n                            child: Row(\n                              mainAxisSize: MainAxisSize.min,\n                              children: [\n                                Icon(icon, color: AppTheme.grey, size: 18),\n                                const SizedBox(width: 4),\n                                Text(\n                                  spec,\n                                  style: TextStyle(\n                                    color: AppTheme.grey,\n                                    fontSize: 12,\n                                  ),\n                                ),\n                              ],\n                            ),\n                          );\n                        },\n                      ),\n                    ),\n                  const SizedBox(height: 12),\n                  // Rating row\n                  Row(\n                    children: [\n                      ...List.generate(5, (index) => Icon(\n                            index < (car.rating ~/ 0.5) ? Icons.star : Icons.star_border,\n                            color: AppTheme.primary,\n                            size: 16,\n                          )),\n                      const SizedBox(width: 8),\n                      Text(\n                        '${car.rating.toStringAsFixed(1)} (${car.reviewCount})\n',\n                        style: TextStyle(\n                          fontSize: 14,\n                          fontWeight: FontWeight.w600,\n                          color: AppTheme.primary,\n                        ),\n                      ),\n                    ],\n                  ),\n                  const SizedBox(height: 16),\n                  // Button and price row\n                  Row(\n                    children: [\n                      Expanded(\n                        child: ElevatedButton(\n                          onPressed: () => Navigator.push(\n                            context,\n                            MaterialPageRoute(\n                              builder: (_) => CarDetailScreen(car: car),\n                            ),\n                          ),\n                          style: ElevatedButton.styleFrom(\n                            backgroundColor: AppTheme.primary,\n                            foregroundColor: Colors.white,\n                            shape: RoundedRectangleBorder(\n                              borderRadius: BorderRadius.circular(12),\n                            ),\n                            padding: const EdgeInsets.symmetric(vertical: 12),\n                          ),\n                          child: const Text(\n                            'Book Now',\n                            style: TextStyle(\n                              fontWeight: FontWeight.bold,\n                              fontSize: 16,\n                            ),\n                          ),\n                        ),\n                      ),\n                      const SizedBox(width: 12),\n                      Text(\n                        'KSh ${car.price.toStringAsFixed(0)}',\n                        style: GoogleFonts.inter(\n                          fontSize: 20,\n                          fontWeight: FontWeight.bold,\n                          color: AppTheme.primary,\n                        ),\n                      ),\n                    ],\n                  ),\n                ],\n              ),\n            ),
           ],
         ),
       ),

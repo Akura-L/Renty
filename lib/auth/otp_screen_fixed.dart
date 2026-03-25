@@ -253,7 +253,13 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
             const SizedBox(height: 8),
             Align(
               alignment: Alignment.centerLeft,
-TextButton(\n                onPressed: _resendVisible ? _resendOtp : null,\n                child: Text(\n                  'Resend Code',\n                  style: TextStyle(color: theme.primaryColor),\n                ),\n              ),
+              child: TextButton(
+                onPressed: _resendVisible ? _resendOtp : null,
+                child: Text(
+                  'Resend Code',
+                  style: TextStyle(color: theme.primaryColor),
+                ),
+              ),
             ),
             const SizedBox(height: 10),
             Row(
@@ -263,7 +269,10 @@ TextButton(\n                onPressed: _resendVisible ? _resendOtp : null,\n   
                     onPressed: () {
                       // Mock alternative delivery
                     },
-Text('Send via Email', style: TextStyle(color: theme.primaryColor),),
+                    child: Text(
+                      'Send via Email',
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
                   ),
                 ),
                 Expanded(
@@ -271,7 +280,10 @@ Text('Send via Email', style: TextStyle(color: theme.primaryColor),),
                     onPressed: () {
                       // Mock alternative delivery
                     },
-Text('Call me instead', style: TextStyle(color: theme.primaryColor),),
+                    child: Text(
+                      'Call me instead',
+                      style: TextStyle(color: theme.primaryColor),
+                    ),
                   ),
                 ),
               ],

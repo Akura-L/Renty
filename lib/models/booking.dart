@@ -8,6 +8,11 @@ class Booking {
   final DateTime startDate;
   final DateTime endDate;
   final String status;
+  final String reference;
+  final String ownerName;
+  final String pickupLocation;
+  final double totalPaid;
+  final String ownerPhone;
 
   const Booking({
     required this.id,
@@ -15,6 +20,11 @@ class Booking {
     required this.startDate,
     required this.endDate,
     required this.status,
+    required this.reference,
+    required this.ownerName,
+    required this.pickupLocation,
+    required this.totalPaid,
+    required this.ownerPhone,
   });
 
   factory Booking.fromJson(Map<String, dynamic> json) {
@@ -24,6 +34,11 @@ class Booking {
       startDate: DateTime.parse(json['startDate'] ?? ''),
       endDate: DateTime.parse(json['endDate'] ?? ''),
       status: json['status'] ?? '',
+      reference: json['reference'] ?? '',
+      ownerName: json['ownerName'] ?? '',
+      pickupLocation: json['pickupLocation'] ?? '',
+      totalPaid: (json['totalPaid'] ?? 0).toDouble(),
+      ownerPhone: json['ownerPhone'] ?? '',
     );
   }
 
@@ -33,5 +48,10 @@ class Booking {
         'startDate': startDate.toIso8601String(),
         'endDate': endDate.toIso8601String(),
         'status': status,
+        'reference': reference,
+        'ownerName': ownerName,
+        'pickupLocation': pickupLocation,
+        'totalPaid': totalPaid,
+        'ownerPhone': ownerPhone,
       };
 }

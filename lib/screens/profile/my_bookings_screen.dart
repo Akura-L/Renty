@@ -6,6 +6,7 @@ import '../../core/theme.dart';
 import '../../models/booking.dart';
 import '../booking/car_detail_screen.dart';
 import '../booking/payment_screen.dart';
+import 'messages_screen.dart';
 
 class MyBookingsScreen extends StatelessWidget {
   const MyBookingsScreen({super.key});
@@ -43,13 +44,45 @@ class MyBookingsScreen extends StatelessWidget {
                 ),
               );
             }
-            return RefreshIndicator(
-              onRefresh: () => Future.value(),
-              child: ListView.builder(
-                padding: EdgeInsets.all(AppTheme.kPaddingLarge),
-                itemCount: provider.bookings.length,
-                itemBuilder: (context, i) =>
-                    _buildBookingCard(context, provider.bookings[i], provider),
+            return DefaultTabController(
+              length: 3,
+              child: Column(
+                children: [
+                  TabBar(
+                    labelColor: AppTheme.primary,
+                    unselectedLabelColor: AppTheme.grey,
+                    indicatorColor: AppTheme.primary,
+                    tabs: [
+                      Tab(text: 'Upcoming (${provider.upcomingBookings.length})'),
+                      Tab(text: 'Past (${provider.pastBookings.length})'),
+                      Tab(text: 'Cancelled (${provider.cancelledBookings.length})'),
+                    ],
+                  ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        _buildBookingsTab(
+                          context: context,
+                          provider: provider,
+                          title: 'Upcoming',
+                          bookings: provider.upcomingBookings,
+                        ),
+                        _buildBookingsTab(
+                          context: context,
+                          provider: provider,
+                          title: 'Past',
+                          bookings: provider.pastBookings,
+                        ),
+                        _buildBookingsTab(
+                          context: context,
+                          provider: provider,
+                          title: 'Cancelled',
+                          bookings: provider.cancelledBookings,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             );
           },
@@ -61,7 +94,7 @@ class MyBookingsScreen extends StatelessWidget {
   Widget _buildBookingCard(
       BuildContext context, Booking booking, BookingsProvider provider) {
     final totalDays = booking.endDate.difference(booking.startDate).inDays + 1;
-    final totalPrice = booking.car.price * totalDays;
+
     return Card(
       margin: EdgeInsets.only(bottom: AppTheme.kPaddingMedium),
       elevation: 2,
@@ -95,20 +128,36 @@ class MyBookingsScreen extends StatelessWidget {
                       Text(booking.car.name,
                           style:
                               GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                      Text(booking.reference,
+                          style: TextStyle(
+                              fontSize: AppTheme.kFontSizeSmall,
+                              color: AppTheme.grey)),
                       Text('${booking.car.location} • ${booking.car.year}'),
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          const Icon(Icons.date_range,
+                          const Icon(Icons.calendar_today,
                               size: 16, color: AppTheme.grey),
                           const SizedBox(width: 4),
                           Text(
-                            '${booking.startDate.day}/${booking.startDate.month} - ${booking.endDate.day}/${booking.endDate.month}',
+                            'Pickup: ${booking.startDate.day}/${booking.startDate.month} | Return: ${booking.endDate.day}/${booking.endDate.month}',
                             style: const TextStyle(color: AppTheme.grey),
                           ),
                         ],
                       ),
-                      Text('KSh ${totalPrice.toStringAsFixed(0)} total',
+                      Text('$totalDays days',
+                          style: TextStyle(
+                              fontSize: AppTheme.kFontSizeSmall,
+                              color: AppTheme.grey)),
+                      Text('Owner: ${booking.ownerName}',
+                          style: TextStyle(
+                              fontSize: AppTheme.kFontSizeSmall,
+                              fontWeight: FontWeight.w600)),
+                      Text(booking.pickupLocation,
+                          style: TextStyle(
+                              fontSize: AppTheme.kFontSizeSmall,
+                              color: AppTheme.grey)),
+                      Text('KSh ${booking.totalPaid.toStringAsFixed(0)} paid',
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.w600,
                             color: AppTheme.primary,
@@ -120,13 +169,13 @@ class MyBookingsScreen extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
-                    color: _getStatusColor(booking.status).withOpacity(0.1),
+                    color: Colors.green.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    booking.status,
-                    style: TextStyle(
-                      color: _getStatusColor(booking.status),
+                    booking.status.toUpperCase(),
+                    style: const TextStyle(
+                      color: Colors.green,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
@@ -139,24 +188,16 @@ class MyBookingsScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    icon: const Icon(Icons.payment, size: 16),
-                    label: const Text('Pay Now'),
-                    onPressed: booking.status == 'Pending'
-                        ? () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) => PaymentScreen(
-                                    car: booking.car,
-                                    startDate: booking.startDate,
-                                    endDate: booking.endDate,
-                                    totalAmount: totalPrice),
-                              ),
-                            );
-                          }
-                        : null,
+                    icon: const Icon(Icons.phone, size: 16),
+                    label: const Text('Call Owner'),
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                            content: Text('Calling ${booking.ownerName}...')),
+                      );
+                    },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: AppTheme.primary,
+                      backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
                     ),
                   ),
@@ -164,22 +205,17 @@ class MyBookingsScreen extends StatelessWidget {
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton.icon(
-                    icon: const Icon(Icons.visibility, size: 16),
-                    label: const Text('View Details'),
+                    icon: const Icon(Icons.message, size: 16),
+                    label: const Text('Message'),
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => CarDetailScreen(car: booking.car),
+                          builder: (_) => const MessagesScreen(),
                         ),
                       );
                     },
                   ),
-                ),
-                const SizedBox(width: 12),
-                IconButton(
-                  icon: const Icon(Icons.delete, color: Colors.red),
-                  onPressed: () => provider.removeBooking(booking.id),
                 ),
               ],
             ),
@@ -189,12 +225,35 @@ class MyBookingsScreen extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String status) {
-    return switch (status) {
-      'Confirmed' => Colors.green,
-      'Pending' => Colors.orange,
-      'Completed' => Colors.blue,
-      _ => AppTheme.grey,
-    };
+  Widget _buildBookingsTab({
+    required BuildContext context,
+    required BookingsProvider provider,
+    required String title,
+    required List<Booking> bookings,
+  }) {
+    if (bookings.isEmpty) {
+      return const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.calendar_today_outlined, size: 80, color: AppTheme.grey),
+            SizedBox(height: 16),
+            Text('No bookings yet', style: TextStyle(fontSize: 18)),
+            Text('Book your first car!',
+                style: TextStyle(color: AppTheme.grey)),
+          ],
+        ),
+      );
+    }
+    return RefreshIndicator(
+      onRefresh: () => Future.value(),
+      child: ListView.separated(
+        padding: EdgeInsets.all(AppTheme.kPaddingLarge),
+        itemCount: bookings.length,
+        separatorBuilder: (context, index) => const SizedBox(height: 12),
+        itemBuilder: (context, i) =>
+            _buildBookingCard(context, bookings[i], provider),
+      ),
+    );
   }
 }

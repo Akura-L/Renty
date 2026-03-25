@@ -75,15 +75,15 @@ class _PhotoScreenState extends State<PhotoScreen> {
                 child: Column(
                   children: [
                     CircleAvatar(
-                      radius: 80,
-                      backgroundColor: theme.primaryColor.withOpacity(0.1),
+                      radius: 100,
+                      backgroundColor: AppTheme.primary.withOpacity(0.1),
                       backgroundImage:
                           _image != null ? FileImage(_image!) : null,
                       child: _image == null
                           ? const Text(
                               'JM',
                               style: TextStyle(
-                                fontSize: 28,
+                                fontSize: 40,
                                 fontWeight: FontWeight.w700,
                                 color: AppTheme.primary,
                               ),
@@ -129,10 +129,46 @@ class _PhotoScreenState extends State<PhotoScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              const _RequirementLine('Clear, well-lit face photo'),
-              const _RequirementLine('No sunglasses or hats'),
-              const _RequirementLine('Neutral background preferred'),
-              const _RequirementLine('File size under 5 MB (JPG/PNG)'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Text(
+                  '• Clear well-lit face photo',
+                  style: TextStyle(
+                    color: AppTheme.grey700,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Text(
+                  '• No sunglasses or hats',
+                  style: TextStyle(
+                    color: AppTheme.grey700,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Text(
+                  '• Neutral background preferred',
+                  style: TextStyle(
+                    color: AppTheme.grey700,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: Text(
+                  '• File size under 5 MB (JPG/PNG)',
+                  style: TextStyle(
+                    color: AppTheme.grey700,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
               const Spacer(),
               if (_image != null)
                 Center(
@@ -152,31 +188,13 @@ class _PhotoScreenState extends State<PhotoScreen> {
               const SizedBox(height: 12),
               Center(
                 child: TextButton(
+                  style: TextButton.styleFrom(foregroundColor: AppTheme.primary),
                   onPressed: _skip,
-                  child: const Text("Skip for now — I'll add later"),
+                  child: const Text('Skip for now — I'll add later'),
                 ),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _RequirementLine extends StatelessWidget {
-  final String text;
-  const _RequirementLine(this.text);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: AppTheme.grey700,
-          fontWeight: FontWeight.w600,
         ),
       ),
     );

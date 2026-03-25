@@ -13,6 +13,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _selectedCategory = 'Featured';
+  List<String> _categories = ['Featured', 'Best Value', 'Luxury', 'Electric'];
   List<Car> cars = [
     const Car(
       id: '1',
@@ -158,11 +160,24 @@ class _HomeScreenState extends State<HomeScreen> {
   void _filterCars() {
     final query = _searchController.text.toLowerCase();
     setState(() {
-      filteredCars = cars
-          .where((car) =>
-              car.name.toLowerCase().contains(query) ||
-              car.location.toLowerCase().contains(query))
-          .toList();
+      filteredCars = cars.where((car) {
+        final matchesSearch = query.isEmpty ||
+            car.name.toLowerCase().contains(query) ||
+            car.location.toLowerCase().contains(query);
+
+        final matchesCategory = _selectedCategory == 'Featured' ||
+            (_selectedCategory == 'Electric' &&
+                (car.name.toLowerCase().contains('ev') ||
+                    car.name.toLowerCase().contains('audi'))) ||
+            (_selectedCategory == 'Luxury' &&
+                (car.name.toLowerCase().contains('mercedes') ||
+                    car.name.toLowerCase().contains('range') ||
+                    car.name.toLowerCase().contains('bmw') ||
+                    car.name.toLowerCase().contains('audi'))) ||
+            (_selectedCategory == 'Best Value' && (car.price < 6000));
+
+        return matchesSearch && matchesCategory;
+      }).toList();
     });
   }
 
@@ -197,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                _getGreeting(),
+                'Good afternoon',
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
@@ -226,12 +241,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               SizedBox(height: AppTheme.kPaddingMedium * 0.75),
-              Wrap(
-                spacing: Responsive.horizontalGap(context),
-                children: const [
-                  _HomeMiniChip(label: 'All', active: true),
-                  _HomeMiniChip(label: 'SUV'),
-                ],
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    _FilterChip(
+                      label: 'All',
+                      isSelected: true,
+                      onTap: () {
+                        // All filter already active, or could clear category filter
+                      },
+                    ),
+                    _FilterChip(label: 'SUV', onTap: () {}),
+                    _FilterChip(label: 'Sedan', onTap: () {}),
+                    _FilterChip(label: 'Luxury', onTap: () {}),
+                    _FilterChip(label: 'Electric', onTap: () {}),
+                    _FilterChip(label: 'Pickup', onTap: () {}),
+                  ],
+                ),
               ),
               SizedBox(height: AppTheme.kPaddingMedium),
               Text(
@@ -239,6 +266,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: GoogleFonts.inter(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              SizedBox(
+                height: 40,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: _categories.length,
+                  itemBuilder: (context, index) {
+                    final category = _categories[index];
+                    final isSelected = _selectedCategory == category;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedCategory = category;
+                            _filterCars();
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppTheme.primary10
+                                : Colors.grey[100],
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppTheme.primary
+                                  : AppTheme.grey10,
+                            ),
+                          ),
+                          child: Text(
+                            category,
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              color:
+                                  isSelected ? AppTheme.primary : AppTheme.grey,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 16),
@@ -252,11 +326,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossCount,
-                      childAspectRatio: aspectRatio,
-                      crossAxisSpacing: Responsive.horizontalGap(context) * 2,
-                      mainAxisSpacing: AppTheme.kPaddingSmall * 1.3,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.78,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
                     ),
                     itemCount: filteredCars.length,
                     itemBuilder: (context, i) =>
@@ -306,12 +381,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   errorBuilder: (context, error, stackTrace) => Container(
                     height: AppTheme.kCardImageHeight,
                     color: Colors.grey[300],
-                    alignment: Alignment.center,
-                    child: const Icon(
-                      Icons.image_not_supported,
-                      size: 50,
-                      color: Colors.grey,
-                    ),
                   ),
                 ),
               ),
@@ -323,7 +392,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${car.name} ${car.year}',
+                    car.name,
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -332,11 +401,47 @@ class _HomeScreenState extends State<HomeScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    car.location,
-                    style: const TextStyle(
+                    '${car.location}, ${car.year}',
+                    style: GoogleFonts.inter(
                       color: AppTheme.grey,
                       fontSize: 12,
                     ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primary.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.star,
+                                size: 14, color: AppTheme.primary),
+                            const SizedBox(width: 4),
+                            Text(
+                              '${car.rating.toStringAsFixed(1)}',
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12,
+                                color: AppTheme.primary,
+                              ),
+                            ),
+                            Text(
+                              '(${car.reviewCount})',
+                              style: GoogleFonts.inter(
+                                fontSize: 11,
+                                color: AppTheme.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 6),
                   Text(
@@ -364,28 +469,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class _HomeMiniChip extends StatelessWidget {
+class _FilterChip extends StatelessWidget {
   final String label;
-  final bool active;
-  const _HomeMiniChip({required this.label, this.active = false});
+  final bool isSelected;
+  final VoidCallback onTap;
+  const _FilterChip({
+    required this.label,
+    this.isSelected = false,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: active ? AppTheme.primary10 : Colors.grey[100],
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(
-          color: active ? AppTheme.primary : AppTheme.grey10,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        margin: const EdgeInsets.only(right: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? AppTheme.primary10 : Colors.grey[100],
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(
+            color: isSelected ? AppTheme.primary : AppTheme.grey10,
+          ),
         ),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontWeight: FontWeight.w800,
-          color: active ? AppTheme.primary : AppTheme.grey700,
-          fontSize: 12,
+        child: Text(
+          label,
+          style: GoogleFonts.inter(
+            fontWeight: FontWeight.w700,
+            color: isSelected ? AppTheme.primary : AppTheme.grey700,
+            fontSize: 13,
+          ),
         ),
       ),
     );

@@ -64,7 +64,25 @@ class BookingsProvider extends ChangeNotifier {
       ),
       startDate: DateTime.now(),
       endDate: DateTime.now().add(const Duration(days: 3)),
-      status: 'Confirmed',
+      status: 'CONFIRMED',
+      reference: 'RNT $id',
+      ownerName: 'John Doe',
+      pickupLocation: 'Nairobi CBD',
+      totalPaid: 16500,
+      ownerPhone: '+254 700 123 456',
     );
   }
+
+  List<Booking> get upcomingBookings => _bookings
+      .where((b) =>
+          b.startDate
+              .isAfter(DateTime.now().subtract(const Duration(days: 1))) &&
+          (b.status == 'CONFIRMED' || b.status == 'PENDING'))
+      .toList();
+
+  List<Booking> get pastBookings =>
+      _bookings.where((b) => b.endDate.isBefore(DateTime.now())).toList();
+
+  List<Booking> get cancelledBookings =>
+      _bookings.where((b) => b.status == 'CANCELLED').toList();
 }
