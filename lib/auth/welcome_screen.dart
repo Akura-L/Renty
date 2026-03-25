@@ -46,10 +46,36 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SvgPicture.asset(
-                  'assets/icons/logo.svg',
-                  width: 120,
-                  height: 120,
+                Row(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: AppTheme.primary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(
+                        Icons.directions_car,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Renty',
+                          style: TextStyle(
+                            color: AppTheme.dark,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
                 SizedBox(height: AppTheme.kPaddingSmall),
                 Text(
@@ -81,7 +107,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: _signIn,
-                    icon: const Icon(Icons.phone_iphone),
+                    icon: const Icon(Icons.apple),
                     label: const Text('Continue with Apple'),
                   ),
                 ),
@@ -135,6 +161,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {},
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.primary,
+                          ),
                           child: const Text('Forgot password?'),
                         ),
                       ),
@@ -155,35 +184,25 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               builder: (_) => const SignUpScreen(),
                             ),
                           ),
-                          child: const Text(
-                              'New to Renty? Create a free account'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppTheme.primary,
+                          ),
+                          child:
+                              const Text('New to Renty? Create a free account'),
                         ),
                       ),
                       SizedBox(height: AppTheme.kPaddingSmall),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '4.9 / 5',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(
-                                  color: AppTheme.grey,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                          Text(
-                            'Trusted by 10,000+ drivers across Kenya',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(
-                                  color: AppTheme.grey,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                          ),
-                        ],
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(top: AppTheme.kPaddingSmall),
+                        child: Text(
+                          '4.9 / 5 • Trusted by 10,000+ drivers across Kenya',
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: AppTheme.grey,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
                       ),
                     ],
                   ),

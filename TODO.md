@@ -1,21 +1,18 @@
-# Fix Home Screen Vehicle Images Blank + Overflow
+# Renty Login Screen Redesign TODO
 
-**Status: Complete**
+## Plan Summary
+Target: lib/auth/welcome_screen.dart
+- Update logo to teal square icon with white car + 'Renty' wordmark (top-left).
+- Subtitle: 'Sign in to access your bookings and saved cars' ✓
+- Heading: 'Welcome back' large bold ✓
+- Full-width outlined 'Continue with Google' (G icon), 'Continue with Apple' (Apple icon).
+- Divider 'or sign in with email'.
+- Email or Phone field, Password field (floating labels).
+- 'Forgot password?' right-aligned teal link.
+- Full-width teal 'Sign In' button.
+- Teal text link 'New to Renty? Create a free account'.
+- Bottom: '4.9 / 5 • Trusted by 10,000+ drivers across Kenya' small grey.
 
-## Summary:
-Fixed home screen vehicle images by:
-- Updated image paths to snake_case in home_screen.dart
-- Fixed GridView aspectRatio to stable 1.2 for 2-column layout to prevent overflow
-- Retained Shimmer effect (common cause of blank was likely Flutter cache)
-- Removed Shimmer from car_detail_screen.dart for consistency
-- Ran flutter clean && pub get to rebundle assets
+## Steps
+- [x] Step 1: Create assets/icons/car_icon.svg if needed or use Icons.directions_car; update logo Row.\n- [x] Step 2: Fix Apple button icon and labels.\n- [x] Step 3: Style forgot password link teal, right-aligned.\n- [ ] Step 4: Ensure fields have floating labels (use theme).\n- [ ] Step 5: Style create account link teal.\n- [ ] Step 6: Update footer to single line small grey text.\n- [ ] Step 7: Edit file with all changes at once using edit_file.\n- [ ] Step 8: Test with `flutter run --hot` or hot reload.\n- [ ] Step 9: Mark complete, attempt_completion.\n\nCurrent: Logo, Apple icon, forgot link updated. Remaining: create account, footer, fields check.
 
-Manual step: Rename images with spaces in assets/images/ to match new paths:
-ren "mercedes GLE 450.jpeg" "mercedes_gle_450.jpeg"
-ren "range evoque.jpeg" "range_evoque.jpeg"
-ren "BMW X5.jpeg" "bmw_x5.jpeg"
-ren "Toyota prado TX.jpeg" "toyota_prado_tx.jpeg"
-ren "Ford Explorer.jpeg" "ford_explorer.jpeg"
-ren "AudiQ7.jpeg" "audi_q7.jpeg"
-
-Then run `flutter run` to test. Images should now load properly without blanks or overflow.
