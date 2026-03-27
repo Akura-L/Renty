@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../core/theme.dart';
+import '../../core/responsive.dart';
 import '../../models/car.dart';
 
 // import 'date_picker_screen.dart';
@@ -35,23 +35,22 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
           horizontal: Responsive.screenPadding(context),
-          vertical: Responsive.screenPadding(context),
+          vertical: RentySpacing.lg,
         ),
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(RentyRadius.lg),
               child: SizedBox(
-                height: Responsive.adaptiveHeight(
-                    context, AppTheme.kDetailImageHeight),
+                height: 240,
                 width: double.infinity,
                 child: Image.asset(
                   widget.car.imageUrl,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) => Container(
-                    color: Colors.grey[300],
+                    color: RentyColors.surface,
                     child: const Icon(Icons.image_not_supported,
-                        size: 50, color: Colors.grey),
+                        size: 50, color: RentyColors.textDisabled),
                   ),
                 ),
               ),
@@ -60,34 +59,34 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
             Row(
               children: [
                 if (widget.car.topRated)
-                  _Badge(text: 'TOP RATED', color: AppTheme.primary),
+                  const _Badge(text: 'TOP RATED', color: RentyColors.primary),
+                if (widget.car.availableToday) const SizedBox(width: 12),
                 if (widget.car.availableToday)
-                  SizedBox(width: Responsive.horizontalGap(context)),
-                if (widget.car.availableToday)
-                  _Badge(text: 'AVAILABLE', color: const Color(0xFF2E7D32)),
+                  const _Badge(text: 'AVAILABLE', color: RentyColors.success),
               ],
             ),
             const SizedBox(height: 10),
-            Text("KSh ${widget.car.price.toStringAsFixed(0)} /day",
-                style: GoogleFonts.inter(
-                    fontSize: 28,
-                    color: AppTheme.primary,
-                    fontWeight: FontWeight.bold)),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text("KSh ${widget.car.price.toStringAsFixed(0)} /day",
+                  style: RentyTextStyles.displayLarge
+                      .copyWith(color: RentyColors.primary)),
+            ),
             const SizedBox(height: 10),
-            Text(
-              '${widget.car.location} • ${widget.car.rating.toStringAsFixed(1)} (${widget.car.reviewCount})',
-              style: const TextStyle(
-                  color: AppTheme.grey, fontWeight: FontWeight.w600),
-              textAlign: TextAlign.center,
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '${widget.car.location} • ${widget.car.rating.toStringAsFixed(1)} (${widget.car.reviewCount})',
+                style: RentyTextStyles.bodyM,
+              ),
             ),
             const SizedBox(height: 20),
-            _SectionTitle('Specifications'),
+            const _SectionTitle('Specifications'),
             const SizedBox(height: 10),
             if (widget.car.specs.isEmpty)
-              Text(
+              const Text(
                 'Specifications will appear here.',
-                style: TextStyle(
-                    color: AppTheme.grey700, fontWeight: FontWeight.w600),
+                style: RentyTextStyles.bodyM,
               )
             else
               Wrap(
@@ -100,13 +99,12 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                     .toList(),
               ),
             const SizedBox(height: 18),
-            _SectionTitle('About This Car'),
+            const _SectionTitle('About This Car'),
             const SizedBox(height: 8),
             if (widget.car.about.isNotEmpty)
               Text(
                 widget.car.about,
-                style: TextStyle(
-                    color: AppTheme.grey700, fontWeight: FontWeight.w600),
+                style: RentyTextStyles.bodyM,
               ),
             if (widget.car.about.isNotEmpty)
               Align(
@@ -117,7 +115,7 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                 ),
               ),
             const SizedBox(height: 10),
-            _SectionTitle('Select Rental Dates'),
+            const _SectionTitle('Select Rental Dates'),
             const SizedBox(height: 10),
             TableCalendar(
               firstDay: DateTime.now(),
@@ -134,40 +132,37 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                 formatButtonVisible: false,
                 titleCentered: true,
               ),
-              calendarStyle: CalendarStyle(
-                defaultTextStyle: const TextStyle(
-                    color: AppTheme.dark, fontWeight: FontWeight.w700),
-                weekendTextStyle: const TextStyle(
-                    color: AppTheme.dark, fontWeight: FontWeight.w700),
-                todayDecoration: const BoxDecoration(
-                  color: AppTheme.primary,
+              calendarStyle: const CalendarStyle(
+                defaultTextStyle: RentyTextStyles.bodyM,
+                weekendTextStyle: RentyTextStyles.bodyM,
+                todayDecoration: BoxDecoration(
+                  color: RentyColors.primaryLight,
                   shape: BoxShape.circle,
                 ),
-                selectedDecoration: const BoxDecoration(
-                  color: AppTheme.primary,
+                selectedDecoration: BoxDecoration(
+                  color: RentyColors.primary,
                   shape: BoxShape.circle,
                 ),
               ),
             ),
             const SizedBox(height: 10),
-            Wrap(
-              spacing: Responsive.horizontalGap(context),
+            const Wrap(
+              spacing: 16,
               alignment: WrapAlignment.spaceBetween,
               children: [
-                _LegendItem(label: 'Selected', color: AppTheme.primary),
-                _LegendItem(label: 'Booked', color: const Color(0xFFB71C1C)),
+                _LegendItem(label: 'Selected', color: RentyColors.primary),
+                _LegendItem(label: 'Booked', color: RentyColors.error),
                 _LegendItem(
-                    label: 'Unavailable', color: const Color(0xFF9E9E9E)),
+                    label: 'Unavailable', color: RentyColors.textDisabled),
               ],
             ),
             const SizedBox(height: 18),
-            _SectionTitle('Reviews'),
+            const _SectionTitle('Reviews'),
             const SizedBox(height: 10),
             if (widget.car.reviews.isEmpty)
-              Text(
+              const Text(
                 'No reviews yet.',
-                style: TextStyle(
-                    color: AppTheme.grey700, fontWeight: FontWeight.w600),
+                style: RentyTextStyles.bodyM,
               )
             else
               Column(
@@ -178,33 +173,27 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CircleAvatar(
-                          radius: Responsive.adaptiveRadius(context, 18),
-                          backgroundColor: AppTheme.primary.withOpacity(0.14),
+                          radius: 18,
+                          backgroundColor: RentyColors.primaryLight,
                           child: Text(
                             r.initials,
-                            style: TextStyle(
-                              color: AppTheme.primary,
-                              fontWeight: FontWeight.w800,
-                            ),
+                            style: RentyTextStyles.labelL
+                                .copyWith(color: RentyColors.primary),
                           ),
                         ),
-                        SizedBox(width: Responsive.horizontalGap(context)),
+                        const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 r.text,
-                                style: TextStyle(
-                                    color: AppTheme.dark,
-                                    fontWeight: FontWeight.w600),
+                                style: RentyTextStyles.bodyM,
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 '${r.name} · ${r.monthYear}',
-                                style: TextStyle(
-                                    color: AppTheme.grey700,
-                                    fontWeight: FontWeight.w600),
+                                style: RentyTextStyles.caption,
                               ),
                             ],
                           ),
@@ -233,7 +222,7 @@ class _CarDetailScreenState extends State<CarDetailScreen> {
                             'Date selected: ${_selectedDay?.toString().split(' ')[0]} - Navigate to payment')),
                   );
                 },
-                child: Text('Book Now'),
+                child: const Text('Book Now'),
               ),
             ),
           ],
@@ -278,11 +267,7 @@ class _SectionTitle extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Text(
         text,
-        style: GoogleFonts.inter(
-          fontSize: 18,
-          fontWeight: FontWeight.w800,
-          color: AppTheme.dark,
-        ),
+        style: RentyTextStyles.headingM,
       ),
     );
   }
@@ -297,16 +282,12 @@ class _SpecChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: AppTheme.primary.withOpacity(0.07),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppTheme.primary.withOpacity(0.18)),
+        color: RentyColors.surface,
+        borderRadius: BorderRadius.circular(RentyRadius.sm),
       ),
       child: Text(
         text,
-        style: GoogleFonts.inter(
-          fontWeight: FontWeight.w700,
-          color: AppTheme.dark,
-        ),
+        style: RentyTextStyles.bodyS,
       ),
     );
   }
@@ -320,19 +301,18 @@ class _LegendItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-            width: 10,
-            height: 10,
-            decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
-        const SizedBox(width: 6),
-        Text(
-          label,
-          style: TextStyle(
-              color: AppTheme.grey700,
-              fontWeight: FontWeight.w700,
-              fontSize: 12),
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+          ),
         ),
+        const SizedBox(width: 6),
+        Text(label, style: RentyTextStyles.caption),
       ],
     );
   }

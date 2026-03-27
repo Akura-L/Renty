@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 // ============================================================
 //  RENTY — Complete Design System & ThemeData
@@ -14,10 +13,11 @@ class RentyColors {
   RentyColors._();
 
   // Primary
-  static const Color primary = Color(0xFF00BFA5); // Teal CTA
+  static const Color primary =
+      Color.fromARGB(133, 1, 77, 77); // Turquoise Teal CTA
   static const Color primaryLight =
-      Color(0xFFE0F7F4); // Teal chip bg / avatar bg
-  static const Color primaryDark = Color(0xFF00897B); // Pressed teal
+      Color(0xFFCCE8E8); // Turquoise Teal chip bg / avatar bg
+  static const Color primaryDark = Color.fromARGB(255, 11, 63, 63); // Pressed turquoise teal
 
   // Backgrounds
   static const Color background = Color(0xFFFFFFFF);
@@ -41,7 +41,7 @@ class RentyColors {
   static const Color divider = Color(0xFFF0F0F0);
 
   // Badge / Tag backgrounds
-  static const Color badgeTopRated = Color(0xFF00BFA5);
+  static const Color badgeTopRated = Color.fromARGB(112, 5, 99, 86);
   static const Color badgeLuxury = Color(0xFF7B1FA2);
   static const Color badgeElectric = Color(0xFF1565C0);
   static const Color badgeEconomy = Color(0xFF2E7D32);
@@ -53,10 +53,10 @@ class RentyColors {
   static const Color statusCancelled = Color(0xFFE53935);
 
   // Unread dot
-  static const Color unreadDot = Color(0xFF00BFA5);
+  static const Color unreadDot = Color.fromARGB(100, 5, 113, 99);
 
   // Bottom nav
-  static const Color navActive = Color(0xFF00BFA5);
+  static const Color navActive = Color.fromARGB(111, 6, 119, 104);
   static const Color navInactive = Color(0xFF9E9E9E);
 }
 
@@ -188,7 +188,7 @@ class RentyTextStyles {
     fontFamily: _font,
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    color: RentyColors.primary,
+    color: Color.fromARGB(117, 7, 122, 107),
     letterSpacing: 0.2,
   );
 
@@ -373,7 +373,7 @@ class RentyTheme {
       ),
 
       // ── Cards ────────────────────────────────
-      cardTheme: const CardThemeData(
+      cardTheme: CardThemeData(
         color: RentyColors.surfaceCard,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -417,7 +417,7 @@ class RentyTheme {
 
       // ── ListTile ─────────────────────────────
       listTileTheme: const ListTileThemeData(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         minLeadingWidth: 24,
       ),
 
@@ -527,7 +527,7 @@ class RentyDecorations {
       );
 
   /// Profile avatar circle (initials)
-  static BoxDecoration get avatarInitials => BoxDecoration(
+  static BoxDecoration get avatarInitials => const BoxDecoration(
         color: RentyColors.primaryLight,
         shape: BoxShape.circle,
       );

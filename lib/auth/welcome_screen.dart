@@ -41,104 +41,83 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.all(AppTheme.kPaddingXL),
+          padding: const EdgeInsets.all(RentySpacing.xl),
           child: SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        color: AppTheme.primary,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        Icons.directions_car,
-                        color: Colors.white,
-                        size: 32,
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Renty',
-                          style: TextStyle(
-                            color: AppTheme.dark,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
+                Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 80,
+                        height: 80,
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: RentyColors.primary,
+                          borderRadius: BorderRadius.circular(RentyRadius.md),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: AppTheme.kPaddingSmall),
-                Text(
-                  'Sign in to access your bookings and saved cars',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: AppTheme.grey,
-                        fontWeight: FontWeight.w600,
+                        child: SvgPicture.asset(
+                          'assets/images/renty.png',
+                          colorFilter: const ColorFilter.mode(
+                              Colors.white, BlendMode.srcIn),
+                        ),
                       ),
-                ),
-                SizedBox(height: AppTheme.kPaddingXS),
-                Text(
-                  'Welcome back',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.dark,
+                      const SizedBox(height: 24),
+                      const Text(
+                        'Welcome back',
+                        style: RentyTextStyles.headingXL,
                       ),
+                      const SizedBox(height: 12),
+                      Text(
+                        'Sign in to access your bookings and saved cars',
+                        style: RentyTextStyles.bodyM
+                            .copyWith(color: Colors.grey[600]),
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: AppTheme.kPaddingLarge),
+                const SizedBox(height: 48),
+                const SizedBox(height: RentySpacing.lg),
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: _signIn,
-                    icon: const Icon(Icons.g_mobiledata),
+                    icon: SvgPicture.asset('assets/icons/google_g.svg',
+                        height: 24, width: 24),
                     label: const Text('Continue with Google'),
                   ),
                 ),
-                SizedBox(height: AppTheme.kPaddingSmall),
+                const SizedBox(height: RentySpacing.sm),
                 SizedBox(
                   width: double.infinity,
                   child: OutlinedButton.icon(
                     onPressed: _signIn,
-                    icon: const Icon(Icons.apple),
+                    icon: const Icon(Icons.apple, color: Colors.black),
                     label: const Text('Continue with Apple'),
                   ),
                 ),
-                SizedBox(height: AppTheme.kPaddingLarge),
-                Row(
+                const SizedBox(height: RentySpacing.lg),
+                const Row(
                   children: [
                     Expanded(
-                      child: Divider(
-                        color: AppTheme.grey.withOpacity(0.25),
-                        thickness: 1,
-                      ),
+                      child: Divider(),
                     ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Text(
                         'or sign in with email',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.grey,
-                              fontWeight: FontWeight.w600,
-                            ),
+                        style: RentyTextStyles.bodyM,
                       ),
                     ),
                     Expanded(
-                      child: Divider(
-                        color: AppTheme.grey.withOpacity(0.25),
-                        thickness: 1,
-                      ),
+                      child: Divider(),
                     ),
                   ],
                 ),
-                SizedBox(height: AppTheme.kPaddingLarge),
+                const SizedBox(height: RentySpacing.lg),
                 Form(
                   child: Column(
                     children: [
@@ -149,7 +128,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         ),
                         keyboardType: TextInputType.emailAddress,
                       ),
-                      SizedBox(height: AppTheme.kPaddingMedium),
+                      const SizedBox(height: RentySpacing.md),
                       TextFormField(
                         controller: _passwordController,
                         decoration: const InputDecoration(
@@ -161,13 +140,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {},
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppTheme.primary,
-                          ),
                           child: const Text('Forgot password?'),
                         ),
                       ),
-                      SizedBox(height: AppTheme.kPaddingMedium),
+                      const SizedBox(height: RentySpacing.md),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -175,7 +151,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           child: const Text('Sign In'),
                         ),
                       ),
-                      SizedBox(height: AppTheme.kPaddingLarge),
+                      const SizedBox(height: RentySpacing.lg),
                       Center(
                         child: TextButton(
                           onPressed: () => Navigator.push(
@@ -184,24 +160,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               builder: (_) => const SignUpScreen(),
                             ),
                           ),
-                          style: TextButton.styleFrom(
-                            foregroundColor: AppTheme.primary,
-                          ),
                           child:
                               const Text('New to Renty? Create a free account'),
                         ),
                       ),
-                      SizedBox(height: AppTheme.kPaddingSmall),
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: AppTheme.kPaddingSmall),
+                      const SizedBox(height: RentySpacing.sm),
+                      const Padding(
+                        padding: EdgeInsets.only(top: RentySpacing.sm),
                         child: Text(
                           '4.9 / 5 • Trusted by 10,000+ drivers across Kenya',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: AppTheme.grey,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                          style: RentyTextStyles.caption,
                         ),
                       ),
                     ],

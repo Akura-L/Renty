@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/theme.dart';
 import '../../auth/welcome_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -23,7 +24,6 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Colors.white,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
               'assets/images/renty.png',
@@ -40,6 +40,17 @@ class _SplashScreenState extends State<SplashScreen> {
                 letterSpacing: 2,
               ),
             ),
+            const SizedBox(height: 8),
+            Text(
+              'YOUR JOURNEY STARTS HERE',
+              style: TextStyle(
+                color: RentyColors.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 1,
+              ),
+            ),
+            const Spacer(),
           ],
         ),
       ),

@@ -36,28 +36,22 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Sign In')),
       body: Padding(
-        padding: EdgeInsets.all(AppTheme.kPaddingXL),
+        padding: const EdgeInsets.all(RentySpacing.xl),
         child: Form(
           key: _formKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 'Welcome back',
-                style: TextStyle(
-                  fontSize: AppTheme.kFontSizeLargeTitle + 6,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: RentyTextStyles.displayLarge,
               ),
-              const SizedBox(height: AppTheme.kPaddingXS),
-              Text(
+              const SizedBox(height: RentySpacing.xs),
+              const Text(
                 'Sign in to continue',
-                style: TextStyle(
-                  fontSize: AppTheme.kFontSizeSmall + 4,
-                  color: AppTheme.grey,
-                ),
+                style: RentyTextStyles.bodyL,
               ),
-              SizedBox(height: AppTheme.kPaddingLarge),
+              const SizedBox(height: RentySpacing.lg),
               TextFormField(
                 controller: _emailController,
                 decoration: const InputDecoration(labelText: 'Email'),
@@ -65,7 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 validator: (value) =>
                     value?.isEmpty ?? true ? 'Enter email' : null,
               ),
-              SizedBox(height: AppTheme.kPaddingMedium),
+              const SizedBox(height: RentySpacing.md),
               TextFormField(
                 controller: _passwordController,
                 decoration: const InputDecoration(labelText: 'Password'),
@@ -73,7 +67,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 validator: (value) =>
                     value?.isEmpty ?? true ? 'Enter password' : null,
               ),
-              SizedBox(height: AppTheme.kPaddingXS),
+              const SizedBox(height: RentySpacing.xs),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -85,7 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: const Text('Forgot Password?'),
                 ),
               ),
-              SizedBox(height: AppTheme.kPaddingLarge),
+              const SizedBox(height: RentySpacing.lg),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -93,7 +87,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: const Text('Sign In'),
                 ),
               ),
-              SizedBox(height: AppTheme.kPaddingMedium),
+              const SizedBox(height: RentySpacing.md),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -107,7 +101,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     icon: const Icon(Icons.g_mobiledata),
                     label: const Text('Google'),
                   ),
-                  SizedBox(width: AppTheme.kPaddingMedium),
+                  const SizedBox(width: RentySpacing.md),
                   OutlinedButton.icon(
                     onPressed: () {
                       Navigator.pushReplacement(
@@ -115,7 +109,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         MaterialPageRoute(builder: (_) => const MainScreen()),
                       );
                     },
-                    icon: const Icon(Icons.apple),
+                    icon: const Icon(Icons.apple, color: Colors.black),
                     label: const Text('Apple'),
                   ),
                 ],

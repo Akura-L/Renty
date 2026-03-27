@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'core/theme.dart';
 import 'models/car.dart';
 import 'screens/booking/payment_screen.dart';
@@ -39,38 +38,25 @@ class _DriverScreenState extends State<DriverScreen> {
     final tripTotal = widget.car.price * (totalDays <= 0 ? 1 : totalDays);
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20),
+      appBar: AppBar(title: const Text('Driver Information')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(RentySpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const _BookingStepIndicator(activeStep: 2),
-            const SizedBox(height: 12),
-            Text(
-              'Driver Information',
-              style: GoogleFonts.inter(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: AppTheme.dark,
-              ),
-            ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 18),
             const Text(
               "Who's driving?",
-              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+              style: RentyTextStyles.headingL,
             ),
-            const SizedBox(height: 6),
-            Text(
-              'We\'ve pre-filled your details from your account.\nDetails loaded from your verified Renty profile',
-              style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w600),
+            const SizedBox(height: 8),
+            const Text(
+              'We\'ve pre-filled your details from your account. Details loaded from your verified Renty profile',
+              style: RentyTextStyles.bodyM,
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 24),
             Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: AppTheme.grey.withOpacity(0.18)),
-              ),
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
@@ -79,7 +65,7 @@ class _DriverScreenState extends State<DriverScreen> {
                     Row(
                       children: [
                         const Text('Primary Driver',
-                            style: TextStyle(fontWeight: FontWeight.w800)),
+                            style: RentyTextStyles.labelL),
                         const Spacer(),
                         TextButton(
                           onPressed: () {},
@@ -88,66 +74,58 @@ class _DriverScreenState extends State<DriverScreen> {
                       ],
                     ),
                     const SizedBox(height: 12),
-                    _InfoRow(label: 'First Name', value: 'James'),
-                    const SizedBox(height: 10),
-                    _InfoRow(label: 'Last Name', value: 'Mwangi'),
-                    const SizedBox(height: 10),
-                    _InfoRow(label: 'Phone Number', value: '+254 712 345 678'),
-                    const SizedBox(height: 10),
-                    _InfoRow(label: 'Email Address', value: 'james@example.com'),
-                    const SizedBox(height: 10),
+                    const _InfoRow(label: 'First Name', value: 'James'),
+                    const SizedBox(height: 12),
+                    const _InfoRow(label: 'Last Name', value: 'Mwangi'),
+                    const SizedBox(height: 12),
+                    const _InfoRow(label: 'Phone Number', value: '+254 712 345 678'),
+                    const SizedBox(height: 12),
+                    const _InfoRow(label: 'Email Address', value: 'james@example.com'),
+                    const SizedBox(height: 16),
                     Row(
                       children: [
-                        Expanded(
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text('Driver’s Licence No.',
-                                  style: TextStyle(
-                                    color: AppTheme.grey,
-                                    fontWeight: FontWeight.w800,
-                                    fontSize: 12,
-                                  )),
-                              SizedBox(height: 6),
+                                  style: RentyTextStyles.caption),
+                              SizedBox(height: 4),
                               Text('KE-DL-2019-847231',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w800,
-                                  )),
+                                  style: RentyTextStyles.labelL),
                             ],
                           ),
                         ),
-                        const SizedBox(width: 10),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                           decoration: BoxDecoration(
-                            color: AppTheme.primary.withOpacity(0.10),
-                            borderRadius: BorderRadius.circular(999),
+                            color: RentyColors.primaryLight,
+                            borderRadius: BorderRadius.circular(RentyRadius.pill),
                           ),
                           child: const Text(
                             'Verified',
                             style: TextStyle(
-                              color: AppTheme.primary,
-                              fontWeight: FontWeight.w800,
-                              fontSize: 12,
+                              color: RentyColors.primary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 11,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 18),
                     TextButton(
                       onPressed: () {},
                       child: const Text('Add a second driver'),
                     ),
-                    const SizedBox(height: 6),
                     const Text(
                       'Free · Both drivers must be 23+',
-                      style: TextStyle(color: AppTheme.grey, fontWeight: FontWeight.w600),
+                      style: RentyTextStyles.caption,
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 24),
                     const Text(
                       'Special Requests (optional)',
-                      style: TextStyle(fontWeight: FontWeight.w800),
+                      style: RentyTextStyles.labelL,
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
@@ -155,30 +133,29 @@ class _DriverScreenState extends State<DriverScreen> {
                       minLines: 2,
                       maxLines: 3,
                       decoration: const InputDecoration(
-                        hintText: 'Please ensure the car is at the pickup location',
-                        border: OutlineInputBorder(),
+                        hintText: 'e.g. Please ensure the car is at terminal 1B',
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 24),
             const Text(
               'YOUR TRIP',
-              style: TextStyle(fontWeight: FontWeight.w800),
+              style: RentyTextStyles.labelL,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
-              '${start.month <= 0 ? '' : start.day}/${start.month}/${start.year} - ${end.day}/${end.month}/${end.year}',
-              style: TextStyle(color: Colors.grey.shade700, fontWeight: FontWeight.w700),
+              '${start.day}/${start.month}/${start.year} - ${end.day}/${end.month}/${end.year}',
+              style: RentyTextStyles.bodyM,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
-              '${totalDays} days · KSh ${tripTotal.toStringAsFixed(0)} total',
-              style: TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w900),
+              '$totalDays days · KSh ${tripTotal.toStringAsFixed(0)} total',
+              style: RentyTextStyles.headingM.copyWith(color: RentyColors.primary),
             ),
-            const Spacer(),
+            const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -193,13 +170,7 @@ class _DriverScreenState extends State<DriverScreen> {
                     ),
                   ),
                 ),
-                style:
-                    ElevatedButton.styleFrom(backgroundColor: AppTheme.primary),
-                child: const Text('Continue to Payment',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white)),
+                child: const Text('Continue to Payment'),
               ),
             ),
           ],
@@ -221,12 +192,12 @@ class _InfoRow extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(color: AppTheme.grey, fontWeight: FontWeight.w800, fontSize: 12),
+          style: RentyTextStyles.caption,
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(fontWeight: FontWeight.w900),
+          style: RentyTextStyles.labelL,
         ),
       ],
     );
@@ -234,44 +205,57 @@ class _InfoRow extends StatelessWidget {
 }
 
 class _BookingStepIndicator extends StatelessWidget {
-  final int activeStep; // 1..4
+  final int activeStep;
   const _BookingStepIndicator({required this.activeStep});
 
   @override
   Widget build(BuildContext context) {
-    Widget step(String label, int idx) {
-      final isActive = idx == activeStep;
-      return Expanded(
-        child: Column(
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: isActive ? AppTheme.primary : Colors.grey.shade600,
-                fontWeight: isActive ? FontWeight.w800 : FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Container(
-              height: 3,
-              width: 26,
-              decoration: BoxDecoration(
-                color: isActive ? AppTheme.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Row(
       children: [
-        step('Dates', 1),
-        step('Driver', 2),
-        step('Payment', 3),
-        step('Done', 4),
+        _step(1, 'Dates', activeStep >= 1),
+        _line(activeStep >= 2),
+        _step(2, 'Driver', activeStep >= 2),
+        _line(activeStep >= 3),
+        _step(3, 'Payment', activeStep >= 3),
       ],
+    );
+  }
+
+  Widget _step(int n, String label, bool active) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 12,
+          backgroundColor: active ? RentyColors.primary : RentyColors.surface,
+          child: Text(
+            n.toString(),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: active ? Colors.white : RentyColors.textDisabled,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: active ? FontWeight.bold : FontWeight.normal,
+            color: active ? RentyColors.primary : RentyColors.textDisabled,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _line(bool active) {
+    return Expanded(
+      child: Container(
+        height: 2,
+        color: active ? RentyColors.primary : RentyColors.surface,
+        margin: const EdgeInsets.only(bottom: 14),
+      ),
     );
   }
 }

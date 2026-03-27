@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../providers/bookings_provider.dart';
 import '../../core/theme.dart';
 import '../../models/booking.dart';
-import '../booking/car_detail_screen.dart';
-import '../booking/payment_screen.dart';
 import 'messages_screen.dart';
 
 class MyBookingsScreen extends StatelessWidget {
@@ -13,80 +10,70 @@ class MyBookingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: context.watch<BookingsProvider>(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('My Bookings',
-              style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
-          actions: const [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=68'),
-            ),
-            SizedBox(width: 16),
-          ],
-        ),
-        body: Consumer<BookingsProvider>(
-          builder: (context, provider, child) {
-            if (provider.isEmpty) {
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.calendar_today_outlined,
-                        size: 80, color: AppTheme.grey),
-                    SizedBox(height: 16),
-                    Text('No bookings yet', style: TextStyle(fontSize: 18)),
-                    Text('Book your first car!',
-                        style: TextStyle(color: AppTheme.grey)),
-                  ],
-                ),
-              );
-            }
-            return DefaultTabController(
-              length: 3,
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('My Bookings'),
+        actions: const [
+          CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=68'),
+          ),
+          SizedBox(width: 16),
+        ],
+      ),
+      body: Consumer<BookingsProvider>(
+        builder: (context, provider, child) {
+          if (provider.isEmpty) {
+            return const Center(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TabBar(
-                    labelColor: AppTheme.primary,
-                    unselectedLabelColor: AppTheme.grey,
-                    indicatorColor: AppTheme.primary,
-                    tabs: [
-                      Tab(text: 'Upcoming (${provider.upcomingBookings.length})'),
-                      Tab(text: 'Past (${provider.pastBookings.length})'),
-                      Tab(text: 'Cancelled (${provider.cancelledBookings.length})'),
-                    ],
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        _buildBookingsTab(
-                          context: context,
-                          provider: provider,
-                          title: 'Upcoming',
-                          bookings: provider.upcomingBookings,
-                        ),
-                        _buildBookingsTab(
-                          context: context,
-                          provider: provider,
-                          title: 'Past',
-                          bookings: provider.pastBookings,
-                        ),
-                        _buildBookingsTab(
-                          context: context,
-                          provider: provider,
-                          title: 'Cancelled',
-                          bookings: provider.cancelledBookings,
-                        ),
-                      ],
-                    ),
-                  ),
+                  Icon(Icons.calendar_today_outlined,
+                      size: 80, color: RentyColors.textDisabled),
+                  SizedBox(height: 16),
+                  Text('No bookings yet', style: RentyTextStyles.headingM),
+                  Text('Book your first car!',
+                      style: RentyTextStyles.bodyM),
                 ],
               ),
             );
-          },
-        ),
+          }
+          return DefaultTabController(
+            length: 3,
+            child: Column(
+              children: [
+                const TabBar(
+                  tabs: [
+                    Tab(text: 'Upcoming'),
+                    Tab(text: 'Past'),
+                    Tab(text: 'Cancelled'),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    children: [
+                      _buildBookingsTab(
+                        context: context,
+                        provider: provider,
+                        bookings: provider.upcomingBookings,
+                      ),
+                      _buildBookingsTab(
+                        context: context,
+                        provider: provider,
+                        bookings: provider.pastBookings,
+                      ),
+                      _buildBookingsTab(
+                        context: context,
+                        provider: provider,
+                        bookings: provider.cancelledBookings,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -96,26 +83,24 @@ class MyBookingsScreen extends StatelessWidget {
     final totalDays = booking.endDate.difference(booking.startDate).inDays + 1;
 
     return Card(
-      margin: EdgeInsets.only(bottom: AppTheme.kPaddingMedium),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: const EdgeInsets.only(bottom: RentySpacing.md),
       child: Padding(
-        padding: EdgeInsets.all(AppTheme.kPaddingMedium),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
+                  borderRadius: BorderRadius.circular(RentyRadius.md),
+                  child: Image.asset(
                     booking.car.imageUrl,
-                    height: AppTheme.kThumbnailHeight,
+                    height: 80,
                     width: 80,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
-                      height: AppTheme.kThumbnailHeight,
-                      width: AppTheme.kThumbnailWidth,
-                      color: Colors.grey[300],
+                      height: 80,
+                      width: 80,
+                      color: RentyColors.surface,
                       child: const Icon(Icons.image_not_supported),
                     ),
                   ),
@@ -126,64 +111,49 @@ class MyBookingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(booking.car.name,
-                          style:
-                              GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                          style: RentyTextStyles.headingS),
                       Text(booking.reference,
-                          style: TextStyle(
-                              fontSize: AppTheme.kFontSizeSmall,
-                              color: AppTheme.grey)),
-                      Text('${booking.car.location} • ${booking.car.year}'),
+                          style: RentyTextStyles.caption),
+                      Text('${booking.car.location} • ${booking.car.year}',
+                          style: RentyTextStyles.bodyS),
                       const SizedBox(height: 8),
                       Row(
                         children: [
                           const Icon(Icons.calendar_today,
-                              size: 16, color: AppTheme.grey),
+                              size: 14, color: RentyColors.textSecondary),
                           const SizedBox(width: 4),
                           Text(
-                            'Pickup: ${booking.startDate.day}/${booking.startDate.month} | Return: ${booking.endDate.day}/${booking.endDate.month}',
-                            style: const TextStyle(color: AppTheme.grey),
+                            '${booking.startDate.day}/${booking.startDate.month} - ${booking.endDate.day}/${booking.endDate.month}',
+                            style: RentyTextStyles.bodyS,
                           ),
                         ],
                       ),
-                      Text('$totalDays days',
-                          style: TextStyle(
-                              fontSize: AppTheme.kFontSizeSmall,
-                              color: AppTheme.grey)),
-                      Text('Owner: ${booking.ownerName}',
-                          style: TextStyle(
-                              fontSize: AppTheme.kFontSizeSmall,
-                              fontWeight: FontWeight.w600)),
-                      Text(booking.pickupLocation,
-                          style: TextStyle(
-                              fontSize: AppTheme.kFontSizeSmall,
-                              color: AppTheme.grey)),
                       Text('KSh ${booking.totalPaid.toStringAsFixed(0)} paid',
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w600,
-                            color: AppTheme.primary,
+                          style: RentyTextStyles.labelM.copyWith(
+                            color: RentyColors.primary,
                           )),
                     ],
                   ),
                 ),
                 Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.green.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
+                    color: RentyColors.success.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(RentyRadius.pill),
                   ),
                   child: Text(
                     booking.status.toUpperCase(),
                     style: const TextStyle(
-                      color: Colors.green,
+                      color: RentyColors.success,
                       fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                      fontSize: 10,
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -196,10 +166,6 @@ class MyBookingsScreen extends StatelessWidget {
                             content: Text('Calling ${booking.ownerName}...')),
                       );
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -228,7 +194,6 @@ class MyBookingsScreen extends StatelessWidget {
   Widget _buildBookingsTab({
     required BuildContext context,
     required BookingsProvider provider,
-    required String title,
     required List<Booking> bookings,
   }) {
     if (bookings.isEmpty) {
@@ -236,24 +201,18 @@ class MyBookingsScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.calendar_today_outlined, size: 80, color: AppTheme.grey),
+            Icon(Icons.calendar_today_outlined, size: 60, color: RentyColors.textDisabled),
             SizedBox(height: 16),
-            Text('No bookings yet', style: TextStyle(fontSize: 18)),
-            Text('Book your first car!',
-                style: TextStyle(color: AppTheme.grey)),
+            Text('No bookings found', style: RentyTextStyles.bodyM),
           ],
         ),
       );
     }
-    return RefreshIndicator(
-      onRefresh: () => Future.value(),
-      child: ListView.separated(
-        padding: EdgeInsets.all(AppTheme.kPaddingLarge),
-        itemCount: bookings.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 12),
-        itemBuilder: (context, i) =>
-            _buildBookingCard(context, bookings[i], provider),
-      ),
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: bookings.length,
+      itemBuilder: (context, i) =>
+          _buildBookingCard(context, bookings[i], provider),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme.dart';
 import '../../providers/bookings_provider.dart';
 import '../../models/car.dart';
@@ -34,6 +33,11 @@ class ConfirmationScreen extends StatelessWidget {
         startDate: startDate,
         endDate: endDate,
         status: 'Confirmed',
+        reference: bookingId,
+        ownerName: 'David M.',
+        pickupLocation: car.location,
+        totalPaid: totalAmount,
+        ownerPhone: '+254 712 345 678',
       );
       context.read<BookingsProvider>().addBooking(newBooking);
     });
@@ -44,155 +48,125 @@ class ConfirmationScreen extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Icon(Icons.check_circle,
-                  size: 110, color: Color(0xFF00BFA5)),
-              const SizedBox(height: 16),
-              Text(
-                'Booking Confirmed!',
-                style: GoogleFonts.inter(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.dark,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(RentySpacing.xl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Icon(Icons.check_circle,
+                      size: 110, color: RentyColors.primary),
                 ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'BOOKING REFERENCE',
-                style: TextStyle(
-                    color: AppTheme.grey700, fontWeight: FontWeight.w800),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                bookingId,
-                style: GoogleFonts.inter(
-                  fontSize: 42,
-                  color: AppTheme.primary,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Save this for check-in',
-                style: TextStyle(
-                    color: AppTheme.grey700, fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 18),
-              Card(
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(color: AppTheme.grey.withOpacity(0.18)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        _formatLongDateRange(startDate, endDate),
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        '$days days · Pickup at 09:00 AM',
-                        style: TextStyle(
-                            color: AppTheme.grey700,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        locationText,
-                        style: TextStyle(
-                            color: AppTheme.grey700,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'KSh ${totalAmount.toStringAsFixed(0)} paid',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w900,
-                          fontSize: 18,
-                          color: AppTheme.primary,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        paidViaMpesa
-                            ? 'M-Pesa · +254 712 345 678 PAID'
-                            : 'Credit / Debit Card PAID',
-                        style: TextStyle(
-                            color: AppTheme.grey700,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        'DM 4.9 · 128 trips',
-                        style: TextStyle(
-                            color: AppTheme.grey700,
-                            fontWeight: FontWeight.w700),
-                      ),
-                    ],
+                const SizedBox(height: 16),
+                const Center(
+                  child: Text(
+                    'Booking Confirmed!',
+                    style: RentyTextStyles.headingXL,
                   ),
                 ),
-              ),
-              const SizedBox(height: 18),
-              Text(
-                'What happens next?',
-                style: GoogleFonts.inter(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 16,
-                  color: AppTheme.dark,
+                const SizedBox(height: 24),
+                const Text(
+                  'BOOKING REFERENCE',
+                  style: RentyTextStyles.labelL,
                 ),
-              ),
-              const SizedBox(height: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _NextStep('Owner notified',
-                      'David M. has been alerted and will confirm within 1 hour'),
-                  const SizedBox(height: 10),
-                  _NextStep('Confirmation SMS',
-                      'You\'ll receive details to +254 712 345 678'),
-                  const SizedBox(height: 10),
-                  _NextStep('Pickup day',
-                      'Head to Westlands, Nairobi at 09:00 AM on ${_formatPickupDay(startDate)}'),
-                  const SizedBox(height: 10),
-                ],
-              ),
-              const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const MainScreen()),
+                const SizedBox(height: 8),
+                Text(
+                  bookingId,
+                  style: RentyTextStyles.displayLarge.copyWith(
+                    fontSize: 42,
+                    color: RentyColors.primary,
                   ),
-                  child: const Text('Back to Explore'),
                 ),
-              ),
-              const SizedBox(height: 12),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: () {
-                    // Best-effort: jump to MainScreen and let the user open Bookings tab.
-                    Navigator.pushReplacement(
+                const SizedBox(height: 10),
+                const Text(
+                  'Save this for check-in',
+                  style: RentyTextStyles.bodyM,
+                ),
+                const SizedBox(height: 24),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _formatLongDateRange(startDate, endDate),
+                          style: RentyTextStyles.headingS,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '$days days · Pickup at 09:00 AM',
+                          style: RentyTextStyles.bodyM,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          locationText,
+                          style: RentyTextStyles.labelL,
+                        ),
+                        const SizedBox(height: 12),
+                        const Divider(),
+                        const SizedBox(height: 12),
+                        Text(
+                          'KSh ${totalAmount.toStringAsFixed(0)} paid',
+                          style: RentyTextStyles.headingM.copyWith(color: RentyColors.primary),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          paidViaMpesa
+                              ? 'M-Pesa · +254 712 345 678 PAID'
+                              : 'Credit / Debit Card PAID',
+                          style: RentyTextStyles.labelM,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'What happens next?',
+                  style: RentyTextStyles.headingM,
+                ),
+                const SizedBox(height: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const _NextStep('Owner notified',
+                        'David M. has been alerted and will confirm within 1 hour'),
+                    const SizedBox(height: 12),
+                    const _NextStep('Confirmation SMS',
+                        'You\'ll receive details to +254 712 345 678'),
+                    const SizedBox(height: 12),
+                    _NextStep('Pickup day',
+                        'Head to Westlands, Nairobi at 09:00 AM on ${_formatPickupDay(startDate)}'),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (_) => const MainScreen()),
-                    );
-                  },
-                  child: const Text('View My Booking'),
+                    ),
+                    child: const Text('Back to Explore'),
+                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => const MainScreen()),
+                      );
+                    },
+                    child: const Text('View My Booking'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -254,27 +228,25 @@ class _NextStep extends StatelessWidget {
         Container(
           width: 28,
           height: 28,
-          decoration: BoxDecoration(
-            color: AppTheme.primary.withOpacity(0.12),
+          decoration: const BoxDecoration(
+            color: RentyColors.primaryLight,
             shape: BoxShape.circle,
           ),
-          child: Icon(Icons.check, size: 18, color: AppTheme.primary),
+          child: const Icon(Icons.check, size: 18, color: RentyColors.primary),
         ),
-        const SizedBox(width: 10),
+        const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 title,
-                style: TextStyle(
-                    fontWeight: FontWeight.w900, color: AppTheme.dark),
+                style: RentyTextStyles.labelL,
               ),
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: TextStyle(
-                    color: AppTheme.grey700, fontWeight: FontWeight.w600),
+                style: RentyTextStyles.bodyS,
               ),
             ],
           ),

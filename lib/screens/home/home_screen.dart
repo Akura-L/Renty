@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../booking/car_detail_screen.dart';\nimport '../../core/theme.dart';\nimport '../../core/responsive.dart';
-import '../../models/car.dart';
+import '../booking/car_detail_screen.dart';
+import '../../core/theme.dart';
+import '../../core/responsive.dart';
+import '../../models/car.dart'; 
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +13,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedCategory = 'Featured';
-  List<String> _categories = ['Featured', 'Best Value', 'Luxury', 'Electric'];
+  final List<String> _categories = [
+    'Featured',
+    'Best Value',
+    'Luxury',
+    'Electric'
+  ];
   List<Car> cars = [
     const Car(
       id: '1',
@@ -26,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       reviewCount: 128,
       topRated: true,
       availableToday: true,
-      specs: const [
+      specs: [
         '7 Seats',
         'Automatic',
         'Full A/C',
@@ -35,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
       about:
           'This well-maintained Land Cruiser GX V8 handles both city streets and off-road adventures with ease. Fully insured, recently serviced, equipped with 4WD, roof rack, and full climate control.',
-      reviews: const [
+      reviews: [
         CarReview(
           initials: 'SK',
           text:
@@ -63,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
       reviewCount: 89,
       topRated: true,
       availableToday: true,
-      specs: const ['5 Seats', 'Automatic', 'Full A/C', '250km/day', 'AWD'],
+      specs: ['5 Seats', 'Automatic', 'Full A/C', '250km/day', 'AWD'],
       about:
           'Luxury SUV with premium features, ambient lighting, and smooth handling.',
     ),
@@ -133,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
       location: 'Mombasa',
       year: 2023,
       price: 5900.0,
-      imageUrl: 'assets/images/hyundai_palisade.jpeg',
+      imageUrl: 'assets/images/Hyundai.jpeg',
       rating: 4.8,
       reviewCount: 145,
       topRated: true,
@@ -205,27 +210,19 @@ class _HomeScreenState extends State<HomeScreen> {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(
             horizontal: Responsive.screenPadding(context),
-            vertical: AppTheme.kPaddingLarge * 0.7,
+            vertical: RentySpacing.lg * 0.7,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Good afternoon',
-                style: GoogleFonts.inter(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.grey,
-                ),
+                _getGreeting(),
+                style: RentyTextStyles.headingS,
               ),
               const SizedBox(height: 6),
-              Text(
+              const Text(
                 'Drive Your Way',
-                style: GoogleFonts.inter(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w900,
-                  color: AppTheme.dark,
-                ),
+                style: RentyTextStyles.headingL,
               ),
               const SizedBox(height: 14),
               TextField(
@@ -234,12 +231,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintText: 'Search cars, locations...',
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                      borderRadius: BorderRadius.circular(RentyRadius.md)),
                   filled: true,
-                  fillColor: Colors.grey[100],
+                  fillColor: RentyColors.surface,
                 ),
               ),
-              SizedBox(height: AppTheme.kPaddingMedium * 0.75),
+              const SizedBox(height: RentySpacing.md * 0.75),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -259,13 +256,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: AppTheme.kPaddingMedium),
-              Text(
+              const SizedBox(height: RentySpacing.md),
+              const Text(
                 "Featured Cars",
-                style: GoogleFonts.inter(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: RentyTextStyles.headingL,
               ),
               const SizedBox(height: 16),
               SizedBox(
@@ -290,22 +284,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               horizontal: 20, vertical: 8),
                           decoration: BoxDecoration(
                             color: isSelected
-                                ? AppTheme.primary10
-                                : Colors.grey[100],
-                            borderRadius: BorderRadius.circular(20),
+                                ? RentyColors.primaryLight
+                                : RentyColors.surface,
+                            borderRadius:
+                                BorderRadius.circular(RentyRadius.pill),
                             border: Border.all(
                               color: isSelected
-                                  ? AppTheme.primary
-                                  : AppTheme.grey10,
+                                  ? RentyColors.primary
+                                  : RentyColors.border,
                             ),
                           ),
                           child: Text(
                             category,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
-                              color:
-                                  isSelected ? AppTheme.primary : AppTheme.grey,
-                              fontSize: 14,
+                            style: RentyTextStyles.labelL.copyWith(
+                              color: isSelected
+                                  ? RentyColors.primary
+                                  : RentyColors.textSecondary,
                             ),
                           ),
                         ),
@@ -318,17 +312,13 @@ class _HomeScreenState extends State<HomeScreen> {
               LayoutBuilder(
                 builder: (context, constraints) {
                   final crossCount = Responsive.dynamicGridCount(context);
-                  // Flutter's `childAspectRatio` is `width / height`.
-                  // The previous value made the grid cells too short, causing
-                  // `BOTTOM OVERFLOWED BY ... PIXELS` warnings inside the cards.
-                  final aspectRatio = crossCount == 1 ? 0.85 : 0.92;
+                  final aspectRatio = crossCount == 1 ? 0.85 : 0.78;
                   return GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.78,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossCount,
+                      childAspectRatio: aspectRatio,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                     ),
@@ -354,37 +344,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.08),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            )
-          ],
-        ),
+        decoration: RentyDecorations.card,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(16)),
-              child: Shimmer.fromColors(
-                baseColor: Colors.grey[300]!,
-                highlightColor: Colors.grey[100]!,
-                child: Image.asset(
-                  car.imageUrl,
-                  height: AppTheme.kCardImageHeight,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    height: AppTheme.kCardImageHeight,
-                    color: Colors.grey[300],
-                  ),
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(RentyRadius.lg)),
+              child: Image.asset(
+                car.imageUrl,
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  height: 120,
+                  color: RentyColors.surface,
                 ),
               ),
             ),
-            // Keep card content compact to avoid grid cell overflow.
             Padding(
               padding: const EdgeInsets.all(10),
               child: Column(
@@ -392,71 +369,59 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Text(
                     car.name,
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),
-                    maxLines: 2,
+                    style: RentyTextStyles.headingS,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '${car.location}, ${car.year}',
-                    style: GoogleFonts.inter(
-                      color: AppTheme.grey,
-                      fontSize: 12,
-                    ),
+                    style: RentyTextStyles.bodyS,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   Row(
                     children: [
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                            horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: AppTheme.primary.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
+                          color: RentyColors.primaryLight,
+                          borderRadius: BorderRadius.circular(RentyRadius.xs),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(Icons.star,
-                                size: 14, color: AppTheme.primary),
-                            const SizedBox(width: 4),
+                                size: 12, color: RentyColors.primary),
+                            const SizedBox(width: 2),
                             Text(
-                              '${car.rating.toStringAsFixed(1)}',
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 12,
-                                color: AppTheme.primary,
-                              ),
-                            ),
-                            Text(
-                              '(${car.reviewCount})',
-                              style: GoogleFonts.inter(
-                                fontSize: 11,
-                                color: AppTheme.grey,
-                              ),
+                              car.rating.toStringAsFixed(1),
+                              style: RentyTextStyles.priceSmall
+                                  .copyWith(fontSize: 11),
                             ),
                           ],
                         ),
                       ),
+                      const SizedBox(width: 4),
+                      Text(
+                        '(${car.reviewCount})',
+                        style: RentyTextStyles.caption,
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "KSh ${car.price.toStringAsFixed(0)}",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      color: AppTheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Text(
-                    "/day",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.grey,
-                    ),
+                  const SizedBox(height: 8),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        "KSh ${car.price.toStringAsFixed(0)}",
+                        style: RentyTextStyles.price,
+                      ),
+                      const Text(
+                        "/day",
+                        style: RentyTextStyles.bodyS,
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -486,18 +451,16 @@ class _FilterChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         margin: const EdgeInsets.only(right: 12),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primary10 : Colors.grey[100],
-          borderRadius: BorderRadius.circular(25),
+          color: isSelected ? RentyColors.primaryLight : RentyColors.surface,
+          borderRadius: BorderRadius.circular(RentyRadius.pill),
           border: Border.all(
-            color: isSelected ? AppTheme.primary : AppTheme.grey10,
+            color: isSelected ? RentyColors.primary : RentyColors.border,
           ),
         ),
         child: Text(
           label,
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w700,
-            color: isSelected ? AppTheme.primary : AppTheme.grey700,
-            fontSize: 13,
+          style: RentyTextStyles.labelL.copyWith(
+            color: isSelected ? RentyColors.primary : RentyColors.textSecondary,
           ),
         ),
       ),

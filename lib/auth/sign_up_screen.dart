@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 
 import '../core/theme.dart';
-import 'otp_screen.dart';
+import 'otp_screen_fixed.dart';
 import 'welcome_screen.dart';
 import 'widgets/auth_flow_stepper.dart';
 
@@ -39,26 +40,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(RentySpacing.xxl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const AuthFlowStepper(currentStep: 1),
               const SizedBox(height: 18),
-              Text(
+              const Text(
                 'Create your account',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.dark,
-                    ),
+                style: RentyTextStyles.headingXL,
               ),
               const SizedBox(height: 8),
-              Text(
+              const Text(
                 'Enter your phone or email to get started. It only takes a minute.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppTheme.grey,
-                      fontWeight: FontWeight.w600,
-                    ),
+                style: RentyTextStyles.bodyM,
               ),
               const SizedBox(height: 22),
               Row(
@@ -93,10 +88,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           : TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: _usePhone ? 'Phone' : 'Email',
-                        hintText: _usePhone ? '+254 712 345 678' : 'james@example.com',
-                        prefixIcon: _usePhone 
-                          ? Icon(Icons.flag_outlined, color: Colors.green[800], size: 24)
-                          : null,
+                        hintText: _usePhone
+                            ? '+254 712 345 678'
+                            : 'james@example.com',
+                        prefixIcon: _usePhone
+                            ? Icon(Icons.flag_outlined,
+                                color: Colors.green[800], size: 24)
+                            : null,
                       ),
                       validator: (v) {
                         if (v == null || v.trim().isEmpty) {
@@ -109,12 +107,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     if (_usePhone) ...[
                       const SizedBox(height: 8),
-                      Text(
-                        'We'll send a verification code to this number',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppTheme.grey,
-                          fontSize: 14,
-                        ),
+                      const Text(
+                        'We\'ll send a verification code to this number',
+                        style: RentyTextStyles.bodyM,
                       ),
                     ],
                   ],
@@ -154,23 +149,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(RentyRadius.lg),
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 14),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(RentyRadius.lg),
           border: Border.all(
-            color: active ? AppTheme.primary : AppTheme.grey25,
+            color: active ? RentyColors.primary : RentyColors.border,
             width: active ? 2 : 1,
           ),
-          color: active ? AppTheme.primary.withOpacity(0.08) : Colors.white,
+          color: active ? RentyColors.primaryLight : RentyColors.background,
         ),
         child: Center(
           child: Text(
             label,
-            style: TextStyle(
-              fontWeight: FontWeight.w700,
-              color: active ? AppTheme.primary : AppTheme.dark,
+            style: RentyTextStyles.labelL.copyWith(
+              color: active ? RentyColors.primary : RentyColors.textPrimary,
             ),
           ),
         ),
@@ -184,12 +178,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Why join Renty?',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.w700,
-              color: AppTheme.dark,
-            ),
+            style: RentyTextStyles.headingM,
           ),
           const SizedBox(height: 12),
           _buildBullet('Browse 500+ verified cars across Kenya'),
@@ -206,9 +197,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.check_circle, color: AppTheme.primary, size: 20),
+          const Icon(Icons.check_circle, color: RentyColors.primary, size: 20),
           const SizedBox(width: 12),
-          Expanded(child: Text(text, style: Theme.of(context).textTheme.bodyMedium)),
+          Expanded(child: Text(text, style: RentyTextStyles.bodyM)),
         ],
       ),
     );
@@ -221,12 +212,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: RichText(
           textAlign: TextAlign.center,
           text: TextSpan(
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppTheme.grey),
+            style: RentyTextStyles.caption,
             children: [
               const TextSpan(text: 'By continuing, you agree to our '),
               TextSpan(
                 text: 'Terms of Service',
-                style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600),
+                style:
+                    RentyTextStyles.link.copyWith(fontWeight: FontWeight.w600),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     // Navigate to terms
@@ -235,7 +227,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const TextSpan(text: ' and '),
               TextSpan(
                 text: 'Privacy Policy',
-                style: const TextStyle(color: AppTheme.primary, fontWeight: FontWeight.w600),
+                style:
+                    RentyTextStyles.link.copyWith(fontWeight: FontWeight.w600),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     // Navigate to privacy policy

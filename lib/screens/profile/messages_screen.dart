@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import '../../core/theme.dart';
 
 class Message {
@@ -117,10 +117,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
     final unreadCount = messages.where((m) => m.isUnread).length;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Messages',
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Messages'),
         actions: [
           Stack(
             children: [
@@ -136,7 +133,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   child: Container(
                     padding: const EdgeInsets.all(2),
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: RentyColors.error,
                       shape: BoxShape.circle,
                     ),
                     constraints:
@@ -161,30 +158,31 @@ class _MessagesScreenState extends State<MessagesScreen> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            margin: const EdgeInsets.only(bottom: 16),
+            margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.primary,
-              borderRadius: BorderRadius.circular(12),
+              color: RentyColors.primary,
+              borderRadius: BorderRadius.circular(RentyRadius.lg),
             ),
-            child: Row(
+            child: const Row(
               children: [
                 Icon(Icons.local_activity, color: Colors.white, size: 24),
-                const SizedBox(width: 12),
+                SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'ACTIVE BOOKING',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 1.1,
                         ),
                       ),
                       Text(
                         'Land Cruiser TX001 • Nairobi\nOct 15-17 • KSh 12,500',
-                        style: GoogleFonts.inter(
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 14,
                         ),
@@ -197,43 +195,43 @@ class _MessagesScreenState extends State<MessagesScreen> {
             ),
           ),
           // Filter Tabs
-          DefaultTabController(
-            length: 4,
-            child: Column(
-              children: [
-                TabBar(
-                  labelColor: AppTheme.primary,
-                  unselectedLabelColor: AppTheme.grey,
-                  indicatorColor: AppTheme.primary,
-                  tabs: const [
-                    Tab(text: 'All'),
-                    Tab(text: 'Unread'),
-                    Tab(text: 'Owners'),
-                    Tab(text: 'Support'),
-                  ],
-                ),
-                Expanded(
-                  child: TabBarView(
-                    children: [
-                      _buildTabView([]), // All
-                      _buildTabView(
-                          messages.where((m) => m.isUnread).toList()), // Unread
-                      _buildTabView(
-                          messages.where((m) => m.isOwners).toList()), // Owners
-                      _buildTabView(messages
-                          .where((m) => m.isSupport)
-                          .toList()), // Support
+          Expanded(
+            child: DefaultTabController(
+              length: 4,
+              child: Column(
+                children: [
+                  const TabBar(
+                    tabs: [
+                      Tab(text: 'All'),
+                      Tab(text: 'Unread'),
+                      Tab(text: 'Owners'),
+                      Tab(text: 'Support'),
                     ],
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        _buildTabView(messages), // All
+                        _buildTabView(messages
+                            .where((m) => m.isUnread)
+                            .toList()), // Unread
+                        _buildTabView(messages
+                            .where((m) => m.isOwners)
+                            .toList()), // Owners
+                        _buildTabView(messages
+                            .where((m) => m.isSupport)
+                            .toList()), // Support
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: AppTheme.primary,
         child: const Icon(Icons.chat, color: Colors.white),
       ),
     );
@@ -302,8 +300,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                 child: Container(
                   width: 12,
                   height: 12,
-                  decoration: BoxDecoration(
-                    color: AppTheme.primary,
+                  decoration: const BoxDecoration(
+                    color: RentyColors.primary,
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -312,28 +310,21 @@ class _MessagesScreenState extends State<MessagesScreen> {
         ),
         title: Text(
           message.senderName,
-          style: GoogleFonts.inter(
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-          ),
+          style: RentyTextStyles.headingS,
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               '${message.carName}${message.bookingRef != null ? ' (${message.bookingRef})' : ''}',
-              style: TextStyle(
-                color: AppTheme.grey,
-                fontSize: 14,
-              ),
+              style: RentyTextStyles.bodyS
+                  .copyWith(color: RentyColors.textSecondary),
             ),
             const SizedBox(height: 4),
             Text(
               message.preview,
-              style: TextStyle(
-                color: AppTheme.grey,
-                fontSize: 14,
-              ),
+              style: RentyTextStyles.bodyS
+                  .copyWith(color: RentyColors.textSecondary),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -345,15 +336,15 @@ class _MessagesScreenState extends State<MessagesScreen> {
           children: [
             Text(
               _formatRelativeTime(message.time),
-              style: const TextStyle(fontSize: 12, color: AppTheme.grey),
+              style: RentyTextStyles.caption,
             ),
             if (message.isUnread) ...[
               const SizedBox(height: 4),
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
-                  color: AppTheme.primary,
+                decoration: const BoxDecoration(
+                  color: RentyColors.primary,
                   shape: BoxShape.circle,
                 ),
               ),

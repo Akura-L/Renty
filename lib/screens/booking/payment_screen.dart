@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../core/theme.dart';
 import '../../models/car.dart';
 import 'confirmation_screen.dart';
@@ -32,177 +31,144 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final totalToPay = baseRental + serviceFee;
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Choose payment method',
-              style: GoogleFonts.inter(
-                fontSize: 22,
-                fontWeight: FontWeight.w900,
-                color: AppTheme.dark,
-              ),
-            ),
-            const SizedBox(height: 6),
-            const _BookingStepIndicator(activeStep: 3),
-            const SizedBox(height: 18),
-            _PaymentOption(
-              title: 'M-Pesa',
-              subtitle: 'Safaricom · Most popular in Kenya',
-              selected: _useMpesa,
-              onTap: () => setState(() => _useMpesa = true),
-            ),
-            const SizedBox(height: 12),
-            _PaymentOption(
-              title: 'Credit / Debit Card',
-              subtitle: 'Visa, Mastercard, Amex',
-              selected: !_useMpesa,
-              onTap: () => setState(() => _useMpesa = false),
-            ),
-            const SizedBox(height: 18),
-            Text(
-              'BOOKING SUMMARY',
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w900,
-                fontSize: 14,
-                color: AppTheme.dark,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: AppTheme.grey.withOpacity(0.18)),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.car.name,
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '${_formatDateRange(widget.startDate, widget.endDate)}',
-                      style: TextStyle(
-                          color: AppTheme.grey700, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      '${_rentalDays(widget.startDate, widget.endDate)} days',
-                      style: TextStyle(
-                          color: AppTheme.grey700, fontWeight: FontWeight.w600),
-                    ),
-                    const SizedBox(height: 10),
-                    Divider(color: AppTheme.grey.withOpacity(0.22)),
-                    const SizedBox(height: 8),
-                    _SummaryLine(
-                        'KSh ${widget.car.price.toStringAsFixed(0)} × ${_rentalDays(widget.startDate, widget.endDate)} days',
-                        'KSh ${baseRental.toStringAsFixed(0)}'),
-                    const SizedBox(height: 6),
-                    const _SummaryLine('Service fee', 'KSh 3,500'),
-                    const SizedBox(height: 6),
-                    const _SummaryLine('Insurance and protection', 'Free'),
-                    const SizedBox(height: 10),
-                    Divider(color: AppTheme.grey.withOpacity(0.22)),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Total to pay',
-                      style: TextStyle(
-                          color: AppTheme.grey700, fontWeight: FontWeight.w700),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      'KSh ${totalToPay.toStringAsFixed(0)}',
-                      style: GoogleFonts.inter(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                        color: AppTheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 14),
-            if (_useMpesa) ...[
-              Text(
-                'M-Pesa Phone Number',
-                style: TextStyle(
-                    color: AppTheme.grey700,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 13),
+      appBar: AppBar(title: const Text('Payment')),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(RentySpacing.xl),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Choose payment method',
+                style: RentyTextStyles.headingL,
               ),
               const SizedBox(height: 6),
-              Container(
+              const _BookingStepIndicator(activeStep: 3),
+              const SizedBox(height: 18),
+              _PaymentOption(
+                title: 'M-Pesa',
+                subtitle: 'Safaricom · Most popular in Kenya',
+                selected: _useMpesa,
+                onTap: () => setState(() => _useMpesa = true),
+              ),
+              const SizedBox(height: 12),
+              _PaymentOption(
+                title: 'Credit / Debit Card',
+                subtitle: 'Visa, Mastercard, Amex',
+                selected: !_useMpesa,
+                onTap: () => setState(() => _useMpesa = false),
+              ),
+              const SizedBox(height: 18),
+              const Text(
+                'BOOKING SUMMARY',
+                style: RentyTextStyles.labelL,
+              ),
+              const SizedBox(height: 12),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.car.name,
+                        style: RentyTextStyles.headingS,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        _formatDateRange(widget.startDate, widget.endDate),
+                        style: RentyTextStyles.bodyM,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '${_rentalDays(widget.startDate, widget.endDate)} days',
+                        style: RentyTextStyles.bodyM,
+                      ),
+                      const SizedBox(height: 12),
+                      const Divider(),
+                      const SizedBox(height: 12),
+                      _SummaryLine(
+                          'KSh ${widget.car.price.toStringAsFixed(0)} × ${_rentalDays(widget.startDate, widget.endDate)} days',
+                          'KSh ${baseRental.toStringAsFixed(0)}'),
+                      const SizedBox(height: 8),
+                      const _SummaryLine('Service fee', 'KSh 3,500'),
+                      const SizedBox(height: 8),
+                      const _SummaryLine('Insurance and protection', 'Free'),
+                      const SizedBox(height: 12),
+                      const Divider(),
+                      const SizedBox(height: 12),
+                      const Text(
+                        'Total to pay',
+                        style: RentyTextStyles.labelL,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'KSh ${totalToPay.toStringAsFixed(0)}',
+                        style: RentyTextStyles.displayLarge
+                            .copyWith(color: RentyColors.primary),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
+              if (_useMpesa) ...[
+                const Text(
+                  'M-Pesa Phone Number',
+                  style: RentyTextStyles.labelL,
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: RentyColors.border),
+                    borderRadius: BorderRadius.circular(RentyRadius.lg),
+                  ),
+                  child: const Row(
+                    children: [
+                      Text('🇰🇪 +254 712 ···', style: RentyTextStyles.labelL),
+                      Spacer(),
+                      Text('Verified',
+                          style: TextStyle(
+                              color: RentyColors.primary,
+                              fontWeight: FontWeight.w700)),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                  'You will receive an M-Pesa STK push prompt on this number to authorize payment.',
+                  style: RentyTextStyles.bodyS,
+                ),
+              ],
+              const Spacer(),
+              SizedBox(
                 width: double.infinity,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppTheme.grey.withOpacity(0.25)),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Row(
-                  children: const [
-                    Text('🇰🇪 +254 712 ···',
-                        style: TextStyle(fontWeight: FontWeight.w800)),
-                    Spacer(),
-                    Text('Verified',
-                        style: TextStyle(
-                            color: AppTheme.primary,
-                            fontWeight: FontWeight.w900)),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'You will receive an M-Pesa STK push prompt on this number to authorize payment of KSh ${totalToPay.toStringAsFixed(0)}.',
-                style: TextStyle(
-                    color: AppTheme.grey700, fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-            ],
-            const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                onPressed: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => ConfirmationScreen(
-                      car: widget.car,
-                      startDate: widget.startDate,
-                      endDate: widget.endDate,
-                      totalAmount: totalToPay,
-                      paidViaMpesa: _useMpesa,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ConfirmationScreen(
+                        car: widget.car,
+                        startDate: widget.startDate,
+                        endDate: widget.endDate,
+                        totalAmount: totalToPay,
+                        paidViaMpesa: _useMpesa,
+                      ),
                     ),
                   ),
-                ),
-                child: Text(
-                  _useMpesa
-                      ? 'Pay KSh ${totalToPay.toStringAsFixed(0)} via M-Pesa'
-                      : 'Pay KSh ${totalToPay.toStringAsFixed(0)} with card',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.inter(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                  child: Text(
+                    _useMpesa
+                        ? 'Pay KSh ${totalToPay.toStringAsFixed(0)} via M-Pesa'
+                        : 'Pay KSh ${totalToPay.toStringAsFixed(0)} with card',
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -250,39 +216,34 @@ class _PaymentOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(RentyRadius.lg),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           border: Border.all(
-            color:
-                selected ? AppTheme.primary : AppTheme.grey.withOpacity(0.22),
+            color: selected ? RentyColors.primary : RentyColors.border,
             width: selected ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(RentyRadius.lg),
+          color: selected ? RentyColors.primaryLight : RentyColors.background,
         ),
         child: Row(
           children: [
             Container(
-              width: 18,
-              height: 18,
+              width: 20,
+              height: 20,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: selected
-                      ? AppTheme.primary
-                      : AppTheme.grey.withOpacity(0.55),
+                  color:
+                      selected ? RentyColors.primary : RentyColors.textDisabled,
                 ),
               ),
               child: selected
-                  ? Center(
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppTheme.primary,
-                        ),
+                  ? const Center(
+                      child: CircleAvatar(
+                        radius: 6,
+                        backgroundColor: RentyColors.primary,
                       ),
                     )
                   : null,
@@ -292,13 +253,11 @@ class _PaymentOption extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(title,
-                      style: const TextStyle(fontWeight: FontWeight.w900)),
+                  Text(title, style: RentyTextStyles.labelL),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                        color: AppTheme.grey700, fontWeight: FontWeight.w600),
+                    style: RentyTextStyles.bodyS,
                   ),
                 ],
               ),
@@ -310,65 +269,76 @@ class _PaymentOption extends StatelessWidget {
   }
 }
 
+class _SummaryLine extends StatelessWidget {
+  final String label;
+  final String value;
+  const _SummaryLine(this.label, this.value);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: RentyTextStyles.bodyM),
+        Text(value, style: RentyTextStyles.labelL),
+      ],
+    );
+  }
+}
+
 class _BookingStepIndicator extends StatelessWidget {
-  final int activeStep; // 1..4
+  final int activeStep;
   const _BookingStepIndicator({required this.activeStep});
 
   @override
   Widget build(BuildContext context) {
-    Widget step(String label, int idx) {
-      final isActive = idx == activeStep;
-      return Expanded(
-        child: Column(
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: isActive ? AppTheme.primary : AppTheme.grey600,
-                fontWeight: isActive ? FontWeight.w800 : FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Container(
-              height: 3,
-              width: 26,
-              decoration: BoxDecoration(
-                color: isActive ? AppTheme.primary : Colors.transparent,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Row(
       children: [
-        step('Dates', 1),
-        step('Driver', 2),
-        step('Payment', 3),
-        step('Done', 4),
+        _step(1, 'Dates', activeStep >= 1),
+        _line(activeStep >= 2),
+        _step(2, 'Protection', activeStep >= 2),
+        _line(activeStep >= 3),
+        _step(3, 'Payment', activeStep >= 3),
       ],
+    );
+  }
+
+  Widget _step(int n, String label, bool active) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 12,
+          backgroundColor: active ? RentyColors.primary : RentyColors.surface,
+          child: Text(
+            n.toString(),
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: active ? Colors.white : RentyColors.textDisabled,
+            ),
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 10,
+            fontWeight: active ? FontWeight.bold : FontWeight.normal,
+            color: active ? RentyColors.primary : RentyColors.textDisabled,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _line(bool active) {
+    return Expanded(
+      child: Container(
+        height: 2,
+        color: active ? RentyColors.primary : RentyColors.surface,
+        margin: const EdgeInsets.only(bottom: 14),
+      ),
     );
   }
 }
 
-class _SummaryLine extends StatelessWidget {
-  final String left;
-  final String right;
-  const _SummaryLine(this.left, this.right);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Text(left,
-              style: TextStyle(
-                  color: AppTheme.grey700, fontWeight: FontWeight.w600)),
-        ),
-        Text(right, style: GoogleFonts.inter(fontWeight: FontWeight.w900)),
-      ],
-    );
-  }
-}

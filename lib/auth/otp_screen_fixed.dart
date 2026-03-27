@@ -132,16 +132,16 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
           decoration: InputDecoration(
             counterText: '',
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppTheme.kPaddingMedium),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(RentyRadius.md),
+              borderSide: const BorderSide(color: RentyColors.border),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(AppTheme.kPaddingMedium),
+              borderRadius: BorderRadius.circular(RentyRadius.md),
               borderSide:
-                  BorderSide(color: Theme.of(context).primaryColor, width: 2),
+                  const BorderSide(color: RentyColors.primary, width: 2),
             ),
             filled: true,
-            fillColor: Colors.grey.shade50,
+            fillColor: RentyColors.surface,
           ),
           onChanged: (value) => _onOtpChanged(value, index),
         ),
@@ -165,7 +165,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
     final theme = Theme.of(context);
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.all(AppTheme.kPaddingXL),
+        padding: const EdgeInsets.all(RentySpacing.xl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -173,7 +173,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
             const SizedBox(height: 18),
             Icon(
               Icons.message_outlined,
-              size: AppTheme.kIconSizeLarge,
+              size: 28.0,
               color: theme.primaryColor,
             ),
             const SizedBox(height: 14),
@@ -193,8 +193,8 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
             const SizedBox(height: 18),
             Text(
               'Please enter it below.',
-              style: TextStyle(
-                  color: AppTheme.grey600, fontWeight: FontWeight.w600),
+              style:
+                  RentyTextStyles.bodyS.copyWith(fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 14),
             AnimatedBuilder(
@@ -289,7 +289,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
               ],
             ),
             const SizedBox(height: 18),
-            Text(
+            const Text(
               'Check your SMS inbox',
               style: TextStyle(
                 color: AppTheme.dark,

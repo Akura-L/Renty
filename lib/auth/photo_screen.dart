@@ -45,30 +45,23 @@ class _PhotoScreenState extends State<PhotoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: const EdgeInsets.all(RentySpacing.xl),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const AuthFlowStepper(currentStep: 4),
               const SizedBox(height: 18),
-              Text(
+              const Text(
                 'Add a profile photo',
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.dark,
-                ),
+                style: RentyTextStyles.headingXL,
               ),
               const SizedBox(height: 10),
-              Text(
+              const Text(
                 'Rentals are 70% more successful with a clear, verified profile photo.',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.grey,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: RentyTextStyles.bodyM,
               ),
               const SizedBox(height: 18),
               Center(
@@ -76,7 +69,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                   children: [
                     CircleAvatar(
                       radius: 100,
-                      backgroundColor: AppTheme.primary.withOpacity(0.1),
+                      backgroundColor: RentyColors.primaryLight,
                       backgroundImage:
                           _image != null ? FileImage(_image!) : null,
                       child: _image == null
@@ -85,7 +78,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                               style: TextStyle(
                                 fontSize: 40,
                                 fontWeight: FontWeight.w700,
-                                color: AppTheme.primary,
+                                color: Color.fromARGB(133, 8, 227, 227),
                               ),
                             )
                           : null,
@@ -94,10 +87,7 @@ class _PhotoScreenState extends State<PhotoScreen> {
                     if (_image != null)
                       const Text(
                         'Photo selected',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: AppTheme.primary,
-                        ),
+                        style: RentyTextStyles.labelL,
                       ),
                   ],
                 ),
@@ -121,52 +111,37 @@ class _PhotoScreenState extends State<PhotoScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              Text(
+              const Text(
                 'Photo requirements',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  color: AppTheme.dark,
-                ),
+                style: RentyTextStyles.headingS,
               ),
               const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 3),
                 child: Text(
                   '• Clear well-lit face photo',
-                  style: TextStyle(
-                    color: AppTheme.grey700,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: RentyTextStyles.bodyM,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 3),
                 child: Text(
                   '• No sunglasses or hats',
-                  style: TextStyle(
-                    color: AppTheme.grey700,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: RentyTextStyles.bodyM,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 3),
                 child: Text(
                   '• Neutral background preferred',
-                  style: TextStyle(
-                    color: AppTheme.grey700,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: RentyTextStyles.bodyM,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 3),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 3),
                 child: Text(
                   '• File size under 5 MB (JPG/PNG)',
-                  style: TextStyle(
-                    color: AppTheme.grey700,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: RentyTextStyles.bodyM,
                 ),
               ),
               const Spacer(),
@@ -188,9 +163,8 @@ class _PhotoScreenState extends State<PhotoScreen> {
               const SizedBox(height: 12),
               Center(
                 child: TextButton(
-                  style: TextButton.styleFrom(foregroundColor: AppTheme.primary),
                   onPressed: _skip,
-                  child: const Text('Skip for now — I'll add later'),
+                  child: const Text('Skip for now — I\'ll add later'),
                 ),
               ),
             ],

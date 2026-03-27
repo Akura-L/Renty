@@ -22,10 +22,10 @@ class AuthFlowStepper extends StatelessWidget {
       final isDone = clampedStep > stepIndex;
 
       final color = isActive
-          ? AppTheme.primary
+          ? RentyColors.primary
           : isDone
-              ? AppTheme.primary.withOpacity(0.9)
-              : AppTheme.grey;
+              ? RentyColors.primary
+              : RentyColors.textDisabled;
 
       final weight = isActive ? FontWeight.w700 : FontWeight.w600;
 
@@ -36,16 +36,16 @@ class AuthFlowStepper extends StatelessWidget {
               label,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(color: color, fontWeight: weight, fontSize: 12),
+              style: TextStyle(color: color, fontWeight: weight, fontSize: 11),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
             Container(
-              height: 2,
-              width: 26,
+              height: 3,
               decoration: BoxDecoration(
-                color: isActive || isDone ? AppTheme.primary : Colors.transparent,
+                color: isActive || isDone ? RentyColors.primary : RentyColors.surface,
                 borderRadius: BorderRadius.circular(2),
               ),
+              margin: const EdgeInsets.symmetric(horizontal: 2),
             ),
           ],
         ),
@@ -57,12 +57,9 @@ class AuthFlowStepper extends StatelessWidget {
       children: [
         Text(
           'Step $clampedStep of 5',
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 16,
-          ),
+          style: RentyTextStyles.labelL.copyWith(color: RentyColors.primary),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

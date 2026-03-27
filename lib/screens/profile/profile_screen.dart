@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../providers/favourites_provider.dart';
 import '../../../providers/bookings_provider.dart';
 import '../../../core/theme.dart';
-import '../../../auth/welcome_screen.dart';
 import 'favourites_screen.dart';
 import 'my_bookings_screen.dart';
 import 'messages_screen.dart';
@@ -54,33 +52,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile',
-            style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+        title: const Text('Profile'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(RentySpacing.xl),
         child: Column(
           children: [
             // Profile Header
             Stack(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 60,
                   backgroundImage:
-                      const NetworkImage('https://i.pravatar.cc/300?img=68'),
-                  backgroundColor: AppTheme.primary.withOpacity(0.1),
+                      NetworkImage('https://i.pravatar.cc/300?img=68'),
+                  backgroundColor: RentyColors.primaryLight,
                 ),
                 Positioned(
-                  bottom: -10,
-                  right: 10,
+                  bottom: 0,
+                  right: 4,
                   child: Container(
                     padding: const EdgeInsets.all(8),
                     decoration: const BoxDecoration(
-                      color: AppTheme.primary,
+                      color: RentyColors.primary,
                       shape: BoxShape.circle,
                     ),
-                    child:
-                        const Icon(Icons.edit, color: Colors.white, size: 20),
+                    child: const Icon(Icons.camera_alt,
+                        color: Colors.white, size: 20),
                   ),
                 ),
               ],
@@ -88,14 +85,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 20),
             Text(
               userName ?? 'User',
-              style:
-                  GoogleFonts.inter(fontSize: 24, fontWeight: FontWeight.bold),
+              style: RentyTextStyles.headingXL,
             ),
             Text(
               userEmail ?? 'email@example.com',
-              style: const TextStyle(color: AppTheme.grey, fontSize: 16),
+              style: RentyTextStyles.bodyM,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 32),
 
             // Stats Cards - Dynamic
             Consumer2<BookingsProvider, FavouritesProvider>(
@@ -104,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     Expanded(
                       child: _statCard(
-                        'Total Bookings',
+                        'Bookings',
                         bookingsProvider.count.toString(),
                         Icons.calendar_today,
                       ),
@@ -121,38 +117,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 );
               },
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 32),
 
             // Account Info List
             Card(
               child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    _infoRow(Icons.phone, 'Phone', userPhone),
+                    _infoRow(Icons.phone_outlined, 'Phone', userPhone),
                     const Divider(),
-                    _infoRow(Icons.location_on, 'City', userCity),
+                    _infoRow(Icons.location_on_outlined, 'City', userCity),
                     const Divider(),
-                    _infoRow(Icons.email, 'Email', userEmail),
+                    _infoRow(Icons.email_outlined, 'Email', userEmail),
                   ],
                 ),
               ),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 32),
 
-            // Quick Actions Section (from task ListTiles)
-            const Text(
-              'Quick Actions',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Quick Actions',
+                style: RentyTextStyles.headingM,
+              ),
             ),
             const SizedBox(height: 16),
             Card(
               child: Column(
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.settings),
+                    leading: const Icon(Icons.settings_outlined),
                     title: const Text('Settings'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    trailing: const Icon(Icons.chevron_right, size: 20),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Settings coming soon')),
@@ -160,9 +158,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.help),
+                    leading: const Icon(Icons.help_outline),
                     title: const Text('Help Center'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    trailing: const Icon(Icons.chevron_right, size: 20),
                     onTap: () {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -171,9 +169,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.book),
+                    leading: const Icon(Icons.history),
                     title: const Text('My Bookings'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    trailing: const Icon(Icons.chevron_right, size: 20),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -184,9 +182,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.favorite),
+                    leading: const Icon(Icons.favorite_border),
                     title: const Text('Favourites'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    trailing: const Icon(Icons.chevron_right, size: 20),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -197,9 +195,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.chat),
+                    leading: const Icon(Icons.chat_bubble_outline),
                     title: const Text('Messages'),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    trailing: const Icon(Icons.chevron_right, size: 20),
                     onTap: () {
                       Navigator.push(
                         context,
@@ -212,12 +210,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
             // Action Buttons
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                icon: const Icon(Icons.edit),
+                icon: const Icon(Icons.edit_outlined, color: Colors.white),
                 label: const Text('Edit Profile'),
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -244,24 +242,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _statCard(String title, String count, IconData icon) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.primary.withOpacity(0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.primary.withOpacity(0.2)),
+        color: RentyColors.surface,
+        borderRadius: BorderRadius.circular(RentyRadius.lg),
+        border: Border.all(color: RentyColors.border),
       ),
       child: Column(
         children: [
-          Icon(icon, size: 40, color: AppTheme.primary),
+          Icon(icon, size: 24, color: RentyColors.primary),
           const SizedBox(height: 8),
           Text(
             count,
-            style: GoogleFonts.inter(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: AppTheme.primary),
+            style:
+                RentyTextStyles.headingXL.copyWith(color: RentyColors.primary),
           ),
-          Text(title, style: const TextStyle(color: AppTheme.grey)),
+          Text(title, style: RentyTextStyles.caption),
         ],
       ),
     );
@@ -269,23 +265,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _infoRow(IconData icon, String label, String? value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         children: [
-          Icon(icon, color: AppTheme.primary),
+          Icon(icon, color: RentyColors.textSecondary, size: 20),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label,
-                    style: const TextStyle(color: AppTheme.grey, fontSize: 12)),
-                Text(value ?? 'N/A',
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                Text(label, style: RentyTextStyles.caption),
+                Text(value ?? 'N/A', style: RentyTextStyles.labelL),
               ],
             ),
           ),
-          const Icon(Icons.edit, color: AppTheme.grey, size: 18),
+          const Icon(Icons.chevron_right, color: RentyColors.border, size: 18),
         ],
       ),
     );

@@ -47,87 +47,82 @@ class _LicenseScreenState extends State<LicenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const AuthFlowStepper(currentStep: 5),
-              const SizedBox(height: 18),
-              Text(
-                'Upload your licence',
-                style: theme.textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.dark,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(RentySpacing.xl),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const AuthFlowStepper(currentStep: 5),
+                const SizedBox(height: 18),
+                const Text(
+                  'Upload your licence',
+                  style: RentyTextStyles.headingXL,
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Required for insurance purposes. Upload both sides of your valid driver\'s licence.',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.grey,
-                  fontWeight: FontWeight.w600,
+                const SizedBox(height: 10),
+                const Text(
+                  'Required for insurance purposes. Upload both sides of your valid driver\'s licence.',
+                  style: RentyTextStyles.bodyM,
                 ),
-              ),
-              const SizedBox(height: 22),
-              Text(
-                'Front Side — ${_frontLicense != null ? "Uploaded" : "Tap to upload"}',
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 10),
-              _LicenseUploadTile(
-                imageFile: _frontLicense,
-                onTap: () => _pickLicense(forBack: false),
-                placeholderIcon: Icons.card_membership,
-              ),
-              const SizedBox(height: 18),
-              Text(
-                'Back Side — ${_backLicense != null ? "Uploaded" : "Required"}',
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 10),
-              _LicenseUploadTile(
-                imageFile: _backLicense,
-                onTap: () => _pickLicense(forBack: true),
-                placeholderIcon: Icons.card_membership,
-              ),
-              const SizedBox(height: 12),
-              Text(\n                'Upload the back side of your licence to continue',\n                style: TextStyle(\n                  color: AppTheme.primary,\n                  fontWeight: FontWeight.w600,\n                ),\n              ),
-              const SizedBox(height: 14),
-              Text(
-                'Photo tips',
-                style: theme.textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w800,
-                  color: AppTheme.dark,
+                const SizedBox(height: 22),
+                const Text(
+                  'Front Side',
+                  style: RentyTextStyles.labelL,
                 ),
-              ),
-              const SizedBox(height: 8),
-  const _TipLine('• Full licence visible — no corners cut off'),
-  const _TipLine('• Photo must not be expired'),
-  const _TipLine('• All text must be clearly readable'),
-  const _TipLine('• Both front and back required'),
-              const SizedBox(height: 14),
-              Text(
-                '256-bit Encrypted  |  GDPR Compliant',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.grey,
-                  fontWeight: FontWeight.w800,
+                const SizedBox(height: 10),
+                _LicenseUploadTile(
+                  imageFile: _frontLicense,
+                  onTap: () => _pickLicense(forBack: false),
+                  placeholderIcon: Icons.card_membership,
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Submit & Finish — Upload Back Side First',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: AppTheme.grey700,
-                  fontWeight: FontWeight.w800,
+                const SizedBox(height: 18),
+                const Text(
+                  'Back Side',
+                  style: RentyTextStyles.labelL,
                 ),
-              ),
-              const Spacer(),
-              SizedBox(\n                width: double.infinity,\n                child: ElevatedButton(\n                  onPressed: _canSubmit ? _submit : null,\n                  style: ElevatedButton.styleFrom(\n                    backgroundColor: _canSubmit ? null : AppTheme.grey300,\n                    foregroundColor: _canSubmit ? null : AppTheme.grey,\n                  ),\n                  child: const Text('Submit & Finish'),\n                ),\n              ),
-            ],
+                const SizedBox(height: 10),
+                _LicenseUploadTile(
+                  imageFile: _backLicense,
+                  onTap: () => _pickLicense(forBack: true),
+                  placeholderIcon: Icons.card_membership,
+                ),
+                const SizedBox(height: 12),
+                if (!_canSubmit)
+                  const Text(
+                    'Upload both sides to continue',
+                    style: TextStyle(
+                      color: RentyColors.primary,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Photo tips',
+                  style: RentyTextStyles.headingS,
+                ),
+                const SizedBox(height: 12),
+                const _TipLine('• Full licence visible — no corners cut off'),
+                const _TipLine('• Photo must not be expired'),
+                const _TipLine('• All text must be clearly readable'),
+                const _TipLine('• Both front and back required'),
+                const SizedBox(height: 24),
+                const Text(
+                  '256-bit Encrypted | GDPR Compliant',
+                  style: RentyTextStyles.caption,
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _canSubmit ? _submit : null,
+                    child: const Text('Submit & Finish'),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -148,41 +143,39 @@ class _LicenseUploadTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
         height: 160,
         width: double.infinity,
-        decoration: BoxDecoration(\n          borderRadius: BorderRadius.circular(12),\n        ),\n        child: Stack(\n          children: [\n            // Dashed border simulation using gradient\n            Positioned.fill(\n              child: Container(\n                decoration: BoxDecoration(\n                  borderRadius: BorderRadius.circular(12),\n                  border: Border.all(\n                    color: Colors.grey.shade300,\n                    width: 2,\n                    strokeAlign: BorderSide.strokeAlignInside,\n                  ),\n                ),\n              ),\n            ),\n            // Content container\n            Container(\n              height: double.infinity,\n              width: double.infinity,\n              decoration: BoxDecoration(\n                color: Colors.white,\n                borderRadius: BorderRadius.circular(12),\n              ),\n            ),\n          ],\n        ),
+        decoration: imageFile == null 
+          ? RentyDecorations.uploadZone 
+          : BoxDecoration(
+              borderRadius: BorderRadius.circular(RentyRadius.lg),
+              border: Border.all(color: RentyColors.border),
+            ),
         child: imageFile == null
-            ? Center(
+            ? const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(placeholderIcon, size: 50, color: AppTheme.primary),
-                    const SizedBox(height: 10),
+                    Icon(Icons.add_a_photo_outlined, size: 40, color: RentyColors.textSecondary),
+                    SizedBox(height: 10),
                     Text(
                       'Tap to upload',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: AppTheme.grey700,
-                      ),
+                      style: RentyTextStyles.labelM,
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: 4),
                     Text(
-                      'Take a photo or upload from gallery',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: AppTheme.grey,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      'JPG or PNG preferred',
+                      style: RentyTextStyles.caption,
                       textAlign: TextAlign.center,
                     ),
                   ],
                 ),
               )
             : ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(RentyRadius.lg),
                 child: Image.file(imageFile!, fit: BoxFit.cover),
               ),
       ),
@@ -197,13 +190,13 @@ class _TipLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 3),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: AppTheme.grey700,
-          fontWeight: FontWeight.w600,
-        ),
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          const Icon(Icons.check_circle_outline, size: 16, color: RentyColors.success),
+          const SizedBox(width: 8),
+          Expanded(child: Text(text, style: RentyTextStyles.bodyM)),
+        ],
       ),
     );
   }
