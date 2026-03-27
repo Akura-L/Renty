@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../core/theme.dart';
 import 'sign_up_screen.dart';
@@ -39,146 +40,305 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            child:
+                const Icon(Icons.chevron_left, color: Colors.black, size: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(RentySpacing.xl),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 80,
-                        height: 80,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: RentyColors.primary,
-                          borderRadius: BorderRadius.circular(RentyRadius.md),
-                        ),
-                        child: SvgPicture.asset(
-                          'assets/images/renty.png',
-                          colorFilter: const ColorFilter.mode(
-                              Colors.white, BlendMode.srcIn),
-                        ),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        'Welcome back',
-                        style: RentyTextStyles.headingXL,
-                      ),
-                      const SizedBox(height: 12),
-                      Text(
-                        'Sign in to access your bookings and saved cars',
-                        style: RentyTextStyles.bodyM
-                            .copyWith(color: Colors.grey[600]),
-                      ),
-                    ],
-                  ),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 16),
+              // Header Icon
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: RentyColors.primary,
+                  borderRadius: BorderRadius.circular(16),
                 ),
-                const SizedBox(height: 48),
-                const SizedBox(height: RentySpacing.lg),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: _signIn,
-                    icon: SvgPicture.asset('assets/icons/google_g.svg',
-                        height: 24, width: 24),
-                    label: const Text('Continue with Google'),
-                  ),
+                child: const Icon(
+                  Icons.directions_car_filled_outlined,
+                  color: Colors.white,
+                  size: 32,
                 ),
-                const SizedBox(height: RentySpacing.sm),
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton.icon(
-                    onPressed: _signIn,
-                    icon: const Icon(Icons.apple, color: Colors.black),
-                    label: const Text('Continue with Apple'),
-                  ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Welcome back',
+                style: RentyTextStyles.headingXL,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Sign in to access your bookings and saved cars',
+                style: RentyTextStyles.bodyM,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
+              // Social Buttons
+              _buildSocialButton(
+                onPressed: _signIn,
+                icon: SvgPicture.asset(
+                  'assets/icons/google_g.svg',
+                  width: 20,
+                  height: 20,
                 ),
-                const SizedBox(height: RentySpacing.lg),
-                const Row(
+                label: 'Continue with Google',
+              ),
+              const SizedBox(height: 16),
+              _buildSocialButton(
+                onPressed: _signIn,
+                icon: const Icon(Icons.apple, color: Colors.black, size: 24),
+                label: 'Continue with Apple',
+              ),
+              const SizedBox(height: 32),
+              // Divider
+              Row(
+                children: [
+                  const Expanded(child: Divider(color: Color(0xFFF1F3F4))),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'or sign in with email',
+                      style: RentyTextStyles.bodyM.copyWith(
+                        color: Colors.grey,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  const Expanded(child: Divider(color: Color(0xFFF1F3F4))),
+                ],
+              ),
+              const SizedBox(height: 32),
+              // Form
+              Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Divider(),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        'or sign in with email',
-                        style: RentyTextStyles.bodyM,
+                    const Text(
+                      'Email or Phone',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color(0xFF2D3E50),
                       ),
                     ),
-                    Expanded(
-                      child: Divider(),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        hintText: 'james@example.com',
+                        fillColor: const Color(0xFFF8F9FA),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.grey.shade200),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.grey.shade200),
+                        ),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Password',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF2D3E50),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          ),
+                          child: const Text(
+                            'Forgot password?',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xFF149C9C),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(
+                        hintText: 'password123',
+                        fillColor: const Color(0xFFF8F9FA),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.grey.shade200),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: BorderSide(color: Colors.grey.shade200),
+                        ),
+                      ),
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 32),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: _signIn,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: RentyColors.primary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text(
+                          'Sign In',
+                          style: RentyTextStyles.button,
+                        ),
+                      ),
                     ),
                   ],
                 ),
-                const SizedBox(height: RentySpacing.lg),
-                Form(
-                  child: Column(
+              ),
+              const SizedBox(height: 24),
+              // Sign Up Link
+              Center(
+                child: RichText(
+                  text: TextSpan(
+                    text: 'New to Renty? ',
+                    style: RentyTextStyles.bodyM,
                     children: [
-                      TextFormField(
-                        controller: _emailController,
-                        decoration: const InputDecoration(
-                          labelText: 'Email or Phone',
+                      TextSpan(
+                        text: 'Create a free account',
+                        style: RentyTextStyles.link.copyWith(
+                          decoration: TextDecoration.underline,
+                          fontWeight: FontWeight.w600,
                         ),
-                        keyboardType: TextInputType.emailAddress,
-                      ),
-                      const SizedBox(height: RentySpacing.md),
-                      TextFormField(
-                        controller: _passwordController,
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                        ),
-                        obscureText: true,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text('Forgot password?'),
-                        ),
-                      ),
-                      const SizedBox(height: RentySpacing.md),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: _signIn,
-                          child: const Text('Sign In'),
-                        ),
-                      ),
-                      const SizedBox(height: RentySpacing.lg),
-                      Center(
-                        child: TextButton(
-                          onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const SignUpScreen(),
-                            ),
-                          ),
-                          child:
-                              const Text('New to Renty? Create a free account'),
-                        ),
-                      ),
-                      const SizedBox(height: RentySpacing.sm),
-                      const Padding(
-                        padding: EdgeInsets.only(top: RentySpacing.sm),
-                        child: Text(
-                          '4.9 / 5 • Trusted by 10,000+ drivers across Kenya',
-                          style: RentyTextStyles.caption,
-                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const SignUpScreen(),
+                                ),
+                              ),
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 40),
+              // Review Card
+              _buildReviewCard(),
+              const SizedBox(height: 32),
+            ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSocialButton({
+    required VoidCallback onPressed,
+    required Widget icon,
+    required String label,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          side: BorderSide(color: Colors.grey.shade200),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon,
+            const SizedBox(width: 12),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF2D3E50),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReviewCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF8F9FA),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: Colors.grey.shade100),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...List.generate(
+                5,
+                (index) => const Icon(
+                  Icons.star,
+                  color: Color(0xFFFFC107),
+                  size: 18,
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Text(
+                '4.9 / 5',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  color: Color(0xFF2D3E50),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Trusted by 10,000+ drivers across Kenya',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 13,
+            ),
+          ),
+        ],
       ),
     );
   }

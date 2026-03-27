@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'dart:ui';
+import 'package:intl/intl.dart';
 import 'core/theme.dart';
 import 'models/car.dart';
-import 'screens/booking/payment_screen.dart';
+import 'screens/booking/widgets/booking_flow_stepper.dart';
+import 'terms_screen.dart';
 
 class DriverScreen extends StatefulWidget {
   final Car car;
@@ -23,6 +26,7 @@ class _DriverScreenState extends State<DriverScreen> {
   final _specialRequestsController = TextEditingController(
     text: 'Please ensure the car is at Jomo Kenyatta airport terminal 1B',
   );
+  bool _isChauffeur = false;
 
   @override
   void dispose() {
@@ -32,230 +36,389 @@ class _DriverScreenState extends State<DriverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final start = widget.startDate ?? DateTime.now();
-    final end = widget.endDate ?? DateTime.now();
-    final totalDays = end.difference(start).inDays + 1;
-    final tripTotal = widget.car.price * (totalDays <= 0 ? 1 : totalDays);
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Driver Information')),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(RentySpacing.xl),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _BookingStepIndicator(activeStep: 2),
-            const SizedBox(height: 18),
-            const Text(
-              "Who's driving?",
-              style: RentyTextStyles.headingL,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey.shade200),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'We\'ve pre-filled your details from your account. Details loaded from your verified Renty profile',
-              style: RentyTextStyles.bodyM,
-            ),
-            const SizedBox(height: 24),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child:
+                const Icon(Icons.chevron_left, color: Colors.black, size: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Driver Information',
+          style: TextStyle(
+              color: Color(0xFF2D3E50),
+              fontSize: 16,
+              fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              const BookingFlowStepper(currentStep: 2),
+              const SizedBox(height: 32),
+
+              const Text(
+                "Who's driving?",
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2D3E50)),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                "We've pre-filled your details from your account.",
+                style: TextStyle(color: Colors.grey, fontSize: 14),
+              ),
+              const SizedBox(height: 24),
+
+              // Mode Toggle
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F3F5),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
                   children: [
-                    Row(
-                      children: [
-                        const Text('Primary Driver',
-                            style: RentyTextStyles.labelL),
-                        const Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          child: const Text('Edit'),
-                        ),
-                      ],
+                    Expanded(
+                      child: _modeTab(
+                        label: 'Drive Yourself',
+                        active: !_isChauffeur,
+                        onTap: () => setState(() => _isChauffeur = false),
+                      ),
                     ),
-                    const SizedBox(height: 12),
-                    const _InfoRow(label: 'First Name', value: 'James'),
-                    const SizedBox(height: 12),
-                    const _InfoRow(label: 'Last Name', value: 'Mwangi'),
-                    const SizedBox(height: 12),
-                    const _InfoRow(label: 'Phone Number', value: '+254 712 345 678'),
-                    const SizedBox(height: 12),
-                    const _InfoRow(label: 'Email Address', value: 'james@example.com'),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Driver’s Licence No.',
-                                  style: RentyTextStyles.caption),
-                              SizedBox(height: 4),
-                              Text('KE-DL-2019-847231',
-                                  style: RentyTextStyles.labelL),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: RentyColors.primaryLight,
-                            borderRadius: BorderRadius.circular(RentyRadius.pill),
-                          ),
-                          child: const Text(
-                            'Verified',
-                            style: TextStyle(
-                              color: RentyColors.primary,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Add a second driver'),
-                    ),
-                    const Text(
-                      'Free · Both drivers must be 23+',
-                      style: RentyTextStyles.caption,
-                    ),
-                    const SizedBox(height: 24),
-                    const Text(
-                      'Special Requests (optional)',
-                      style: RentyTextStyles.labelL,
-                    ),
-                    const SizedBox(height: 10),
-                    TextFormField(
-                      controller: _specialRequestsController,
-                      minLines: 2,
-                      maxLines: 3,
-                      decoration: const InputDecoration(
-                        hintText: 'e.g. Please ensure the car is at terminal 1B',
+                    Expanded(
+                      child: _modeTab(
+                        label: 'With Chauffeur',
+                        active: _isChauffeur,
+                        onTap: () => setState(() => _isChauffeur = true),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'YOUR TRIP',
-              style: RentyTextStyles.labelL,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              '${start.day}/${start.month}/${start.year} - ${end.day}/${end.month}/${end.year}',
-              style: RentyTextStyles.bodyM,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '$totalDays days · KSh ${tripTotal.toStringAsFixed(0)} total',
-              style: RentyTextStyles.headingM.copyWith(color: RentyColors.primary),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => PaymentScreen(
-                      car: widget.car,
-                      startDate: start,
-                      endDate: end,
-                      totalAmount: tripTotal,
+              const SizedBox(height: 16),
+
+              // Success Banner
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8F6E8),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Row(
+                  children: [
+                    Icon(Icons.check_circle,
+                        color: Color(0xFF4CAF50), size: 18),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Details loaded from your verified Renty profile',
+                        style: TextStyle(
+                            color: Color(0xFF4CAF50),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Form
+              Row(
+                children: [
+                  Expanded(
+                      child: _buildInputField(
+                          label: 'First Name', value: 'James')),
+                  const SizedBox(width: 12),
+                  Expanded(
+                      child: _buildInputField(
+                          label: 'Last Name', value: 'Mwangi')),
+                ],
+              ),
+              const SizedBox(height: 16),
+              _buildInputField(
+                  label: 'Phone Number', value: '+254 712 345 678'),
+              const SizedBox(height: 16),
+              _buildInputField(
+                  label: 'Email Address', value: 'james@example.com'),
+              const SizedBox(height: 16),
+              _buildLicenceField(
+                  label: "Driver's Licence No.", value: 'KE-DL-2019-847231'),
+              const SizedBox(height: 24),
+
+              CustomPaint(
+                painter: _DottedBorderPainter(),
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                            color: Color(0xFFF8F9FA), shape: BoxShape.circle),
+                        child: const Icon(Icons.person_add_alt_1_outlined,
+                            color: Colors.grey, size: 20),
+                      ),
+                      const SizedBox(width: 16),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Add a second driver',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 14)),
+                            Text('Free · Both drivers must be 23+',
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 12)),
+                          ],
+                        ),
+                      ),
+                      const Icon(Icons.chevron_right,
+                          color: Colors.grey, size: 20),
+                    ],
                   ),
                 ),
-                child: const Text('Continue to Payment'),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+
+              const Text(
+                'Special Requests (optional)',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    color: Color(0xFF2D3E50)),
+              ),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _specialRequestsController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  fillColor: const Color(0xFFF8F9FA),
+                  filled: true,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.all(16),
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              // Bottom Trip Card
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF2D3E50),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('YOUR TRIP',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold)),
+                          const SizedBox(height: 4),
+                          const Text('Jun 20 – Jun 25, 2025',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14)),
+                          const SizedBox(height: 2),
+                          const Text('5 days · KSh 46,000 total',
+                              style: TextStyle(
+                                  color: RentyColors.primary, fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.asset(widget.car.imageUrl,
+                          width: 80, height: 50, fit: BoxFit.cover),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => TermsScreen(
+                          car: widget.car,
+                          startDate: widget.startDate,
+                          endDate: widget.endDate,
+                        ),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: RentyColors.primary,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16)),
+                  ),
+                  child: const Text('Continue to Terms',
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white)),
+                ),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
       ),
     );
   }
-}
 
-class _InfoRow extends StatelessWidget {
-  final String label;
-  final String value;
-  const _InfoRow({required this.label, required this.value});
+  Widget _modeTab(
+      {required String label,
+      required bool active,
+      required VoidCallback onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: active ? RentyColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: TextStyle(
+                fontWeight: FontWeight.w600,
+                color: active ? Colors.white : Colors.grey),
+          ),
+        ),
+      ),
+    );
+  }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildInputField({required String label, required String value}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: RentyTextStyles.caption,
+        Text(label,
+            style: const TextStyle(
+                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF8F9FA),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade100),
+          ),
+          child: Text(value,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Color(0xFF2D3E50))),
         ),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: RentyTextStyles.labelL,
+      ],
+    );
+  }
+
+  Widget _buildLicenceField({required String label, required String value}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: const TextStyle(
+                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF8F9FA),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey.shade100),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.description_outlined,
+                  color: RentyColors.primary, size: 20),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: Text(value,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: Color(0xFF2D3E50)))),
+              const Icon(Icons.check_circle,
+                  color: Color(0xFF4CAF50), size: 16),
+              const SizedBox(width: 4),
+              const Text('Verified',
+                  style: TextStyle(
+                      color: Color(0xFF4CAF50),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold)),
+            ],
+          ),
         ),
       ],
     );
   }
 }
 
-class _BookingStepIndicator extends StatelessWidget {
-  final int activeStep;
-  const _BookingStepIndicator({required this.activeStep});
+class _DottedBorderPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.grey.shade300
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    const dashWidth = 5.0;
+    const dashSpace = 3.0;
+    final radius = Radius.circular(16.0);
+    final RRect rRect = RRect.fromLTRBR(0, 0, size.width, size.height, radius);
+    final Path path = Path()..addRRect(rRect);
+
+    final Path dashPath = Path();
+    for (final metric in path.computeMetrics()) {
+      double distance = 0;
+      while (distance < metric.length) {
+        final double end = distance + dashWidth;
+        dashPath.addPath(
+          metric.extractPath(distance, end),
+          Offset.zero,
+        );
+        distance = end + dashSpace;
+      }
+    }
+    canvas.drawPath(dashPath, paint);
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        _step(1, 'Dates', activeStep >= 1),
-        _line(activeStep >= 2),
-        _step(2, 'Driver', activeStep >= 2),
-        _line(activeStep >= 3),
-        _step(3, 'Payment', activeStep >= 3),
-      ],
-    );
-  }
-
-  Widget _step(int n, String label, bool active) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 12,
-          backgroundColor: active ? RentyColors.primary : RentyColors.surface,
-          child: Text(
-            n.toString(),
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: active ? Colors.white : RentyColors.textDisabled,
-            ),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: active ? FontWeight.bold : FontWeight.normal,
-            color: active ? RentyColors.primary : RentyColors.textDisabled,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _line(bool active) {
-    return Expanded(
-      child: Container(
-        height: 2,
-        color: active ? RentyColors.primary : RentyColors.surface,
-        margin: const EdgeInsets.only(bottom: 14),
-      ),
-    );
-  }
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

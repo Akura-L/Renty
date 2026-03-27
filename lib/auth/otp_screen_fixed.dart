@@ -119,31 +119,38 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
 
   Widget _buildDigitField(int index) {
     return Expanded(
-      child: SizedBox(
-        height: 68,
+      child: Container(
+        height: 64,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF8F9FA),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: _controllers[index].text.isNotEmpty 
+                ? RentyColors.primary 
+                : Colors.grey.shade200,
+            width: _controllers[index].text.isNotEmpty ? 1.5 : 1,
+          ),
+        ),
         child: TextField(
           controller: _controllers[index],
           textAlign: TextAlign.center,
           keyboardType: TextInputType.number,
           maxLength: 1,
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-          decoration: InputDecoration(
-            counterText: '',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(RentyRadius.md),
-              borderSide: const BorderSide(color: RentyColors.border),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(RentyRadius.md),
-              borderSide:
-                  const BorderSide(color: RentyColors.primary, width: 2),
-            ),
-            filled: true,
-            fillColor: RentyColors.surface,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2D3E50),
           ),
-          onChanged: (value) => _onOtpChanged(value, index),
+          decoration: const InputDecoration(
+            counterText: '',
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.zero,
+          ),
+          onChanged: (value) {
+            setState(() {}); // Update border color
+            _onOtpChanged(value, index);
+          },
         ),
       ),
     );
@@ -162,152 +169,228 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(RentySpacing.xl),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AuthFlowStepper(currentStep: 2),
-            const SizedBox(height: 18),
-            Icon(
-              Icons.message_outlined,
-              size: 28.0,
-              color: theme.primaryColor,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.grey.shade200),
             ),
-            const SizedBox(height: 14),
-            Text(
-              'Verify your number',
-              style: theme.textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
+            child: const Icon(Icons.chevron_left, color: Colors.black, size: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        centerTitle: true,
+        title: const Text(
+          'Step 2 of 5',
+          style: TextStyle(
+            color: Colors.grey,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              const AuthFlowStepper(currentStep: 2),
+              const SizedBox(height: 32),
+              const Text(
+                'Verify your number',
+                style: RentyTextStyles.headingXL,
               ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              'We sent a 6-digit code to ${widget.phoneNumber}.',
-              style: theme.textTheme.bodyLarge?.copyWith(
-                color: theme.primaryColor,
+              const SizedBox(height: 12),
+              RichText(
+                text: TextSpan(
+                  style: RentyTextStyles.bodyM,
+                  children: [
+                    const TextSpan(text: 'We sent a 6-digit code to '),
+                    TextSpan(
+                      text: widget.phoneNumber,
+                      style: const TextStyle(
+                          color: RentyColors.textPrimary,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    const TextSpan(text: ' .\nPlease enter it below.'),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 18),
-            Text(
-              'Please enter it below.',
-              style:
-                  RentyTextStyles.bodyS.copyWith(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 14),
-            AnimatedBuilder(
-              animation: _shakeController,
-              builder: (context, child) {
-                return Transform.translate(
-                  offset: Offset(_shakeController.value * 10, 0),
-                  child: child!,
-                );
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(6, _buildDigitField),
+              const SizedBox(height: 32),
+              AnimatedBuilder(
+                animation: _shakeController,
+                builder: (context, child) {
+                  return Transform.translate(
+                    offset: Offset(_shakeController.value * 10, 0),
+                    child: child!,
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(6, _buildDigitField),
+                ),
               ),
-            ),
-            const SizedBox(height: 18),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed:
-                    _isLoading || _otp.length != 6 ? null : () => _verifyOtp(),
-                child: _isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                        ),
-                      )
-                    : const Text('Verify Code'),
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
+              const SizedBox(height: 24),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
                     "Didn't receive the code?",
                     style: TextStyle(
-                      color: RentyColors.textSecondary,
-                      fontWeight: FontWeight.w600,
+                      color: Colors.grey,
+                      fontSize: 15,
                     ),
                   ),
-                ),
-                Text(
-                  _formatClock(_seconds),
-                  style: TextStyle(
-                    color: theme.primaryColor,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: TextButton(
-                onPressed: _resendVisible ? _resendOtp : null,
-                child: Text(
-                  'Resend Code',
-                  style: TextStyle(color: theme.primaryColor),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      // Mock alternative delivery
-                    },
-                    child: Text(
-                      'Send via Email',
-                      style: TextStyle(color: theme.primaryColor),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: RentyColors.primaryLight,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: 6,
+                          height: 6,
+                          decoration: const BoxDecoration(
+                            color: RentyColors.primary,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _formatClock(_seconds),
+                          style: const TextStyle(
+                            color: RentyColors.primary,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed:
+                      _isLoading || _otp.length != 6 ? null : () => _verifyOtp(),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: RentyColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: _isLoading
+                      ? const SizedBox(
+                          height: 24,
+                          width: 24,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : const Text(
+                          'Verify Code',
+                          style: RentyTextStyles.button,
+                        ),
                 ),
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      // Mock alternative delivery
-                    },
-                    child: Text(
-                      'Call me instead',
-                      style: TextStyle(color: theme.primaryColor),
+              ),
+              const SizedBox(height: 24),
+              const Divider(height: 1, color: Color(0xFFF1F3F4)),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.mail_outline, size: 18),
+                      label: const Text('Send via Email'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.grey,
+                        textStyle: const TextStyle(fontSize: 14),
+                      ),
                     ),
                   ),
+                  Container(height: 24, width: 1, color: const Color(0xFFF1F3F4)),
+                  Expanded(
+                    child: TextButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.phone_in_talk_outlined, size: 18),
+                      label: const Text('Call me instead'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.grey,
+                        textStyle: const TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 32),
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFFBEB),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: const Color(0xFFFEF3C7)),
                 ),
-              ],
-            ),
-            const SizedBox(height: 18),
-            const Text(
-              'Check your SMS inbox',
-              style: TextStyle(
-                color: RentyColors.textPrimary,
-                fontWeight: FontWeight.w700,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFEF3C7),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.chat_bubble_outline, color: Color(0xFFD97706), size: 18),
+                    ),
+                    const SizedBox(width: 16),
+                    const Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Check your SMS inbox',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF92400E),
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'The code may take up to 2 minutes to arrive. Check that your phone has signal and the number is correct.',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFFB45309),
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'The code may take up to 2 minutes to arrive. Check that your phone has signal and the number is correct.',
-              style: TextStyle(
-                color: RentyColors.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const Spacer(),
+              const SizedBox(height: 32),
           ],
         ),
       ),
-    );
+    ));
   }
 }

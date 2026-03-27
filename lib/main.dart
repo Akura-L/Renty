@@ -6,7 +6,6 @@ import 'screens/splash/splash_screen.dart';
 import 'auth/welcome_screen.dart';
 import 'core/theme.dart';
 import 'screens/main_screen.dart';
-import 'auth/sign_in_screen.dart';
 import 'auth/sign_up_screen.dart';
 import 'auth/otp_screen_fixed.dart';
 import 'screens/profile/profile_screen.dart';
@@ -45,7 +44,7 @@ class RentyApp extends StatelessWidget {
         '/splash': (context) => const SplashScreen(),
         '/welcome': (context) => const WelcomeScreen(),
         '/main': (context) => const MainScreen(),
-        '/auth/sign-in': (context) => const SignInScreen(),
+        '/auth/sign-in': (context) => const WelcomeScreen(),
         '/auth/sign-up': (context) => const SignUpScreen(),
         '/auth/otp': (context) => const OtpScreen(phoneNumber: '+254712345678'),
         '/auth/photo': (context) => const PhotoScreen(),

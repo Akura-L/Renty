@@ -13,11 +13,10 @@ class RentyColors {
   RentyColors._();
 
   // Primary
-  static const Color primary =
-      Color.fromARGB(133, 1, 77, 77); // Turquoise Teal CTA
-  static const Color primaryLight =
-      Color(0xFFCCE8E8); // Turquoise Teal chip bg / avatar bg
-  static const Color primaryDark = Color.fromARGB(255, 11, 63, 63); // Pressed turquoise teal
+  static const Color primary = Color(0xFF149C9C); // Brand Teal
+  static const Color primaryLight = Color(0xFFE8F6F6); // Light teal bg
+  static const Color primaryDark =
+      Color(0xFF0E7A7A); // Darker teal for interaction
 
   // Backgrounds
   static const Color background = Color(0xFFFFFFFF);
@@ -281,7 +280,7 @@ class RentyTheme {
       // ── Bottom Navigation ────────────────────
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
         backgroundColor: RentyColors.background,
-        selectedItemColor: RentyColors.navActive,
+        selectedItemColor: RentyColors.primary,
         unselectedItemColor: RentyColors.navInactive,
         selectedLabelStyle: TextStyle(
           fontFamily: 'DMSans',
@@ -310,7 +309,7 @@ class RentyTheme {
           shadowColor: Colors.transparent,
           minimumSize: const Size(double.infinity, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(RentyRadius.pill),
+            borderRadius: BorderRadius.circular(RentyRadius.lg),
           ),
           textStyle: RentyTextStyles.button,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
@@ -324,7 +323,7 @@ class RentyTheme {
           side: const BorderSide(color: RentyColors.border, width: 1.5),
           minimumSize: const Size(double.infinity, 52),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(RentyRadius.pill),
+            borderRadius: BorderRadius.circular(RentyRadius.lg),
           ),
           textStyle: RentyTextStyles.buttonOutlined,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
