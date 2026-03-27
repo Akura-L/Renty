@@ -15,63 +15,35 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _phoneNumberController = TextEditingController(text: '712 345 678');
+  final _phoneController = TextEditingController(text: '712345678');
+  String? _selectedCountryCode = '+254';
   final _emailController = TextEditingController(text: 'james@example.com');
+  // Gender and location moved to profile_info_screen
 
-  String _selectedDialCode = '+254';
-  String? _selectedCounty;
-  String? _selectedGender;
+  // Lists moved to profile_info_screen.dart
 
-  final List<Map<String, String>> countries = [
-    {'flag': '🇰🇪', 'name': 'Kenya', 'dialCode': '+254'},
-    {'flag': '🇺🇬', 'name': 'Uganda', 'dialCode': '+256'},
-    {'flag': '🇹🇿', 'name': 'Tanzania', 'dialCode': '+255'},
-    {'flag': '🇷🇼', 'name': 'Rwanda', 'dialCode': '+250'},
-    {'flag': '🇧🇮', 'name': 'Burundi', 'dialCode': '+257'},
-    {'flag': '🇪🇹', 'name': 'Ethiopia', 'dialCode': '+251'},
-    {'flag': '🇸🇴', 'name': 'Somalia', 'dialCode': '+252'},
-    {'flag': '🇳🇬', 'name': 'Nigeria', 'dialCode': '+234'},
-    {'flag': '🇿🇦', 'name': 'South Africa', 'dialCode': '+27'},
-    {'flag': '🇺🇸', 'name': 'United States', 'dialCode': '+1'},
-    {'flag': '🇬🇧', 'name': 'United Kingdom', 'dialCode': '+44'},
-    {'flag': '🇮🇳', 'name': 'India', 'dialCode': '+91'},
-    {'flag': '🇨🇦', 'name': 'Canada', 'dialCode': '+1'},
-    {'flag': '🇦🇺', 'name': 'Australia', 'dialCode': '+61'},
-    {'flag': '🇩🇪', 'name': 'Germany', 'dialCode': '+49'},
-    {'flag': '🇫🇷', 'name': 'France', 'dialCode': '+33'},
-    {'flag': '🇯🇵', 'name': 'Japan', 'dialCode': '+81'},
-    {'flag': '🇧🇷', 'name': 'Brazil', 'dialCode': '+55'},
-  ];
-
-  final List<String> kenyanCounties = [
-    'Baringo', 'Bomet', 'Bungoma', 'Busia', 'Elgeyo-Marakwet',
-    'Embu', 'Garissa', 'Homa Bay', 'Isiolo', 'Kajiado',
-    'Kakamega', 'Kericho', 'Kiambu', 'Kilifi', 'Kirinyaga',
-    'Kisii', 'Kisumu', 'Kitui', 'Kwale', 'Laikipia',
-    'Lamu', 'Machakos', 'Makueni', 'Mandera', 'Marsabit',
-    'Meru', 'Migori', 'Mombasa', "Murang'a", 'Nairobi',
-    'Nakuru', 'Nandi', 'Narok', 'Nyamira', 'Nyandarua',
-    'Nyeri', 'Samburu', 'Siaya', 'Taita-Taveta', 'Tana River',
-    'Tharaka-Nithi', 'Trans Nzoia', 'Turkana', 'Uasin Gishu',
-    'Vihiga', 'Wajir', 'West Pokot',
-  ];
-
-  final List<String> genders = ['Male', 'Female', 'Other'];
+  final List<DropdownMenuItem<String>> countryCodeItems =
+      ['+254', '+1', '+44', '+91']
+          .map((code) => DropdownMenuItem<String>(
+                value: code,
+                child: Text(code),
+              ))
+          .toList();
 
   bool _usePhone = true;
 
   @override
   void dispose() {
-    _phoneNumberController.dispose();
+    _phoneController.dispose();
     _emailController.dispose();
     super.dispose();
   }
 
   void _continue() {
     if (!_formKey.currentState!.validate()) return;
-    final String phoneNumber = _usePhone 
-      ? _selectedDialCode + _phoneNumberController.text.trim() 
-      : _emailController.text.trim();
+    final String phoneNumber = _usePhone
+        ? (_selectedCountryCode ?? '+254') + _phoneController.text.trim()
+        : _emailController.text.trim();
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -85,9 +57,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(RentySpacing.xxl, RentySpacing.xxl, RentySpacing.xxl, RentySpacing.xl),
+          padding: const EdgeInsets.fromLTRB(RentySpacing.xxl, RentySpacing.xxl,
+              RentySpacing.xxl, RentySpacing.xl),
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -129,102 +103,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (_usePhone) ...[
-                        const Text(
-                          'Country code',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(height: 8),
-                        DropdownButtonFormField<Map<String, String>>(
-                          value: countries.firstWhere(
-                            (c) => c['dialCode'] == _selectedDialCode,
-                            orElse: () => countries[0],
-                          ),
-                          decoration: const InputDecoration(
-                            labelText: 'Select Country',
-                          ),
-                          items: countries.map((country) {
-                            return DropdownMenuItem(
-                              value: country,
-                              child: Row(
-                                children: [
-                                  Text(country['flag']!),
-                                  const SizedBox(width: 8),
-                                  Text('${country['name']} (${country['dialCode']})'),
-                                ],
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: DropdownButtonFormField<String>(
+                                value: _selectedCountryCode,
+                                decoration: const InputDecoration(
+                                  labelText: 'Code',
+                                ),
+                                items: countryCodeItems,
+                                onChanged: (value) => setState(
+                                    () => _selectedCountryCode = value),
                               ),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            if (value != null) {
-                              setState(() {
-                                _selectedDialCode = value['dialCode']!;
-                              });
-                            }
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        TextFormField(
-                          controller: _phoneNumberController,
-                          keyboardType: TextInputType.phone,
-                          decoration: InputDecoration(
-                            labelText: 'Phone Number',
-                            hintText: '712 345 678',
-                          ),
-                          validator: (v) {
-                            if (v == null || v.trim().isEmpty) {
-                              return 'Enter your phone number';
-                            }
-                            if (!RegExp(r'^\d{9,10}$').hasMatch(v.trim())) {
-                              return 'Enter valid 9-10 digit phone';
-                            }
-                            return null;
-                          },
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              flex: 3,
+                              child: TextFormField(
+                                controller: _phoneController,
+                                keyboardType: TextInputType.phone,
+                                decoration: const InputDecoration(
+                                  labelText: 'Phone Number',
+                                  hintText: '712 345 678',
+                                ),
+                                validator: (v) {
+                                  if (v == null || v.trim().isEmpty) {
+                                    return 'Enter your phone number';
+                                  }
+                                  final clean =
+                                      v.trim().replaceAll(RegExp(r'[^\d]'), '');
+                                  if (!RegExp(r'^\d{9,10}$').hasMatch(clean)) {
+                                    return 'Local number should be 9-10 digits';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 8),
                         const Text(
                           "We'll send a verification code to this number",
                           style: RentyTextStyles.bodyM,
                         ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'County / Location',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(height: 8),
-                        DropdownButtonFormField<String>(
-                          value: _selectedCounty,
-                          decoration: const InputDecoration(
-                            labelText: 'Select County',
-                          ),
-                          items: kenyanCounties.map((county) {
-                            return DropdownMenuItem(
-                              value: county,
-                              child: Text(county),
-                            );
-                          }).toList(),
-                          onChanged: (value) => setState(() => _selectedCounty = value),
-                          validator: (v) => v == null ? 'Select your county' : null,
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Gender',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(height: 8),
-                        DropdownButtonFormField<String>(
-                          value: _selectedGender,
-                          decoration: const InputDecoration(
-                            labelText: 'Select Gender',
-                          ),
-                          items: genders.map((gender) {
-                            return DropdownMenuItem(
-                              value: gender,
-                              child: Text(gender),
-                            );
-                          }).toList(),
-                          onChanged: (value) => setState(() => _selectedGender = value),
-                          validator: (v) => v == null ? 'Select your gender' : null,
-                        ),
+                        const SizedBox(height: 28),
                       ] else ...[
                         TextFormField(
                           controller: _emailController,
@@ -237,7 +160,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (v == null || v.trim().isEmpty) {
                               return 'Enter your email';
                             }
-                            if (!RegExp(r'^[\\w-]+@[a-z\\d-]+\\.[a-z]{2,}$').hasMatch(v.trim())) {
+                            if (!RegExp(r'^[\\w-]+@[a-z\\d-]+\\.[a-z]{2,}$')
+                                .hasMatch(v.trim())) {
                               return 'Enter valid email';
                             }
                             return null;
@@ -350,7 +274,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const TextSpan(text: 'By continuing, you agree to our '),
               TextSpan(
                 text: 'Terms of Service',
-                style: RentyTextStyles.link.copyWith(fontWeight: FontWeight.w600),
+                style:
+                    RentyTextStyles.link.copyWith(fontWeight: FontWeight.w600),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     // Navigate to terms
@@ -359,7 +284,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               const TextSpan(text: ' and '),
               TextSpan(
                 text: 'Privacy Policy',
-                style: RentyTextStyles.link.copyWith(fontWeight: FontWeight.w600),
+                style:
+                    RentyTextStyles.link.copyWith(fontWeight: FontWeight.w600),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     // Navigate to privacy policy

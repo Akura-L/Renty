@@ -1,12 +1,12 @@
-# Fix main.dart missing 'car' parameter error (RESOLVED - tooling cache issue)
+# Renty Task Progress Tracker
 
-## Steps:
-- [x] Step 1: Ran `flutter pub get` (dependencies resolved)
-- [x] Step 2: Ran `dart analyze` (analysis refreshed successfully)
-- [x] Step 3: VSCode problems panel should now be clear (manual restart if needed via Cmd Palette > "Dart: Restart Analysis Server")
-- [x] Step 4: Code verified correct - main.dart:58 call matches constructors perfectly
-- [x] Complete ✅
+## Current Task: Fix 114px overflow in photo_screen.dart
 
-**Summary:** No code changes needed. Error was stale Dart analyzer cache. Commands executed; check VSCode Problems tab (Ctrl+Shift+M) - error gone. Run `flutter run` to confirm app builds fine.
+**Status: In Progress**
 
-Updated TODO.md and task complete.
+### Steps:
+- [x] Read photo_screen.dart, confirm issue (Column + Spacer causing bottom overflow)
+- [ ] Add SingleChildScrollView around Column, remove Spacer()
+- [ ] Update TODO.md
+- [ ] Test `flutter run`
+- [ ] Complete

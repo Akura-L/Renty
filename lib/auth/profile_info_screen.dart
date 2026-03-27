@@ -13,12 +13,64 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
   final _formKey = GlobalKey<FormState>();
   final _firstName = TextEditingController(text: "James");
   final _lastName = TextEditingController(text: "Mwangi");
-  final _location = TextEditingController();
   final _emergencyContact = TextEditingController(text: '+254 7XX XXX XXX');
   DateTime? _dob;
   final TextEditingController _dobController = TextEditingController();
-  String _gender = 'Male';
+  String? _selectedGender;
+  String? _selectedLocation;
   bool _isLoading = false;
+
+  final List<String> kenyanCounties = [
+    'Baringo',
+    'Bomet',
+    'Bungoma',
+    'Busia',
+    'Elgeyo-Marakwet',
+    'Embu',
+    'Garissa',
+    'Homa Bay',
+    'Isiolo',
+    'Kajiado',
+    'Kakamega',
+    'Kericho',
+    'Kiambu',
+    'Kilifi',
+    'Kirinyaga',
+    'Kisii',
+    'Kisumu',
+    'Kitui',
+    'Kwale',
+    'Laikipia',
+    'Lamu',
+    'Machakos',
+    'Makueni',
+    'Mandera',
+    'Marsabit',
+    'Meru',
+    'Migori',
+    'Mombasa',
+    "Murang'a",
+    'Nairobi',
+    'Nakuru',
+    'Nandi',
+    'Narok',
+    'Nyamira',
+    'Nyandarua',
+    'Nyeri',
+    'Samburu',
+    'Siaya',
+    'Taita-Taveta',
+    'Tana River',
+    'Tharaka-Nithi',
+    'Trans Nzoia',
+    'Turkana',
+    'Uasin Gishu',
+    'Vihiga',
+    'Wajir',
+    'West Pokot',
+  ];
+
+  final List<String> genders = ['Male', 'Female', 'Other'];
 
   Future<void> _selectDob(BuildContext context) async {
     final picked = await showDatePicker(
@@ -131,41 +183,39 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
                     style: RentyTextStyles.labelL,
                   ),
                   const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: RadioListTile<String>(
-                          contentPadding: EdgeInsets.zero,
-                          title: const Text('Male'),
-                          value: 'Male',
-                          groupValue: _gender,
-                          onChanged: (v) {
-                            if (v == null) return;
-                            setState(() => _gender = v);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: RadioListTile<String>(
-                          contentPadding: EdgeInsets.zero,
-                          title: const Text('Female'),
-                          value: 'Female',
-                          groupValue: _gender,
-                          onChanged: (v) {
-                            if (v == null) return;
-                            setState(() => _gender = v);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    controller: _location,
+                  DropdownButtonFormField<String>(
+                    value: _selectedGender,
                     decoration:
-                        const InputDecoration(labelText: "City / Location"),
-                    validator: (v) =>
-                        v == null || v.trim().isEmpty ? 'Enter location' : null,
+                        const InputDecoration(labelText: 'Select Gender'),
+                    items: genders.map((gender) {
+                      return DropdownMenuItem(
+                        value: gender,
+                        child: Text(gender),
+                      );
+                    }).toList(),
+                    onChanged: (value) =>
+                        setState(() => _selectedGender = value),
+                    validator: (v) => v == null ? 'Select your gender' : null,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'County / Location',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 8),
+                  DropdownButtonFormField<String>(
+                    value: _selectedLocation,
+                    decoration:
+                        const InputDecoration(labelText: 'Select County'),
+                    items: kenyanCounties.map((county) {
+                      return DropdownMenuItem(
+                        value: county,
+                        child: Text(county),
+                      );
+                    }).toList(),
+                    onChanged: (value) =>
+                        setState(() => _selectedLocation = value),
+                    validator: (v) => v == null ? 'Select your county' : null,
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
@@ -216,7 +266,6 @@ class _ProfileInfoScreenState extends State<ProfileInfoScreen> {
   void dispose() {
     _firstName.dispose();
     _lastName.dispose();
-    _location.dispose();
     _emergencyContact.dispose();
     _dobController.dispose();
     super.dispose();
