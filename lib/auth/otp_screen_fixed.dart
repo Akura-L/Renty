@@ -236,7 +236,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
                   child: Text(
                     "Didn't receive the code?",
                     style: TextStyle(
-                      color: AppTheme.grey700,
+                      color: RentyColors.textSecondary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -292,7 +292,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
             const Text(
               'Check your SMS inbox',
               style: TextStyle(
-                color: AppTheme.dark,
+                color: RentyColors.textPrimary,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -300,7 +300,7 @@ class _OtpScreenState extends State<OtpScreen> with TickerProviderStateMixin {
             Text(
               'The code may take up to 2 minutes to arrive. Check that your phone has signal and the number is correct.',
               style: TextStyle(
-                color: AppTheme.grey700,
+                color: RentyColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
             ),

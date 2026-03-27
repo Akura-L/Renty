@@ -63,8 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 const CircleAvatar(
                   radius: 60,
-                  backgroundImage:
-                      NetworkImage('https://i.pravatar.cc/300?img=68'),
+                  backgroundImage: AssetImage('assets/images/image.png'),
                   backgroundColor: RentyColors.primaryLight,
                 ),
                 Positioned(

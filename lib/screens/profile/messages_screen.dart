@@ -46,7 +46,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       Message(
         id: '1',
         senderName: 'David M.',
-        senderImage: 'https://i.pravatar.cc/150?img=1',
+        senderImage: 'assets/images/image.png',
         carName: 'Land Cruiser',
         bookingRef: 'TX001',
         preview: 'Hi, when can I pick up the car?',
@@ -57,7 +57,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       Message(
         id: '2',
         senderName: 'Nancy W.',
-        senderImage: 'https://i.pravatar.cc/150?img=2',
+        senderImage: 'assets/images/image.png',
         carName: 'BMW',
         bookingRef: 'TX002',
         preview: 'Thanks for the smooth handover!',
@@ -68,7 +68,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       Message(
         id: '3',
         senderName: 'Renty Support',
-        senderImage: 'https://i.pravatar.cc/150?img=3',
+        senderImage: 'assets/images/image.png',
         carName: '',
         bookingRef: null,
         preview: 'How can we help you today?',
@@ -79,7 +79,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       Message(
         id: '4',
         senderName: 'Peter K.',
-        senderImage: 'https://i.pravatar.cc/150?img=4',
+        senderImage: 'assets/images/image.png',
         carName: 'Corolla',
         bookingRef: 'TX004',
         preview: 'Car ready for pickup tomorrow at 9AM',
@@ -90,7 +90,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       Message(
         id: '5',
         senderName: 'Michael O.',
-        senderImage: 'https://i.pravatar.cc/150?img=5',
+        senderImage: 'assets/images/image.png',
         carName: 'Porsche',
         bookingRef: 'TX005',
         preview: 'Thank you for your feedback!',
@@ -101,7 +101,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       Message(
         id: '6',
         senderName: 'David M.',
-        senderImage: 'https://i.pravatar.cc/150?img=6',
+        senderImage: 'assets/images/image.png',
         carName: 'Land Cruiser',
         bookingRef: 'TX001',
         preview: 'Everything good with the return?',
@@ -123,8 +123,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
             children: [
               const CircleAvatar(
                 radius: 20,
-                backgroundImage:
-                    NetworkImage('https://i.pravatar.cc/150?img=68'),
+                backgroundImage: AssetImage('assets/images/image.png'),
               ),
               if (unreadCount > 0)
                 Positioned(
@@ -262,10 +261,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.inbox_outlined, size: 80, color: AppTheme.grey),
+            Icon(Icons.inbox_outlined,
+                size: 80, color: RentyColors.textDisabled),
             SizedBox(height: 16),
             Text('No messages', style: TextStyle(fontSize: 18)),
-            Text('Check back later', style: TextStyle(color: AppTheme.grey)),
+            Text('Check back later',
+                style: TextStyle(color: RentyColors.textDisabled)),
           ],
         ),
       );
@@ -291,7 +292,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
           children: [
             CircleAvatar(
               radius: 28,
-              backgroundImage: NetworkImage(message.senderImage),
+              backgroundImage: const AssetImage('assets/images/image.png'),
             ),
             if (message.isUnread)
               Positioned(

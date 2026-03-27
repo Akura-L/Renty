@@ -20,8 +20,7 @@ class FavouritesScreen extends StatelessWidget {
             actions: const [
               CircleAvatar(
                 radius: 20,
-                backgroundImage:
-                    NetworkImage('https://i.pravatar.cc/150?img=68'),
+                backgroundImage: AssetImage('assets/images/image.png'),
               ),
               SizedBox(width: 16),
             ],
@@ -73,8 +72,8 @@ class FavouritesScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipRRect(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(RentyRadius.lg)),
+              borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(RentyRadius.lg)),
               child: Image.asset(
                 car.imageUrl,
                 height: 160,
@@ -105,7 +104,8 @@ class FavouritesScreen extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.favorite, color: RentyColors.error),
+                        icon: const Icon(Icons.favorite,
+                            color: RentyColors.error),
                         onPressed: () => provider.toggleFavourite(car.id),
                       ),
                     ],

@@ -16,7 +16,7 @@ class MyBookingsScreen extends StatelessWidget {
         actions: const [
           CircleAvatar(
             radius: 20,
-            backgroundImage: NetworkImage('https://i.pravatar.cc/150?img=68'),
+            backgroundImage: AssetImage('assets/images/image.png'),
           ),
           SizedBox(width: 16),
         ],
